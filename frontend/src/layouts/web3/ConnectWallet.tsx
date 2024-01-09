@@ -71,7 +71,7 @@ export const ConnectWallet = () => {
             <React.Fragment key={'wallet-map'}>
                 <li className="nav-item nav-dropdown group relative">
                   <span
-                    className={`btn btn-outline-primary btn-sm hidden lg:inline-flex items-center`}
+                    className={`btn btn-outline-primary btn-sm hidden lg:inline-flex items-center cursor-pointer`}
                   >
                     Connect Wallet
                     <svg className="h-4 w-4 fill-current" viewBox="0 0 20 20">
@@ -83,7 +83,7 @@ export const ConnectWallet = () => {
                       <li className="nav-dropdown-item" key={`children-${i}`}>
                         {child.installed ? (
                           <span
-                            className="nav-dropdown-link block"
+                            className="nav-dropdown-link block cursor-pointer"
                             onClick={() => connect(child.extensionName)}
                           >
                             {child.name}
@@ -91,7 +91,7 @@ export const ConnectWallet = () => {
                         ) : (
                           <Link
                             href={child.url}
-                            className={`nav-dropdown-link block opacity-50 active`}
+                            className={`nav-dropdown-link block opacity-50 active cursor-pointer`}
                           >
                             {child.name}
                           </Link>
@@ -112,7 +112,7 @@ export const ConnectWallet = () => {
             <React.Fragment key={'wallet-map'}>
                 <li className="nav-item nav-dropdown group relative">
                   <span
-                    className={`btn btn-outline-primary btn-sm hidden lg:inline-flex items-center`}
+                    className={`btn btn-outline-primary btn-sm hidden lg:inline-flex items-center cursor-pointer`}
                   >
                     {account.name}
                     <svg className="h-4 w-4 fill-current" viewBox="0 0 20 20">
@@ -135,7 +135,7 @@ export const ConnectWallet = () => {
                       (account !== child) &&
                       <li className="nav-dropdown-item" key={`children-${Math.random()}`}>
                           <span
-                            className="nav-dropdown-link block"
+                            className="nav-dropdown-link block cursor-pointer"
                             onClick={() => (setAccount(child))}
                           >
                             {child.name}
@@ -144,7 +144,7 @@ export const ConnectWallet = () => {
                     ))}
                     <li className="nav-dropdown-item" key={`children-${Math.random()}`}>
                           <span
-                            className="nav-dropdown-link block"
+                            className="nav-dropdown-link block cursor-pointer"
                             onClick={disconnect}
                           >
                             Disconnect
