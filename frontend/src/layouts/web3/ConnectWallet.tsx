@@ -131,7 +131,7 @@ export const ConnectWallet = () => {
                           </span>
                       </li>
                     ))}*/}
-              {accounts.map((child) => (
+                    {accounts && accounts.map((child) => (
                       (account !== child) &&
                       <li className="nav-dropdown-item" key={`children-${Math.random()}`}>
                           <span
