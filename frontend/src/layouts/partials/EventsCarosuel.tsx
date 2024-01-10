@@ -18,20 +18,20 @@ interface PageData {
   };
 }
 
-const LatestEvents = ({ data }: { data: PageData }) => {
+const EventsCarosuel = ({ data }: { data: PageData }) => {
   return (
     <>
       {data.frontmatter.enable && (
-        <section className="section pt-14">
+        <section className="section pt-14 pb-14">
           <div className="container">
             <div className="row">
-              <div className="mx-auto text-center md:col-10 lg:col-8 xl:col-6">
-                <h2 className="mb-4">Latest Events</h2>
-                {/*<p
+              <div className="mx-auto mb-12 text-center md:col-10 lg:col-8 xl:col-6">
+                <h2 className="mb-4">{data.frontmatter.title}</h2>
+                <p
                   dangerouslySetInnerHTML={markdownify(
                     data.frontmatter.description!,
                   )}
-                />*/}
+                />
               </div>
               <div className="col-12">
                 <Swiper
@@ -118,4 +118,4 @@ const LatestEvents = ({ data }: { data: PageData }) => {
   );
 };
 
-export default LatestEvents;
+export default EventsCarosuel;

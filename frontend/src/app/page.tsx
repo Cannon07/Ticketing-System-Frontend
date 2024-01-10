@@ -7,11 +7,13 @@ import Testimonials from "@/partials/Testimonials";
 import { Button, Feature } from "@/types";
 import Link from "next/link";
 import { FaCheck } from "react-icons/fa/index.js";
-import LatestEvents from "@/partials/LatestEvents";
+import EventsCarosuel from "@/partials/EventsCarosuel";
 
 const Home = () => {
   const homepage = getListPage("homepage/_index.md");
   const testimonial = getListPage("sections/testimonial.md");
+  const latest_events = getListPage("sections/latest-events.md");
+  const budget_wise_events = getListPage("sections/budget-wise-events.md");
   const callToAction = getListPage("sections/call-to-action.md");
   const { frontmatter } = homepage;
   const {
@@ -24,7 +26,6 @@ const Home = () => {
 
   return (
     <>
-      <LatestEvents data={testimonial} />
       <SeoMeta />
       <section className="section pt-14">
         <div className="container">
@@ -113,9 +114,18 @@ const Home = () => {
           </div>
         </section>
       ))}
-
-      <Testimonials data={testimonial} />
-      <CallToAction data={callToAction} />
+      <section
+          className={`section-sm bg-gradient p-0`}
+      >
+        <EventsCarosuel data={latest_events} />
+        <EventsCarosuel data={budget_wise_events} />
+      </section>
+      <section
+          className={`section-sm bg-gradient p-0`}
+      >
+        <Testimonials data={testimonial} />
+        <CallToAction data={callToAction} />
+      </section>
     </>
   );
 };
