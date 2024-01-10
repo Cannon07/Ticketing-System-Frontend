@@ -120,7 +120,7 @@ export const ConnectWallet = () => {
                     </svg>
                   </span>
                   <ul className="nav-dropdown-list hidden group-hover:block lg:invisible lg:absolute lg:block lg:opacity-0 lg:group-hover:visible lg:group-hover:opacity-100">
-              {accounts?.map((child) => (
+                    {accounts && accounts.map((child) => (
                       (account !== child) &&
                       <li className="nav-dropdown-item" key={`children-${Math.random()}`}>
                           <span
