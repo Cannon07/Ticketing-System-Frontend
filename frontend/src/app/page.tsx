@@ -7,6 +7,7 @@ import Testimonials from "@/partials/Testimonials";
 import { Button, Feature } from "@/types";
 import Link from "next/link";
 import { FaCheck } from "react-icons/fa/index.js";
+import LatestEvents from "@/partials/LatestEvents";
 
 const Home = () => {
   const homepage = getListPage("homepage/_index.md");
@@ -23,6 +24,7 @@ const Home = () => {
 
   return (
     <>
+      <LatestEvents data={testimonial} />
       <SeoMeta />
       <section className="section pt-14">
         <div className="container">
