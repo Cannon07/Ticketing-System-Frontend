@@ -1,3 +1,4 @@
+
 import SearchModal from "@/components/SearchModal";
 import config from "@/config/config.json";
 import theme from "@/config/theme.json";
@@ -7,6 +8,8 @@ import Header from "@/partials/Header";
 import Providers from "@/partials/Providers";
 import "@/styles/main.scss";
 import LocationModal from "@/components/LocationModal";
+import React, { useState } from "react";
+
 
 export default function RootLayout({
   children,
@@ -16,6 +19,10 @@ export default function RootLayout({
   // import google font css
   const pf = theme.fonts.font_family.primary;
   const sf = theme.fonts.font_family.secondary;
+
+
+
+
 
   return (
     <html suppressHydrationWarning={true} lang="en">
@@ -49,9 +56,8 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
         <link
-          href={`https://fonts.googleapis.com/css2?family=${pf}${
-            sf ? "&family=" + sf : ""
-          }&display=swap`}
+          href={`https://fonts.googleapis.com/css2?family=${pf}${sf ? "&family=" + sf : ""
+            }&display=swap`}
           rel="stylesheet"
         />
       </head>
@@ -59,10 +65,9 @@ export default function RootLayout({
       <body suppressHydrationWarning={true}>
         <TwSizeIndicator />
         <Providers>
-          <Header />
+          <Header/>
           <SearchModal />
           <LocationModal />
-        
           <main>{children}</main>
           <Footer />
         </Providers>

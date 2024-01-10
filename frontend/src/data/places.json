@@ -1,112 +1,80 @@
 {
-  "countries": [
+  "indianCities": [
     {
-      "name": "United States",
-      "states": [
-        {
-          "name": "California",
-          "cities": [
-            "Los Angeles",
-            "San Francisco",
-            "San Diego"
-          ]
-        },
-        {
-          "name": "New York",
-          "cities": [
-            "New York City",
-            "Buffalo",
-            "Rochester"
-          ]
-        }
-      ],
-      "popular_cities": [
-        "New York City",
-        "Los Angeles",
-        "Chicago",
-        "San Francisco"
-      ]
+      "id": 1,
+      "name": "Mumbai",
+      "popular": true
     },
     {
-      "name": "India",
-      "states": [
-        {
-          "name": "Maharashtra",
-          "cities": [
-            "Mumbai",
-            "Pune",
-            "Nagpur"
-          ]
-        },
-        {
-          "name": "Delhi",
-          "cities": [
-            "New Delhi",
-            "Noida",
-            "Gurgaon"
-          ]
-        }
-      ],
-      "popular_cities": [
-        "Mumbai",
-        "Delhi",
-        "Bangalore",
-        "Chennai"
-      ]
+      "id": 2,
+      "name": "Delhi",
+      "popular": true
     },
     {
-      "name": "United Kingdom",
-      "states": [
-        {
-          "name": "England",
-          "cities": [
-            "London",
-            "Manchester",
-            "Birmingham"
-          ]
-        },
-        {
-          "name": "Scotland",
-          "cities": [
-            "Edinburgh",
-            "Glasgow",
-            "Aberdeen"
-          ]
-        }
-      ],
-      "popular_cities": [
-        "London",
-        "Edinburgh",
-        "Manchester",
-        "Glasgow"
-      ]
+      "id": 3,
+      "name": "Bangalore",
+      "popular": true
     },
     {
-      "name": "Canada",
-      "states": [
-        {
-          "name": "Ontario",
-          "cities": [
-            "Toronto",
-            "Ottawa",
-            "Mississauga"
-          ]
-        },
-        {
-          "name": "Quebec",
-          "cities": [
-            "Montreal",
-            "Quebec City",
-            "Laval"
-          ]
-        }
-      ],
-      "popular_cities": [
-        "Toronto",
-        "Vancouver",
-        "Montreal",
-        "Calgary"
-      ]
+      "id": 4,
+      "name": "Hyderabad",
+      "popular": true
+    },
+    {
+      "id": 5,
+      "name": "Chennai",
+      "popular": true
+    },
+    {
+      "id": 6,
+      "name": "Kolkata",
+      "popular": false
+    },
+    {
+      "id": 7,
+      "name": "Ahmedabad",
+      "popular": false
+    },
+    {
+      "id": 8,
+      "name": "Pune",
+      "popular": false
+    },
+    {
+      "id": 9,
+      "name": "Jaipur",
+      "popular": false
+    },
+    {
+      "id": 10,
+      "name": "Lucknow",
+      "popular": false
+    },
+    {
+      "id": 11,
+      "name": "Chandigarh",
+      "popular": false
+    },
+    {
+      "id": 12,
+      "name": "Bhopal",
+      "popular": false
+    },
+    {
+      "id": 13,
+      "name": "Indore",
+      "popular": false
+    },
+    {
+      "id": 14,
+      "name": "Surat",
+      "popular": false
+    },
+    {
+      "id": 15,
+      "name": "Kanpur",
+      "popular": false
     }
+   
   ]
 }

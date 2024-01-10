@@ -1,20 +1,18 @@
 "use client";
 
-import locationData from "../../data/places.json";
 import React, { useEffect, useState } from "react";
 import LocationResult from "./LocationResult";
 
+
+
 const LocationModal = () => {
   const [searchString, setSearchString] = useState("");
+  const [searchLength,setSearchLength] = useState(0);
 
   // handle input change
   const handleSearch = (e: React.FormEvent<HTMLInputElement>) => {
     setSearchString(e.currentTarget.value.replace("\\", "").toLowerCase());
   };
-
-  
-
-  console.log(locationData.countries[0].name)
 
   // get search result
   const startTime = performance.now();
@@ -36,6 +34,7 @@ const LocationModal = () => {
     locationModalTriggers.forEach((button) => {
       button.addEventListener("click", function () {
         const locationModal = document.getElementById("locationModal");
+        setSearchString("");
         locationModal!.classList.add("show");
         searchInput!.focus();
       });
@@ -100,6 +99,14 @@ const LocationModal = () => {
     });
   }, []);
 
+
+ const handleSearchLength=(len:any)=>{
+    setSearchLength(len);
+ }
+
+
+
+
   return (
     <div id="locationModal" className="search-modal">
       <div id="locationModalOverlay" className="search-modal-overlay" />
@@ -149,7 +156,7 @@ const LocationModal = () => {
             autoComplete="off"
           />
         </div>
-        <LocationResult searchString={searchString}/>
+        <LocationResult searchString={searchString} handleLength={handleSearchLength} />
         <div className="search-wrapper-footer">
           <span className="flex items-center">
             <kbd>
@@ -190,12 +197,12 @@ const LocationModal = () => {
             </kbd>
             to select
           </span>
-          {/* {searchString && (
+          {searchString && (
             <span>
-              <strong>{searchResult.length} </strong> results - in{" "}
+              <strong>{searchLength} </strong> results - in{" "}
               <strong>{totalTime} </strong> seconds
             </span>
-          )} */}
+          )}
           <span>
             <kbd>ESC</kbd> to close
           </span>

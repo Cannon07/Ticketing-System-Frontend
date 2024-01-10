@@ -7,11 +7,12 @@ import { InkConfig } from 'useink';
 import { RococoContractsTestnet, RococoTestnet } from 'useink/chains';
 import { NotificationsProvider } from 'useink/notifications';
 import dynamic from 'next/dynamic';
+import { GlobalContextProvider } from "../../app/context/globalContext";
 
 const UseInkProvider: React.ComponentType<React.PropsWithChildren<InkConfig>> =
-    dynamic(() => import('useink').then(({ UseInkProvider }) => UseInkProvider), {
-        ssr: false,
-    });
+  dynamic(() => import('useink').then(({ UseInkProvider }) => UseInkProvider), {
+    ssr: false,
+  });
 
 const Providers = ({ children }: { children: ReactNode }) => {
   const { default_theme } = config.settings;
@@ -29,7 +30,10 @@ const Providers = ({ children }: { children: ReactNode }) => {
           defaultTheme={default_theme}
           enableColorScheme={false}
         >
-          {children}
+          <GlobalContextProvider>
+
+            {children}
+          </GlobalContextProvider>
         </ThemeProvider>
       </NotificationsProvider>
     </UseInkProvider>

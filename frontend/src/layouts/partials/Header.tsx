@@ -6,9 +6,13 @@ import config from "@/config/config.json";
 import menu from "@/config/menu.json";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { IoSearch } from "react-icons/io5/index.js";
 import { ConnectWallet } from "../web3/ConnectWallet";
+// import { useRouter } from "next/navigation";
+import { useGlobalContext } from "@/app/context/globalContext";
+
+
 
 //  child navigation link interface
 export interface IChildNavigationLink {
@@ -26,10 +30,20 @@ export interface INavigationLink {
 
 const Header = () => {
   // distructuring the main menu from menu object
+
+
+  // const router = useRouter();
   const { main }: { main: INavigationLink[] } = menu;
   const { navigation_button, settings } = config;
   // get current path
   const pathname = usePathname();
+  const { selectedCity } = useGlobalContext();
+
+
+
+
+
+  
 
   // scroll to top on route change
   useEffect(() => {
@@ -126,27 +140,30 @@ const Header = () => {
               )}
             </React.Fragment>
           ))}
-          {/*{navigation_button.enable && (
-            <li className="mt-4 inline-block lg:hidden">
-              <Link
-                className="btn btn-outline-primary btn-sm"
-                href={navigation_button.link}
-              >
-                {navigation_button.label}
-              </Link>
-            </li>
-          )}
-          <ConnectWallet />*/}
 
-        </ul>
-
-        <div className="order-1 ml-auto flex items-center md:order-2 lg:ml-0">
-          <div className="mr-5">
+          <div className="lg:hidden">
             <button
               className={`nav-link inline-flex items-center gap-1`}
               data-place-trigger
             >
-              City
+              {selectedCity == '' ? 'Select City' : selectedCity}
+              <svg className="h-4 w-4 fill-current" viewBox="0 0 20 20">
+                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+              </svg>
+            </button>
+          </div>
+
+
+
+        </ul>
+
+        <div className="order-1 ml-auto flex items-center md:order-2 lg:ml-0">
+          <div className="mr-5 hidden lg:contents">
+            <button
+              className={`nav-link inline-flex items-center gap-1`}
+              data-place-trigger
+            >
+              {selectedCity == '' ? 'Select City' : selectedCity}
               <svg className="h-4 w-4 fill-current" viewBox="0 0 20 20">
                 <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
               </svg>
@@ -164,14 +181,6 @@ const Header = () => {
             </button>
           )}
           <ThemeSwitcher className="mr-5" />
-          {/*{navigation_button.enable && (
-            <Link
-              className="btn btn-outline-primary btn-sm hidden lg:inline-block"
-              href={navigation_button.link}
-            >
-              {navigation_button.label}
-            </Link>
-          )}*/}
           <ConnectWallet />
         </div>
       </nav>
