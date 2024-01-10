@@ -34,7 +34,7 @@ const LocationResult = ({
       
               {
                 (searchCities().length !== 0) ? searchCities().map(city => (
-                  <div>
+                  <div key={city}>
                  {city}
                   </div>
                 )) : 'No cities found'
@@ -42,20 +42,20 @@ const LocationResult = ({
         </div> :
 
           locationData.countries.map(country => (
-            <div>
+            <div key={country.name}>
               <div className="text-lg underline font-bold">{country.name}</div>
               <div className="font-semibold">popular cities</div>
               <div>{country.popular_cities.map(popular_city => (
-                <div>
+                <div key={popular_city}>
                   <p className="text-sm">{popular_city}</p>
                 </div>
               ))}</div>
 
               <div>{country?.states?.map(state => (
-                <div>
+                <div key={state.name}>
                   <p className="font-semibold">{state.name}</p>
                   <p className="text-sm">{state.cities?.map(city => (
-                    <div>
+                    <div key={city}>
                       {city}
                     </div>
                   ))}
