@@ -1,5 +1,6 @@
 "use client";
 import locationData from '.json/places.json'
+import { useState } from 'react';
 
 
 const LocationResult = ({
@@ -7,6 +8,9 @@ const LocationResult = ({
 }: {
   searchString: string;
 }) => {
+
+
+  const [selectedCity,setSelectedCity] = useState('');
 
 
   const allCities = locationData.countries
@@ -23,19 +27,15 @@ const LocationResult = ({
 
 
   return (
-
-
-
     <div className="search-wrapper-body flex gap-4 text-center justify-center">
 
       {
         searchString ? <div>
       
               {
-
                 (searchCities().length !== 0) ? searchCities().map(city => (
                   <div>
-                 { city}
+                 {city}
                   </div>
                 )) : 'No cities found'
               }
@@ -64,12 +64,12 @@ const LocationResult = ({
               ))}
               </div>
             </div>
-
           ))
       }
-
     </div>
   );
 };
+
+
 
 export default LocationResult;

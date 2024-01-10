@@ -13,14 +13,6 @@ const LocationModal = () => {
     setSearchString(e.currentTarget.value.replace("\\", "").toLowerCase());
   };
 
-  // generate search result
-
-  // const countries: ICountry[] = (locationData.countries || []).map((countryData: any) => {
-  //   const states: IState[] = (countryData.states || []).map((stateData: any) => {
-  //     const cities: ICity[] = (stateData.cities || []).map((cityName: string) => ({ name: cityName }));
-  //     return { name: stateData.name, cities };
-  //   });
-      
   
 
   console.log(locationData.countries[0].name)
