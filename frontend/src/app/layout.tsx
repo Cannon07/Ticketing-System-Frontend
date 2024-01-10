@@ -6,6 +6,7 @@ import Footer from "@/partials/Footer";
 import Header from "@/partials/Header";
 import Providers from "@/partials/Providers";
 import "@/styles/main.scss";
+import LocationModal from "@/components/LocationModal";
 
 export default function RootLayout({
   children,
@@ -60,6 +61,8 @@ export default function RootLayout({
         <Providers>
           <Header />
           <SearchModal />
+          <LocationModal />
+        
           <main>{children}</main>
           <Footer />
         </Providers>

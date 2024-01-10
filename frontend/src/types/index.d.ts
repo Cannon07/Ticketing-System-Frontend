@@ -27,6 +27,21 @@ export type Post = {
   content?: string;
 };
 
+export type Place = {
+  countries: [
+    {
+      name: string,
+      states: [
+        {
+          name: string;
+          cities: string[];
+        }
+      ]
+      popular_cities: string[];
+    }
+  ]
+}
+
 export type Author = {
   frontmatter: {
     title: string;

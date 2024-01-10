@@ -35,7 +35,7 @@ const Header = () => {
   useEffect(() => {
     window.scroll(0, 0);
   }, [pathname]);
-settings
+  settings
   return (
     <header
       className={`header z-30 ${settings.sticky_header && "sticky top-0"}`}
@@ -73,6 +73,7 @@ settings
         </label>
         {/* /navbar toggler */}
 
+
         <ul
           id="nav-menu"
           className="navbar-nav order-3 hidden w-full pb-6 lg:order-1 lg:flex lg:w-auto lg:space-x-2 lg:pb-0 xl:space-x-8"
@@ -82,14 +83,13 @@ settings
               {menu.hasChildren ? (
                 <li className="nav-item nav-dropdown group relative">
                   <span
-                    className={`nav-link inline-flex items-center ${
-                      menu.children?.map(({ url }) => url).includes(pathname) ||
+                    className={`nav-link inline-flex items-center ${menu.children?.map(({ url }) => url).includes(pathname) ||
                       menu.children
                         ?.map(({ url }) => `${url}/`)
                         .includes(pathname)
-                        ? "active"
-                        : ""
-                    }`}
+                      ? "active"
+                      : ""
+                      }`}
                   >
                     {menu.name}
                     <svg className="h-4 w-4 fill-current" viewBox="0 0 20 20">
@@ -101,11 +101,10 @@ settings
                       <li className="nav-dropdown-item" key={`children-${i}`}>
                         <Link
                           href={child.url}
-                          className={`nav-dropdown-link block ${
-                            (pathname === `${child.url}/` ||
-                              pathname === child.url) &&
+                          className={`nav-dropdown-link block ${(pathname === `${child.url}/` ||
+                            pathname === child.url) &&
                             "active"
-                          }`}
+                            }`}
                         >
                           {child.name}
                         </Link>
@@ -117,10 +116,9 @@ settings
                 <li className="nav-item">
                   <Link
                     href={menu.url}
-                    className={`nav-link block ${
-                      (pathname === `${menu.url}/` || pathname === menu.url) &&
+                    className={`nav-link block ${(pathname === `${menu.url}/` || pathname === menu.url) &&
                       "active"
-                    }`}
+                      }`}
                   >
                     {menu.name}
                   </Link>
@@ -139,8 +137,23 @@ settings
             </li>
           )}
           <ConnectWallet />*/}
+
         </ul>
+
         <div className="order-1 ml-auto flex items-center md:order-2 lg:ml-0">
+          <div className="mr-5">
+            <button
+              className={`nav-link inline-flex items-center gap-1`}
+              data-place-trigger
+            >
+              City
+              <svg className="h-4 w-4 fill-current" viewBox="0 0 20 20">
+                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+              </svg>
+            </button>
+          </div>
+
+
           {settings.search && (
             <button
               className="border-border text-dark hover:text-primary dark:border-darkmode-border mr-5 inline-block border-r pr-5 text-xl dark:text-white dark:hover:text-darkmode-primary"

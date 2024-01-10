@@ -1,11 +1,11 @@
 "use client";
 
-import searchData from ".json/search.json";
+import locationData from ".json/places.json";
 import React, { useEffect, useState } from "react";
-import SearchResult, { type ISearchItem } from "./SearchResult";
+import LocationResult from "./LocationResult";
 
 
-const SearchModal = () => {
+const LocationModal = () => {
   const [searchString, setSearchString] = useState("");
 
   // handle input change
@@ -14,62 +14,45 @@ const SearchModal = () => {
   };
 
   // generate search result
-  const doSearch = (searchData: ISearchItem[]) => {
-    const regex = new RegExp(`${searchString}`, "gi");
-    if (searchString === "") {
-      return [];
-    } else {
-      const searchResult = searchData.filter((item) => {
-        const title = item.frontmatter.title.toLowerCase().match(regex);
-        const description = item.frontmatter.description
-          ?.toLowerCase()
-          .match(regex);
-        const categories = item.frontmatter.categories
-          ?.join(" ")
-          .toLowerCase()
-          .match(regex);
-        const tags = item.frontmatter.tags
-          ?.join(" ")
-          .toLowerCase()
-          .match(regex);
-        const content = item.content.toLowerCase().match(regex);
 
-        if (title || content || description || categories || tags) {
-          return item;
-        }
-      });
-      return searchResult;
-    }
-  };
+  // const countries: ICountry[] = (locationData.countries || []).map((countryData: any) => {
+  //   const states: IState[] = (countryData.states || []).map((stateData: any) => {
+  //     const cities: ICity[] = (stateData.cities || []).map((cityName: string) => ({ name: cityName }));
+  //     return { name: stateData.name, cities };
+  //   });
+      
+  
+
+  console.log(locationData.countries[0].name)
 
   // get search result
   const startTime = performance.now();
-  const searchResult = doSearch(searchData);
+  // const searchResult = doSearch(searchData);
   const endTime = performance.now();
   const totalTime = ((endTime - startTime) / 1000).toFixed(3);
 
   // search dom manipulation
   useEffect(() => {
-    const searchModal = document.getElementById("searchModal");
+    const locationModal = document.getElementById("locationModal");
     const searchInput = document.getElementById("searchInput");
-    const searchModalOverlay = document.getElementById("searchModalOverlay");
+    const locationModalOverlay = document.getElementById("locationModalOverlay");
     const searchResultItems = document.querySelectorAll("#searchItem");
-    const searchModalTriggers = document.querySelectorAll(
-      "[data-search-trigger]",
+    const locationModalTriggers = document.querySelectorAll(
+      "[data-place-trigger]",
     );
 
     // search modal open
-    searchModalTriggers.forEach((button) => {
+    locationModalTriggers.forEach((button) => {
       button.addEventListener("click", function () {
-        const searchModal = document.getElementById("searchModal");
-        searchModal!.classList.add("show");
+        const locationModal = document.getElementById("locationModal");
+        locationModal!.classList.add("show");
         searchInput!.focus();
       });
     });
 
     // search modal close
-    searchModalOverlay!.addEventListener("click", function () {
-      searchModal!.classList.remove("show");
+    locationModalOverlay!.addEventListener("click", function () {
+      locationModal!.classList.remove("show");
     });
 
     // keyboard navigation
@@ -92,7 +75,7 @@ const SearchModal = () => {
 
     document.addEventListener("keydown", function (event) {
       if ((event.metaKey || event.ctrlKey) && event.key === "k") {
-        searchModal!.classList.add("show");
+        locationModal!.classList.add("show");
         searchInput!.focus();
         updateSelection();
       }
@@ -102,7 +85,7 @@ const SearchModal = () => {
       }
 
       if (event.key === "Escape") {
-        searchModal!.classList.remove("show");
+        locationModal!.classList.remove("show");
       }
 
       if (event.key === "ArrowUp" && selectedIndex > 0) {
@@ -118,17 +101,17 @@ const SearchModal = () => {
         ) as HTMLAnchorElement;
         if (activeLink) {
           activeLink?.click();
-          searchModal!.classList.remove("show");
+          locationModal!.classList.remove("show");
         }
       }
 
       updateSelection();
     });
-  }, [searchString]);
+  }, []);
 
   return (
-    <div id="searchModal" className="search-modal">
-      <div id="searchModalOverlay" className="search-modal-overlay" />
+    <div id="locationModal" className="search-modal">
+      <div id="locationModalOverlay" className="search-modal-overlay" />
       <div className="search-wrapper">
         <div className="search-wrapper-header">
           <label
@@ -175,7 +158,7 @@ const SearchModal = () => {
             autoComplete="off"
           />
         </div>
-        <SearchResult searchResult={searchResult} searchString={searchString} />
+        <LocationResult searchString={searchString}/>
         <div className="search-wrapper-footer">
           <span className="flex items-center">
             <kbd>
@@ -216,12 +199,12 @@ const SearchModal = () => {
             </kbd>
             to select
           </span>
-          {searchString && (
+          {/* {searchString && (
             <span>
               <strong>{searchResult.length} </strong> results - in{" "}
               <strong>{totalTime} </strong> seconds
             </span>
-          )}
+          )} */}
           <span>
             <kbd>ESC</kbd> to close
           </span>
@@ -231,4 +214,4 @@ const SearchModal = () => {
   );
 };
 
-export default SearchModal;
+export default LocationModal;

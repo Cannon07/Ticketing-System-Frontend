@@ -114,24 +114,14 @@ export const ConnectWallet = () => {
                   <span
                     className={`btn btn-outline-primary btn-sm hidden lg:inline-flex items-center cursor-pointer`}
                   >
-                    {account.name}
+                    Hello, {account.name} 
                     <svg className="h-4 w-4 fill-current" viewBox="0 0 20 20">
                       <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
                     </svg>
                   </span>
                   <ul className="nav-dropdown-list hidden group-hover:block lg:invisible lg:absolute lg:block lg:opacity-0 lg:group-hover:visible lg:group-hover:opacity-100">
-              {/*{accountsList.map((child: AccountList, i: number) => (
-                      (currentAccount !== child) &&
-                      <li className="nav-dropdown-item" key={`children-${i}`}>
-                          <span
-                            className="nav-dropdown-link block"
-                            onClick={() => (accounts && setAccount(accounts[i]))}
-                          >
-                            {child.name}
-                          </span>
-                      </li>
-                    ))}*/}
-              {accounts.map((child) => (
+                    
+              {accounts?.map((child) => (
                       (account !== child) &&
                       <li className="nav-dropdown-item" key={`children-${Math.random()}`}>
                           <span
