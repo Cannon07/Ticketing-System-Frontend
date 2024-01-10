@@ -1,5 +1,5 @@
 "use client";
-import locationData from '.json/places.json'
+import locationData from "../../data/places.json";
 import { useState } from 'react';
 
 

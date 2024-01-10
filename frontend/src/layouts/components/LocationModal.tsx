@@ -1,9 +1,8 @@
 "use client";
 
-import locationData from ".json/places.json";
+import locationData from "../../data/places.json";
 import React, { useEffect, useState } from "react";
 import LocationResult from "./LocationResult";
-
 
 const LocationModal = () => {
   const [searchString, setSearchString] = useState("");

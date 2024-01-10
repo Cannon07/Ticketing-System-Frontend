@@ -1,0 +1,112 @@
+{
+  "countries": [
+    {
+      "name": "United States",
+      "states": [
+        {
+          "name": "California",
+          "cities": [
+            "Los Angeles",
+            "San Francisco",
+            "San Diego"
+          ]
+        },
+        {
+          "name": "New York",
+          "cities": [
+            "New York City",
+            "Buffalo",
+            "Rochester"
+          ]
+        }
+      ],
+      "popular_cities": [
+        "New York City",
+        "Los Angeles",
+        "Chicago",
+        "San Francisco"
+      ]
+    },
+    {
+      "name": "India",
+      "states": [
+        {
+          "name": "Maharashtra",
+          "cities": [
+            "Mumbai",
+            "Pune",
+            "Nagpur"
+          ]
+        },
+        {
+          "name": "Delhi",
+          "cities": [
+            "New Delhi",
+            "Noida",
+            "Gurgaon"
+          ]
+        }
+      ],
+      "popular_cities": [
+        "Mumbai",
+        "Delhi",
+        "Bangalore",
+        "Chennai"
+      ]
+    },
+    {
+      "name": "United Kingdom",
+      "states": [
+        {
+          "name": "England",
+          "cities": [
+            "London",
+            "Manchester",
+            "Birmingham"
+          ]
+        },
+        {
+          "name": "Scotland",
+          "cities": [
+            "Edinburgh",
+            "Glasgow",
+            "Aberdeen"
+          ]
+        }
+      ],
+      "popular_cities": [
+        "London",
+        "Edinburgh",
+        "Manchester",
+        "Glasgow"
+      ]
+    },
+    {
+      "name": "Canada",
+      "states": [
+        {
+          "name": "Ontario",
+          "cities": [
+            "Toronto",
+            "Ottawa",
+            "Mississauga"
+          ]
+        },
+        {
+          "name": "Quebec",
+          "cities": [
+            "Montreal",
+            "Quebec City",
+            "Laval"
+          ]
+        }
+      ],
+      "popular_cities": [
+        "Toronto",
+        "Vancouver",
+        "Montreal",
+        "Calgary"
+      ]
+    }
+  ]
+}
