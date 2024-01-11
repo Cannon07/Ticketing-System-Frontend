@@ -146,7 +146,7 @@ const LocationModal = () => {
           </label>
           <input
             id="searchInput"
-            placeholder="Search..."
+            placeholder="Search for your city..."
             className="search-wrapper-header-input"
             type="input"
             name="search"
