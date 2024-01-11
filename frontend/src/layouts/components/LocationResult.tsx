@@ -113,12 +113,10 @@ const LocationResult = ({
                 }
 
             </div>
-
             <button className="font-semibold" onClick={toggleShowAllCities}>{showAllCities ? 'Hide All Cities' : 'View All Cities'}</button>
           </div>
 
       }
-
     </div>
   );
 };
