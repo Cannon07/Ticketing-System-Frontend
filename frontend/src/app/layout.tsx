@@ -8,7 +8,7 @@ import Header from "@/partials/Header";
 import Providers from "@/partials/Providers";
 import "@/styles/main.scss";
 import LocationModal from "@/components/LocationModal";
-import React, { useState } from "react";
+import React from "react";
 
 
 export default function RootLayout({

@@ -31,7 +31,6 @@ const Providers = ({ children }: { children: ReactNode }) => {
           enableColorScheme={false}
         >
           <GlobalContextProvider>
-
             {children}
           </GlobalContextProvider>
         </ThemeProvider>

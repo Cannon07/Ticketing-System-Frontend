@@ -56,7 +56,7 @@ const LocationResult = ({
 
   const handleSelectCity = (city: string) => {
     setSelectedCity(city);
-    setSelectCity(city);
+    setSelectCity(city); 
     localStorage.setItem('city',city);
   }
 
@@ -69,7 +69,7 @@ const LocationResult = ({
         searchString ? <div>
           {
             (searchCities().length !== 0) ? searchCities().map(city => (
-              <button className="p-2" onClick={() => handleSelectCity(city.name)} key={city.id}>
+              <button className="p-2 hover:font-semibold" onClick={() => handleSelectCity(city.name)} key={city.id}>
                 {city.name}
               </button>
             )) : <p className="mt-4">
@@ -82,13 +82,13 @@ const LocationResult = ({
             <h3>Popular Cities</h3>
 
             {popular_cities.map(city => (
-              <button className="p-2" key={city.id} onClick={() => handleSelectCity(city.name)}>{city.name}</button>
+              <button className="p-2 hover:font-semibold" key={city.id} onClick={() => handleSelectCity(city.name)}>{city.name}</button>
             ))}
 
             <h3>Other Cities</h3>
 
             {other_cities.map(city => (
-              <button className="p-2" key={city.id} onClick={() => handleSelectCity(city.name)}>{city.name}</button>
+              <button className="p-2 hover:font-semibold" key={city.id} onClick={() => handleSelectCity(city.name)}>{city.name}</button>
             ))}
 
           </div>

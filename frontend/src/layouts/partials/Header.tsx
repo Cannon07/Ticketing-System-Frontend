@@ -90,9 +90,9 @@ const Header = () => {
 
         <ul
           id="nav-menu"
-          className="navbar-nav order-3 hidden w-full pb-6 lg:order-1 lg:flex lg:w-auto lg:space-x-2 lg:pb-0 xl:space-x-8"
+          className="navbar-nav order-3 hidden w-full pb-6 lg:order-1 lg:flex lg:w-auto lg:space-x-2 lg:pb-0 xl:space-x-8 lg:ml-36"
         >
-          {main.map((menu, i) => (
+          {main.map((menu, i) => ( 
             <React.Fragment key={`menu-${i}`}>
               {menu.hasChildren ? (
                 <li className="nav-item nav-dropdown group relative">
@@ -158,9 +158,9 @@ const Header = () => {
         </ul>
 
         <div className="order-1 ml-auto flex items-center md:order-2 lg:ml-0">
-          <div className="mr-5 hidden lg:contents">
+          <div className="hidden lg:contents">
             <button
-              className={`nav-link inline-flex items-center gap-1`}
+              className={`nav-link inline-flex items-center gap-1 lg:mr-3`}
               data-place-trigger
             >
               {selectedCity == '' ? 'Select City' : selectedCity}
@@ -173,7 +173,7 @@ const Header = () => {
 
           {settings.search && (
             <button
-              className="border-border text-dark hover:text-primary dark:border-darkmode-border mr-5 inline-block border-r pr-5 text-xl dark:text-white dark:hover:text-darkmode-primary"
+              className="border-border text-dark hover:text-primary dark:border-darkmode-border mr-2 md:mr-5 lg:mr-5 inline-block border-r pr-5 text-xl dark:text-white dark:hover:text-darkmode-primary"
               aria-label="search"
               data-search-trigger
             >

@@ -17,7 +17,7 @@ interface GlobalContextProviderProps{
 }
 
 export const GlobalContextProvider = ({children}:GlobalContextProviderProps)=>{
-    const city=localStorage.getItem('city')?localStorage.getItem('city')?.toString():"";
+    const city=localStorage.getItem('city')?localStorage.getItem('city'):"";
     const [selectedCity,setSelectCity] = useState(city?city.toString():"");
 
     return (
