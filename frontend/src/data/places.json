@@ -1,112 +1,235 @@
 {
-  "countries": [
+  "indianCities": [
     {
-      "name": "United States",
-      "states": [
-        {
-          "name": "California",
-          "cities": [
-            "Los Angeles",
-            "San Francisco",
-            "San Diego"
-          ]
-        },
-        {
-          "name": "New York",
-          "cities": [
-            "New York City",
-            "Buffalo",
-            "Rochester"
-          ]
-        }
-      ],
-      "popular_cities": [
-        "New York City",
-        "Los Angeles",
-        "Chicago",
-        "San Francisco"
-      ]
+      "id": 1,
+      "name": "Mumbai",
+      "popular": true
     },
     {
-      "name": "India",
-      "states": [
-        {
-          "name": "Maharashtra",
-          "cities": [
-            "Mumbai",
-            "Pune",
-            "Nagpur"
-          ]
-        },
-        {
-          "name": "Delhi",
-          "cities": [
-            "New Delhi",
-            "Noida",
-            "Gurgaon"
-          ]
-        }
-      ],
-      "popular_cities": [
-        "Mumbai",
-        "Delhi",
-        "Bangalore",
-        "Chennai"
-      ]
+      "id": 2,
+      "name": "Delhi",
+      "popular": true
     },
     {
-      "name": "United Kingdom",
-      "states": [
-        {
-          "name": "England",
-          "cities": [
-            "London",
-            "Manchester",
-            "Birmingham"
-          ]
-        },
-        {
-          "name": "Scotland",
-          "cities": [
-            "Edinburgh",
-            "Glasgow",
-            "Aberdeen"
-          ]
-        }
-      ],
-      "popular_cities": [
-        "London",
-        "Edinburgh",
-        "Manchester",
-        "Glasgow"
-      ]
+      "id": 3,
+      "name": "Bangalore",
+      "popular": true
     },
     {
-      "name": "Canada",
-      "states": [
-        {
-          "name": "Ontario",
-          "cities": [
-            "Toronto",
-            "Ottawa",
-            "Mississauga"
-          ]
-        },
-        {
-          "name": "Quebec",
-          "cities": [
-            "Montreal",
-            "Quebec City",
-            "Laval"
-          ]
-        }
-      ],
-      "popular_cities": [
-        "Toronto",
-        "Vancouver",
-        "Montreal",
-        "Calgary"
-      ]
+      "id": 4,
+      "name": "Hyderabad",
+      "popular": true
+    },
+    {
+      "id": 5,
+      "name": "Chennai",
+      "popular": true
+    },
+    {
+      "id": 6,
+      "name": "Kolkata",
+      "popular": false
+    },
+    {
+      "id": 7,
+      "name": "Ahmedabad",
+      "popular": false
+    },
+    {
+      "id": 8,
+      "name": "Pune",
+      "popular": false
+    },
+    {
+      "id": 9,
+      "name": "Jaipur",
+      "popular": false
+    },
+    {
+      "id": 10,
+      "name": "Lucknow",
+      "popular": false
+    },
+    {
+      "id": 11,
+      "name": "Chandigarh",
+      "popular": false
+    },
+    {
+      "id": 12,
+      "name": "Bhopal",
+      "popular": false
+    },
+    {
+      "id": 13,
+      "name": "Indore",
+      "popular": false
+    },
+    {
+      "id": 14,
+      "name": "Surat",
+      "popular": false
+    },
+    {
+      "id": 15,
+      "name": "Kanpur",
+      "popular": false
+    },
+    {
+      "id": 16,
+      "name": "Kanpur",
+      "popular": false
+    },
+    {
+      "id": 17,
+      "name": "Kanpur",
+      "popular": false
+    },
+    {
+      "id": 18,
+      "name": "Kanpur",
+      "popular": false
+    },
+    {
+      "id": 19,
+      "name": "Kanpur",
+      "popular": false
+    },
+    {
+      "id": 20,
+      "name": "Kanpur",
+      "popular": false
+    },
+    {
+      "id": 21,
+      "name": "Kanpur",
+      "popular": false
+    },
+    {
+      "id": 22,
+      "name": "Kanpur",
+      "popular": false
+    },
+    {
+      "id": 23,
+      "name": "Kanpur",
+      "popular": false
+    },
+    {
+      "id": 24,
+      "name": "Kanpur",
+      "popular": false
+    },
+    {
+      "id": 25,
+      "name": "Kanpur",
+      "popular": false
+    },
+    {
+      "id": 26,
+      "name": "Kanpur",
+      "popular": false
+    },
+    {
+      "id": 27,
+      "name": "Kanpur",
+      "popular": false
+    },
+    {
+      "id": 28,
+      "name": "Kanpur",
+      "popular": false
+    },
+    {
+      "id": 29,
+      "name": "Kanpur",
+      "popular": false
+    },
+    {
+      "id": 30,
+      "name": "Kanpur",
+      "popular": false
+    },
+    {
+      "id": 31,
+      "name": "Kanpur",
+      "popular": false
+    },
+    {
+      "id": 32,
+      "name": "Kanpur",
+      "popular": false
+    },
+    {
+      "id": 33,
+      "name": "Kanpur",
+      "popular": false
+    },
+    {
+      "id": 34,
+      "name": "Kanpur",
+      "popular": false
+    },
+    {
+      "id": 35,
+      "name": "Kanpur",
+      "popular": false
+    },
+    {
+      "id": 36,
+      "name": "Kanpur",
+      "popular": false
+    },
+    {
+      "id": 37,
+      "name": "Kanpur",
+      "popular": false
+    },
+    {
+      "id": 38,
+      "name": "Kanpur",
+      "popular": false
+    },
+    {
+      "id": 39,
+      "name": "Kanpur",
+      "popular": false
+    },
+    {
+      "id": 40,
+      "name": "Kanpur",
+      "popular": false
+    },
+    {
+      "id": 41,
+      "name": "Kanpur",
+      "popular": false
+    },
+    {
+      "id": 42,
+      "name": "Kanpur",
+      "popular": false
+    },
+    {
+      "id": 43,
+      "name": "Kanpur",
+      "popular": false
+    },
+    {
+      "id": 44,
+      "name": "Kanpur",
+      "popular": false
+    },
+    {
+      "id": 45,
+      "name": "Kanpur",
+      "popular": false
+    },
+    {
+      "id": 46,
+      "name": "Kanpur",
+      "popular": false
     }
+   
   ]
 }

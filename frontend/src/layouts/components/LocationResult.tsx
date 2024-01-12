@@ -1,70 +1,121 @@
 "use client";
 import locationData from "../../data/places.json";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useGlobalContext } from "@/app/context/globalContext";
 
-
-const LocationResult = ({
-  searchString,
-}: {
+interface LocationResultProps {
   searchString: string;
-}) => {
+  handleLength: any
+
+}
+const LocationResult = ({
+  searchString, handleLength
+
+}: LocationResultProps) => {
 
 
-  const [selectedCity,setSelectedCity] = useState('');
+  const [selectedCity, setSelectedCity] = useState('');
+  const [showAllCities, setShowAllCities] = useState(false);
+  const { setSelectCity } = useGlobalContext();
 
 
-  const allCities = locationData.countries
-    .flatMap((country) => [...(country.states || []).flatMap((state) => state.cities || [])])
-    .filter(Boolean);
+  const locationModal = document.getElementById("locationModal");
+  useEffect(() => {
+      if (selectedCity !== '') {
+        locationModal!.classList.remove("show");
+        setShowAllCities(false)
+        setSelectedCity('');
+      }
+  })
+
+
+  const allCities = locationData.indianCities
+
+  var popular_cities: any[] = [];
+
+  allCities.map((city) => {
+    if (city.popular == true) {
+      popular_cities.push(city)
+    }
+  })
+
+  var other_cities: any[] = [];
+  var top6: any[] = [];
+  let cnt = 0;
+
+  allCities.map((city) => {
+    if (city.popular === false) {
+      other_cities.push(city)
+    }
+    if (cnt !== 6 && city.popular === false) {
+      top6.push(city)
+      cnt++;
+    }
+  })
+
+
+  const toggleShowAllCities = () => {
+    setShowAllCities(!showAllCities);
+  };
 
   function searchCities() {
-    const searchResult = allCities.filter(city => city.toLowerCase().includes(searchString.toLowerCase()));
+    const searchResult = allCities.filter(city => city.name.toLowerCase().includes(searchString.toLowerCase()));
     return searchResult;
   }
 
-  console.log(searchCities());
+  handleLength(searchCities().length);
 
+  const handleSelectCity = (city: string) => {
+    setSelectedCity(city);
+    setSelectCity(city);
+    localStorage.setItem('city', city);
+  }
 
 
   return (
     <div className="search-wrapper-body flex gap-4 text-center justify-center">
 
       {
-        searchString ? <div>
-      
-              {
-                (searchCities().length !== 0) ? searchCities().map(city => (
-                  <div key={city}>
-                 {city}
-                  </div>
-                )) : 'No cities found'
-              }
+        searchString !== "" ? <div>
+          {
+            (searchCities().length !== 0) ? searchCities().map(city => (
+              <button className="p-2 hover:font-semibold" onClick={() => handleSelectCity(city.name)} key={city.id}>
+                {city.name}
+              </button>
+            )) : <p className="mt-4">
+              No results for &quot;<strong>{searchString}</strong>&quot;
+            </p>
+          }
         </div> :
 
-          locationData.countries.map(country => (
-            <div key={country.name}>
-              <div className="text-lg underline font-bold">{country.name}</div>
-              <div className="font-semibold">popular cities</div>
-              <div>{country.popular_cities.map(popular_city => (
-                <div key={popular_city}>
-                  <p className="text-sm">{popular_city}</p>
-                </div>
-              ))}</div>
+          <div>
+            <div>
+              <h3>Popular Cities</h3>
 
-              <div>{country?.states?.map(state => (
-                <div key={state.name}>
-                  <p className="font-semibold">{state.name}</p>
-                  <p className="text-sm">{state.cities?.map(city => (
-                    <div key={city}>
-                      {city}
-                    </div>
-                  ))}
-                  </p>
-                </div>
+              {popular_cities.map(city => (
+                <button className="p-2 hover:font-semibold text-lg" key={city.id} onClick={() => handleSelectCity(city.name)}>{city.name}</button>
               ))}
-              </div>
+
+              <hr className="h-px my-4 bg-gray-200 border-0 dark:bg-gray-900"/>
+
+
+                <h4>Other Cities</h4>
+
+                {showAllCities ?
+
+                  other_cities.map(city => (
+                    <button className="p-2 hover:font-semibold" key={city.id} onClick={() => handleSelectCity(city.name)}>{city.name}</button>
+                  )) :
+
+                  top6.map(city => (
+                    <button className="p-2 hover:font-semibold" key={city.id} onClick={() => handleSelectCity(city.name)}>{city.name}</button>
+                  ))
+                }
+
             </div>
-          ))
+            <button className="font-semibold" onClick={toggleShowAllCities}>{showAllCities ? 'Hide All Cities' : 'View All Cities'}</button>
+          </div>
+
       }
     </div>
   );
