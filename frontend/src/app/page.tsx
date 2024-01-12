@@ -8,12 +8,14 @@ import { Button, Feature } from "@/types";
 import Link from "next/link";
 import { FaCheck } from "react-icons/fa/index.js";
 import EventsCarosuel from "@/partials/EventsCarosuel";
+import CategoriesCarosuel from "@/partials/CategoriesCarosuel";
 
 const Home = () => {
   const homepage = getListPage("homepage/_index.md");
   const testimonial = getListPage("sections/testimonial.md");
   const latest_events = getListPage("sections/latest-events.md");
   const budget_wise_events = getListPage("sections/budget-wise-events.md");
+  const event_categories = getListPage("sections/event-categories.md");
   const callToAction = getListPage("sections/call-to-action.md");
   const { frontmatter } = homepage;
   const {
@@ -119,6 +121,7 @@ const Home = () => {
       >
         <EventsCarosuel data={latest_events} />
         <EventsCarosuel data={budget_wise_events} />
+        <CategoriesCarosuel data={event_categories} />
       </section>
       <section
           className={`section-sm bg-gradient p-0`}
