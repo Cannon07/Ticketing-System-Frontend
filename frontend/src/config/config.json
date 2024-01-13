@@ -22,6 +22,16 @@
     "blog_folder": "blog"
   },
 
+  "event_settings": {
+    "search": true,
+    "sticky_header": true,
+    "theme_switcher": true,
+    "default_theme": "system",
+    "pagination": 9,
+    "summary_length": 200,
+    "blog_folder": "event"
+  },
+
   "params": {
     "contact_form_action": "#",
     "copyright": "Designed And Developed by [Zeon Studio](https://zeon.studio)"

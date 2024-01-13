@@ -1,4 +1,4 @@
-import BlogCard from "@/components/BlogCard";
+import EventCard from "@/components/EventCard";
 import Pagination from "@/components/Pagination";
 import config from "@/config/config.json";
 import { getListPage, getSinglePage } from "@/lib/contentParser";
@@ -9,7 +9,7 @@ import PostSidebar from "@/partials/PostSidebar";
 import SeoMeta from "@/partials/SeoMeta";
 import { Post } from "@/types";
 
-const { blog_folder, pagination } = config.settings;
+const { blog_folder, pagination } = config.event_settings;
 
 // remove dynamicParams
 export const dynamicParams = false;
@@ -41,7 +41,7 @@ function spreadPages(num: number): number[] {
 }
 
 // for all regular pages
-const Posts = ({ params }: { params: { page: number } }) => {
+const Events = ({ params }: { params: { page: number } }) => {
   const postIndex: Post = getListPage(`${blog_folder}/_index.md`);
   const { title, meta_title, description, image } = postIndex.frontmatter;
   const posts: Post[] = getSinglePage(blog_folder);
@@ -72,7 +72,7 @@ const Posts = ({ params }: { params: { page: number } }) => {
               <div className="row">
                 {currentPosts.map((post: any, index: number) => (
                   <div key={index} className="mb-14 lg:col-4 md:col-6">
-                    <BlogCard data={post} />
+                    <EventCard data={post} />
                   </div>
                 ))}
               </div>
@@ -95,4 +95,4 @@ const Posts = ({ params }: { params: { page: number } }) => {
   );
 };
 
-export default Posts;
+export default Events;
