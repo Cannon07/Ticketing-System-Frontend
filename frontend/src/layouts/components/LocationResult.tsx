@@ -102,7 +102,7 @@ const LocationResult = ({
                 </div>
               }
             </div>
-            <button className={`font-semibold ${showAllCities?'pb-4 lg:p-0':''}` } onClick={toggleShowAllCities}>{showAllCities ? 'Hide All Cities' : 'View All Cities'}</button>
+            <button className={`font-semibold ${showAllCities?'pb-3':''}` } onClick={toggleShowAllCities}>{showAllCities ? 'Hide All Cities' : 'View All Cities'}</button>
           </div>
       }
     </div>
