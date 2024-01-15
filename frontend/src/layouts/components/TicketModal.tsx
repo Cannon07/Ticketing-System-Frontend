@@ -72,13 +72,14 @@ const TicketModal = () => {
           <div className={"flex flex-col items-center gap-4"}>
             <h3 className={"mb-4"}>How Many Tickets ?</h3>
             <div className={"flex gap-2 justify-center w-full flex-wrap"}>
-              {totalTickets.map((ticket) => {
+              {totalTickets.map((ticket, index) => {
                 const ticketKey = Object.keys(ticket)[0];
                 const ticketValue = ticket[Number(ticketKey)]
                 return (
                   <button
                     onClick={() => handleTotalTickets(Number(ticketKey))}
                     className={`btn ${ticketValue ? "btn-primary" : "btn-outline-primary"}`}
+                    key={index}
                   >
                     {ticketKey}
                   </button>
@@ -87,10 +88,11 @@ const TicketModal = () => {
             </div>
             <hr className="h-px my-4 w-full bg-gray-200 border-0 dark:bg-gray-900" />
             <div className={"flex justify-center gap-12 flex-wrap"}>
-              {tierList.map((tier) => {
+              {tierList.map((tier, index) => {
                 return (
                   <div
                     className={"flex flex-col items-center"}
+                    key={index}
                   >
                     <p>{tier.name}</p>
                     <p className={"font-semibold"}>{tier.price}</p>
