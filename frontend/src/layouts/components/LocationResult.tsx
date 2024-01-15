@@ -26,7 +26,7 @@ const LocationResult = ({
       setShowAllCities(false)
       setSelectedCity('');
     }
-  })
+  },[selectedCity, locationModal])
 
 
   const allCities = locationData.indianCities
@@ -94,7 +94,7 @@ const LocationResult = ({
                   <h4>Other Cities</h4>
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 md:grid-cols-3 p-4">
                       {other_cities.map(city => (
-                        <button className="hover:font-semibold self-start" key={city.id} onClick={() => handleSelectCity(city.name)}>
+                        <button className="hover:font-semibold flex self-start" key={city.id} onClick={() => handleSelectCity(city.name)}>
                           {city.name}
                         </button>
                       ))}
