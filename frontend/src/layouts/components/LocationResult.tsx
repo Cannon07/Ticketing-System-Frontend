@@ -21,11 +21,11 @@ const LocationResult = ({
 
   const locationModal = document.getElementById("locationModal");
   useEffect(() => {
-      if (selectedCity !== '') {
-        locationModal!.classList.remove("show");
-        setShowAllCities(false)
-        setSelectedCity('');
-      }
+    if (selectedCity !== '') {
+      locationModal!.classList.remove("show");
+      setShowAllCities(false)
+      setSelectedCity('');
+    }
   })
 
 
@@ -40,16 +40,10 @@ const LocationResult = ({
   })
 
   var other_cities: any[] = [];
-  var top6: any[] = [];
-  let cnt = 0;
 
   allCities.map((city) => {
     if (city.popular === false) {
       other_cities.push(city)
-    }
-    if (cnt !== 6 && city.popular === false) {
-      top6.push(city)
-      cnt++;
     }
   })
 
@@ -91,31 +85,25 @@ const LocationResult = ({
           <div>
             <div>
               <h3>Popular Cities</h3>
-
               {popular_cities.map(city => (
                 <button className="p-2 hover:font-semibold text-lg" key={city.id} onClick={() => handleSelectCity(city.name)}>{city.name}</button>
               ))}
-
-              <hr className="h-px my-4 bg-gray-200 border-0 dark:bg-gray-900"/>
-
-
-                <h4>Other Cities</h4>
-
-                {showAllCities ?
-
-                  other_cities.map(city => (
-                    <button className="p-2 hover:font-semibold" key={city.id} onClick={() => handleSelectCity(city.name)}>{city.name}</button>
-                  )) :
-
-                  top6.map(city => (
-                    <button className="p-2 hover:font-semibold" key={city.id} onClick={() => handleSelectCity(city.name)}>{city.name}</button>
-                  ))
-                }
-
+              <hr className="h-px my-4 bg-gray-200 border-0 dark:bg-gray-900" />
+              {showAllCities &&
+                <div>
+                  <h4>Other Cities</h4>
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 md:grid-cols-3 p-4">
+                      {other_cities.map(city => (
+                        <button className="hover:font-semibold self-start" key={city.id} onClick={() => handleSelectCity(city.name)}>
+                          {city.name}
+                        </button>
+                      ))}
+                  </div>
+                </div>
+              }
             </div>
-            <button className="font-semibold" onClick={toggleShowAllCities}>{showAllCities ? 'Hide All Cities' : 'View All Cities'}</button>
+            <button className={`font-semibold ${showAllCities?'pb-4 lg:p-0':''}` } onClick={toggleShowAllCities}>{showAllCities ? 'Hide All Cities' : 'View All Cities'}</button>
           </div>
-
       }
     </div>
   );
