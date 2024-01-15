@@ -136,6 +136,10 @@ const PostSidebar = ({
         </div>
       </Accordion>
 
+      <button className={"btn btn-primary"} data-ticket-trigger>
+        Book Now
+      </button>
+
       {/* <!-- tags --> */}
       {/*<div className="mb-8">
         <h5 className="mb-6">Tags</h5>
