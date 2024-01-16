@@ -238,7 +238,7 @@ const EventPostPage = ({ similarPosts }: any) => {
                     </li>
                     )}
                 </ul> */}
-                    <div className="content mb-10">
+                    <div className="content">
                         <p>
                             {toggle ? content : content.slice(0, 300)}
                             <button className="pl-2 font-semibold" onClick={(e) => setToggle(!toggle)}>{toggle ? 'Read less' : 'Read more'}</button>
@@ -312,7 +312,7 @@ const EventPostPage = ({ similarPosts }: any) => {
 
                 {/* <!-- Related posts --> */}
                 <div className="pb-0">
-                    <h2 className="h3 mb-12 text-center">Related Posts</h2>
+                    <h2 className="h3 mb-10 text-center">Related Posts</h2>
                     <div className="row justify-center">
                         {similarPosts.map((post: any) => (
                             <div key={post.slug} className="lg:col-4 mb-7">
