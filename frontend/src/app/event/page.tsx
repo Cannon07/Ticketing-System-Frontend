@@ -8,7 +8,7 @@ import PageHeader from "@/partials/PageHeader";
 import PostSidebar from "@/partials/PostSidebar";
 import SeoMeta from "@/partials/SeoMeta";
 import { Post } from "@/types";
-const { blog_folder, pagination } = config.event_settings;
+const { blog_folder, pagination } = config.event_settings_2;
 
 const Events = () => {
   const postIndex: Post = getListPage(`${blog_folder}/_index.md`);

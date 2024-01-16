@@ -138,9 +138,9 @@ const EventPostPage = ({ similarPosts }: any) => {
 
 
                                     <div>
-                                        <Link href={'#'} className="btn btn-primary">
+                                        <button data-ticket-trigger className="btn btn-primary">
                                             Book Tickets
-                                        </Link>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -215,9 +215,9 @@ const EventPostPage = ({ similarPosts }: any) => {
 
 
                         <div>
-                            <Link href={'#'} className="btn btn-primary w-full text-center">
+                            <button data-ticket-trigger className="btn btn-primary w-full text-center">
                                 Book Tickets
-                            </Link>
+                            </button>
                         </div>
                     </div>
                 </div>
