@@ -34,20 +34,32 @@ const EventPostPage = ({ similarPosts }: any) => {
     const [showLeftArrow, setShowLeftArrow] = useState(false);
     const [showRightArrow, setShowRightArrow] = useState(true); // Initially assume there's content to scroll right
 
+
+
+    
     const handleScroll = () => {
+        console.log("scroll"+containerRef?.current?.scrollWidth)
+        console.log("client"+containerRef?.current?.clientWidth)
+        console.log("left"+containerRef.current?.scrollLeft);
+        console.log("diff"+(Number(containerRef?.current?.scrollWidth)-Number(containerRef?.current?.clientWidth)))
         if (containerRef.current) {
             setShowLeftArrow(containerRef.current.scrollLeft > 0);
             setShowRightArrow(containerRef.current.scrollLeft < containerRef.current.scrollWidth - containerRef.current.clientWidth);
+            // setShowRightArrow(false);
         }
     };
 
     const scrollLeft = () => {
+       
         if (containerRef.current) {
             containerRef.current.scrollLeft -= 100; 
         }
     };
 
     const scrollRight = () => {
+
+        console.log(containerRef.current?.scrollLeft)
+    
         if (containerRef.current) {
             containerRef.current.scrollLeft += 100; 
         }
@@ -67,7 +79,7 @@ const EventPostPage = ({ similarPosts }: any) => {
                 container.removeEventListener('scroll', handleScroll);
             }
         };
-    }, []);
+    }, [containerRef]);
 
 
 
