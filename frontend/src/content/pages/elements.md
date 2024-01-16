@@ -210,7 +210,7 @@ Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod 
 
 <Accordion title="Why should you need to do this?">
 
-- This is a thing.
+- <h1>This is a thing.</h1>
 - This is a thing.
 - This is a thing.
 - This is a thing.

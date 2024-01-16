@@ -71,7 +71,7 @@ const Posts = ({ params }: { params: { page: number } }) => {
             <div className="lg:col-8">
               <div className="row">
                 {currentPosts.map((post: any, index: number) => (
-                  <div key={index} className="mb-14 lg:col-4 md:col-6">
+                  <div key={index} className="mb-14 md:col-6">
                     <BlogCard data={post} />
                   </div>
                 ))}
