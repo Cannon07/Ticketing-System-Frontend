@@ -90,7 +90,7 @@ const LocationResult = ({
               {popular_cities.map(city => (
                 <button className="p-2 hover:font-semibold text-lg" key={city.id} onClick={() => handleSelectCity(city.name)}>{city.name}</button>
               ))}
-              <hr className="h-px my-4 bg-gray-200 border-0 dark:bg-gray-900" />
+              <hr className="h-px my-4 dark:bg-gray-600 border-0 bg-gray-200" />
               {showAllCities &&
                 <div>
                   <h4>Other Cities</h4>
@@ -104,7 +104,7 @@ const LocationResult = ({
                 </div>
               }
             </div>
-            <button className={`font-semibold ${showAllCities?'pb-3':''}` } onClick={toggleShowAllCities}>{showAllCities ? 'Hide All Cities' : 'View All Cities'}</button>
+            <button className={`font-semibold pt-1 ${showAllCities?'pb-3':''}` } onClick={toggleShowAllCities}>{showAllCities ? 'Hide All Cities' : 'View All Cities'}</button>
           </div>
       }
     </div>

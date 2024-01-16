@@ -39,10 +39,10 @@ const EventPostPage = ({ similarPosts }: any) => {
 
 
     const handleScroll = () => {
-        console.log("scroll"+containerRef?.current?.scrollWidth)
-        console.log("client"+containerRef?.current?.clientWidth)
-        console.log("left"+containerRef.current?.scrollLeft);
-        console.log("diff"+(Number(containerRef?.current?.scrollWidth)-Number(containerRef?.current?.clientWidth)))
+        // console.log("scroll"+containerRef?.current?.scrollWidth)
+        // console.log("client"+containerRef?.current?.clientWidth)
+        // console.log("left"+containerRef.current?.scrollLeft);
+        // console.log("diff"+(Number(containerRef?.current?.scrollWidth)-Number(containerRef?.current?.clientWidth)))
         if (containerRef.current) {
             setShowLeftArrow(containerRef.current.scrollLeft > 0);
             setShowRightArrow(containerRef.current.scrollLeft < containerRef.current.scrollWidth - containerRef.current.clientWidth);
@@ -286,6 +286,8 @@ const EventPostPage = ({ similarPosts }: any) => {
                         </div>
                     </div> */}
                     <div>
+                        <hr className="h-px my-8 dark:bg-gray-600 border-0 bg-gray-200"/>
+
                         <h2 className="h3">Artists</h2>
                         <div className="relative">
                             <div className="flex items-center gap-6 overflow-scroll no-scrollbar" ref={containerRef}>
@@ -318,6 +320,9 @@ const EventPostPage = ({ similarPosts }: any) => {
 
                             </button>
                         </div>
+
+                        <hr className="h-px my-8 dark:bg-gray-600 border-0 bg-gray-200"/>
+
 
                     </div>
                     {/* <Disqus className="mt-20" /> */}
