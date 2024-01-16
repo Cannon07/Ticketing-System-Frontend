@@ -26,6 +26,26 @@ export type Post = {
   slug?: string;
   content?: string;
 };
+export type EventPost = {
+  frontmatter: {
+    title: string;
+    about: string;
+    cast: string;
+    artists: string[];
+    meta_title?: string;
+    description?: string;
+    image?: string;
+    image2?: string;
+    star_icon: string;
+    categories: string[];
+    author: string;
+    tags: string[];
+    date?: string;
+    draft?: boolean;
+  };
+  slug?: string;
+  content?: string;
+};
 
 export type Place = {
   countries: [

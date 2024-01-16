@@ -141,7 +141,7 @@ const Header = () => {
             </React.Fragment>
           ))}
 
-          <div className="lg:hidden">
+          <div className="lg:hidden md:hidden">
             <button
               className={`nav-link inline-flex items-center gap-1`}
               data-place-trigger
@@ -152,13 +152,10 @@ const Header = () => {
               </svg>
             </button>
           </div>
-
-
-
         </ul>
 
         <div className="order-1 ml-auto flex items-center md:order-2 lg:ml-0">
-          <div className="hidden lg:contents">
+          <div className="hidden lg:contents md:contents">
             <button
               className={`nav-link inline-flex items-center gap-1 lg:mr-3`}
               data-place-trigger
