@@ -86,7 +86,7 @@ const TicketModal = () => {
                 );
               })}
             </div>
-            <hr className="h-px my-4 dark:bg-gray-600 border-0 bg-gray-200"/>
+            <hr className="h-px my-4 w-full dark:bg-gray-600 border-0 bg-gray-200" />
             <div className={"flex justify-center gap-12 flex-wrap"}>
               {tierList.map((tier, index) => {
                 return (
