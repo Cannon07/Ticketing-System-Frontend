@@ -43,18 +43,18 @@ const EventPostPage = ({ similarPosts }: any) => {
 
     const scrollLeft = () => {
         if (containerRef.current) {
-            containerRef.current.scrollLeft -= 100; 
+            containerRef.current.scrollLeft -= 100;
         }
     };
 
     const scrollRight = () => {
         if (containerRef.current) {
-            containerRef.current.scrollLeft += 100; 
+            containerRef.current.scrollLeft += 100;
         }
     };
 
     useEffect(() => {
-       
+
         handleScroll();
 
         const container = containerRef.current;
@@ -126,9 +126,9 @@ const EventPostPage = ({ similarPosts }: any) => {
 
 
                                     <div>
-                                        <Link href={'#'} className="btn btn-primary">
+                                        <button data-ticket-trigger className="btn btn-primary">
                                             Book Tickets
-                                        </Link>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -203,9 +203,9 @@ const EventPostPage = ({ similarPosts }: any) => {
 
 
                         <div>
-                            <Link href={'#'} className="btn btn-primary w-full text-center">
+                            <button data-ticket-trigger className="btn btn-primary w-full text-center">
                                 Book Tickets
-                            </Link>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -295,13 +295,13 @@ const EventPostPage = ({ similarPosts }: any) => {
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
                                 </svg>
-                              
+
                             </button>
                             <button className={`absolute right-0 top-1/2 transform -translate-y-1/2 ${showRightArrow ? '' : 'hidden'}`} onClick={scrollRight}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                                 </svg>
-                             
+
                             </button>
                         </div>
 
