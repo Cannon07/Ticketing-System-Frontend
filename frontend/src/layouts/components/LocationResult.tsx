@@ -47,6 +47,8 @@ const LocationResult = ({
     }
   })
 
+  other_cities.sort((city_a, city_b) => city_a.name.localeCompare(city_b.name));
+
 
   const toggleShowAllCities = () => {
     setShowAllCities(!showAllCities);
