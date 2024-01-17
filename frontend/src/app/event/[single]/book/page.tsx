@@ -1,4 +1,5 @@
 import EventCard from "@/components/EventCard";
+import { EventOverviewCard } from "@/components/EventOverviewCard";
 import Pagination from "@/components/Pagination";
 import config from "@/config/config.json";
 import { getListPage, getSinglePage } from "@/lib/contentParser";
@@ -32,7 +33,7 @@ const Book = () => {
       <PageHeader title={"Checkout"} />
       <section className="section">
         <div className="container">
-          <div className="row gx-5">
+          <div className="row gx-5 h-full">
             {/*<div className="lg:col-8">
               <div className="row">
                 {currentPosts.map((post: any, index: number) => (
@@ -47,7 +48,7 @@ const Book = () => {
                 totalPages={totalPages}
               />
             </div>*/}
-            <div className={"lg:col-7"}>Hello</div>
+            <EventOverviewCard />
 
             <ReceitSidebar
               categories={categories}
