@@ -9,6 +9,7 @@ import { FaRegFolder, FaRegUserCircle } from "react-icons/fa/index.js";
 const BlogCard = ({ data }: { data: Post }) => {
   const { summary_length, blog_folder } = config.settings;
   const { title, image, author, categories, date } = data.frontmatter;
+
   return (
     <div className="bg-body dark:bg-darkmode-body">
       {image && (

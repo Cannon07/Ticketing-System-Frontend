@@ -2,40 +2,38 @@
 
 import React, { useState } from 'react'
 import { useGlobalContext } from '@/app/context/globalContext';
-import NotFound from '@/app/not-found';
+import NotConnected from '@/app/not-connected';
+
 
 
 const OrganizerRegistrationForm = () => {
 
 
     const [aadharNumber, setAadharNumber] = useState('');
-    const [aadharError, setAadharError] = useState('');
+    // const [aadharError, setAadharError] = useState(false);
     const { walletAddress, hasAccount } = useGlobalContext();
 
 
-    if (!hasAccount) return <NotFound />
+    if (!hasAccount) return <NotConnected />
 
 
 
     const handleAadharChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         event.preventDefault()
-
-        const inputAadhar = event.target.value;
-
-        // Validate Aadhar number
-        if (/^\d{12}$/.test(inputAadhar)) {
-            setAadharError('');
-        } else {
-            setAadharError('Invalid Aadhar number');
+      
+        event.target.value=event.target.value.replace(/\D/g, '');
+        if(event.target.value.length>12){
+            event.target.value=event.target.value.slice(0,12);
         }
+        const inputAadhar=event.target.value
 
         setAadharNumber(inputAadhar);
 
-        //  dark:bg-gray-600 border-0 bg-gray-200
+      
     };
     //
     return (
-        <div className="mx-auto border dark:border-gray-600 border-gray-300  rounded-lg">
+        <div className="mx-auto border dark:border-gray-600 border-gray-300 rounded-lg">
             <form className="grid grid-cols-2 gap-6 p-4 py-8" method="POST">
                 <div className="mb-4">
                     <label htmlFor="type" className="form-label block">
@@ -45,7 +43,7 @@ const OrganizerRegistrationForm = () => {
                         disabled
                         id="address"
                         name="address"
-                        className="form-input-disable w-full"
+                        className="form-input-disable w-full shadow-md"
                         value={walletAddress}
                         type="text"
                         required
@@ -59,7 +57,7 @@ const OrganizerRegistrationForm = () => {
                     <input
                         id="name"
                         name="name"
-                        className="form-input w-full"
+                        className="form-input w-full shadow-md"
                         placeholder="Enter your full name.."
                         type="text"
                         required
@@ -73,7 +71,7 @@ const OrganizerRegistrationForm = () => {
                     <input
                         id="uname"
                         name="uname"
-                        className="form-input w-full"
+                        className="form-input w-full shadow-md"
                         placeholder="Enter your username.."
                         type="text"
                         required
@@ -88,7 +86,7 @@ const OrganizerRegistrationForm = () => {
                         disabled
                         id="type"
                         name="type"
-                        className="form-input-disable w-full"
+                        className="form-input-disable w-full shadow-md"
                         value={'organizer'}
                         type="text"
                         required
@@ -102,7 +100,7 @@ const OrganizerRegistrationForm = () => {
                     <input
                         id="organization"
                         name="organization"
-                        className="form-input w-full"
+                        className="form-input w-full shadow-md"
                         placeholder="Enter your organization name.."
                         type="text"
                     />
@@ -115,10 +113,11 @@ const OrganizerRegistrationForm = () => {
                     <input
                         id="aadhar"
                         name="aadhar"
-                        className="form-input w-full"
+                        className="form-input shadow-md"
                         placeholder="Enter your Aadhar number.."
                         type="text"
-                        // value={aadharNumber}
+                        value={aadharNumber}
+                        onChange={handleAadharChange}
                         required
                     />
                 </div>

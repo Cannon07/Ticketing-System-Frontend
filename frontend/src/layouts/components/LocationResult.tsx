@@ -69,7 +69,7 @@ const LocationResult = ({
 
 
   return (
-    <div className="search-wrapper-body flex gap-4 text-center justify-center">
+    <div className="search-wrapper-body flex gap-4 text-center justify-center no-scrollbar">
 
       {
         searchString !== "" ? <div>
@@ -94,7 +94,7 @@ const LocationResult = ({
               {showAllCities &&
                 <div>
                   <h4>Other Cities</h4>
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 md:grid-cols-3 p-4">
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 md:grid-cols-3 p-4 pl-12">
                       {other_cities.map(city => (
                         <button className="hover:font-semibold flex self-start" key={city.id} onClick={() => handleSelectCity(city.name)}>
                           {city.name}

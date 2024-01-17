@@ -1,19 +1,29 @@
 "use client"
 
-import React, { useState } from 'react'
+import React from 'react'
 import { useGlobalContext } from '@/app/context/globalContext';
-import NotFound from '@/app/not-found';
-
+import NotConnected from '@/app/not-connected';
+import { useRouter } from 'next/navigation';
 
 const CreateEventForm = () => {
-    const { walletAddress, hasAccount } = useGlobalContext();
+    
+    const router = useRouter();
+    const { hasAccount } = useGlobalContext();
+    const registered = true;
 
 
-    if (!hasAccount) return <NotFound />
+    if (!registered) {
+        router.push('/register-organizer');
+    }
+
+
+
+    if (!hasAccount) return <NotConnected />
+
 
 
     return (
-        <div className="mx-auto border dark:border-gray-600 border-gray-300  rounded-lg">
+        <div className="mx-auto border shadow-md dark:border-gray-600 border-gray-300 rounded-lg">
             <form className="grid grid-cols-2 gap-6 p-4 py-8" method="POST">
                 <div className="mb-4">
                     <label htmlFor="title" className="form-label block">
@@ -22,7 +32,7 @@ const CreateEventForm = () => {
                     <input
                         id="title"
                         name="title"
-                        className="form-input w-full"
+                        className="form-input w-full shadow-md"
                         placeholder="Enter the title of the event.."
                         type="text"
                         required
@@ -36,7 +46,7 @@ const CreateEventForm = () => {
                     <input
                         id="date"
                         name="date"
-                        className="form-input w-full"
+                        className="form-input w-full shadow-md"
                         type="date"
                         required
                     />
@@ -49,7 +59,7 @@ const CreateEventForm = () => {
                     <input
                         id="time"
                         name="time"
-                        className="form-input w-full"
+                        className="form-input w-full shadow-md"
                         type="time"
                         required
                     />
@@ -62,7 +72,7 @@ const CreateEventForm = () => {
                     <input
                         id="duration"
                         name="duration"
-                        className="form-input w-full"
+                        className="form-input w-full shadow-md"
                         type="time"
                         required
                     />
@@ -75,11 +85,10 @@ const CreateEventForm = () => {
                     <select
                         id="category"
                         name="category"
-                        className="form-input w-full"
+                        className="form-input w-full shadow-md"
                         required
                     >
                         <option value="">Select a category</option>
-                        {/* Add your category options here */}
                     </select>
                 </div>
 
@@ -90,11 +99,12 @@ const CreateEventForm = () => {
                     <select
                         id="artist"
                         name="artist"
-                        className="form-input w-full"
+                        className="form-input w-full shadow-md"
                         required
                     >
+
                         <option value="">Select the artists</option>
-                        {/* Add your artist options here */}
+                    
                     </select>
                 </div>
 
@@ -105,7 +115,7 @@ const CreateEventForm = () => {
                     <textarea
                         id="about"
                         name="about"
-                        className="form-input w-full"
+                        className="form-input w-full shadow-md"
                         placeholder="Provide details about the event.."
                         required
                     ></textarea>
