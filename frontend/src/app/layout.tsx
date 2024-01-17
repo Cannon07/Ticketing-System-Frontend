@@ -10,7 +10,6 @@ import "@/styles/main.scss";
 import LocationModal from "@/components/LocationModal";
 import React from "react";
 
-
 export default function RootLayout({
   children,
 }: {
