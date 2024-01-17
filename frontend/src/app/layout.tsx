@@ -9,7 +9,6 @@ import Providers from "@/partials/Providers";
 import "@/styles/main.scss";
 import LocationModal from "@/components/LocationModal";
 import React from "react";
-import TicketModal from "@/components/TicketModal";
 
 
 export default function RootLayout({
@@ -69,7 +68,6 @@ export default function RootLayout({
           <Header/>
           <SearchModal />
           <LocationModal />
-          <TicketModal />
           <main>{children}</main>
           <Footer />
         </Providers>

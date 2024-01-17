@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useInstalledWallets, useUninstalledWallets, useWallet } from 'useink';
+import { useGlobalContext } from "@/app/context/globalContext";
+
 
 export interface WalletList {
   name: string;
@@ -20,6 +22,9 @@ export const ConnectWallet = () => {
   const { account, accounts, setAccount, connect, disconnect } = useWallet();
   const installedWallets = useInstalledWallets();
   const uninstalledWallets = useUninstalledWallets();
+  const {setHasAccount,setWalletAddress} = useGlobalContext();
+
+  
 
   //const {currentAccount, setCurrentAccount} = useState<AccountList>();
 
@@ -41,6 +46,7 @@ export const ConnectWallet = () => {
   let accountsList: AccountList[] = [];
   let currentAccount: AccountList;
 
+
   useEffect (() => {
     if (account) {
       currentAccount = {
@@ -49,7 +55,7 @@ export const ConnectWallet = () => {
         source: account?.source,
         active: true,
       }
-      //setCurrentAccount(tempAccount)
+    
     }
     if (accounts) {
       accountsList = accounts.map(({name, address, source}) => ({
@@ -104,6 +110,14 @@ export const ConnectWallet = () => {
           </ul>
     )
   } else {
+    setHasAccount(true);
+    setWalletAddress(account?.address);
+    const disconnectWallet=()=>{
+      setHasAccount(false);
+      setWalletAddress('');
+      disconnect();
+    }
+
   return (
       <ul
           id="nav-menu"
@@ -134,7 +148,7 @@ export const ConnectWallet = () => {
                     <li className="nav-dropdown-item" key={`children-${Math.random()}`}>
                           <span
                             className="nav-dropdown-link block cursor-pointer"
-                            onClick={disconnect}
+                            onClick={disconnectWallet}
                           >
                             Disconnect
                           </span>
