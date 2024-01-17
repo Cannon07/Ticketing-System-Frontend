@@ -14,7 +14,7 @@ const NotConnected = () => {
             <h1 className="h2 mb-4">Page Not Available</h1>
             <div className="content">
               <p>
-                We're sorry, but it seems like the page you are looking for is
+                We are sorry, but it seems like the page you are looking for is
                 temporarily unavailable.
               </p>
               <p>
