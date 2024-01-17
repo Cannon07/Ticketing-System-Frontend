@@ -5,6 +5,7 @@ import ImageFallback from "@/helpers/ImageFallback";
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
+import TicketModal from "./TicketModal";
 
 const artists = [
     { id: 1, name: 'Shreya Ghoshal' },
@@ -85,6 +86,7 @@ const EventPostPage = ({ similarPosts }: any) => {
 
     return (
         <article className="">
+          <TicketModal />
             <div className="hidden lg:contents md:contents" style={{ color: "rgb(255, 255, 255)" }}>
                 <div className="flex items-center justify-center m-0 w-full">
                     <div className="h-[490px] overflow-hidden w-full bg-[url('/images/image-placeholder.png')]
