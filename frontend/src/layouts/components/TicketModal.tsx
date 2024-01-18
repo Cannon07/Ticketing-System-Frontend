@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import Link from "next/link";
 
 interface TicketObject {
   [key: number]: boolean
@@ -101,9 +102,9 @@ const TicketModal = () => {
                 )
               })}
             </div>
-            <button className={"btn btn-primary w-full md:w-9/12"}>
-              Book {ticket} Tickets
-            </button>
+            <Link href={"/book"} className={"btn btn-primary w-full md:w-9/12"}>
+              <h5 className={"text-white dark:text-dark flex justify-center"}>Book {ticket} Tickets</h5>
+            </Link>
           </div>
         </div>
       </div>
