@@ -28,7 +28,7 @@ const CreateEventForm = () => {
                     <input
                         id="title"
                         name="title"
-                        className="form-input w-full"
+                        className="form-input"
                         placeholder="Enter the title of the event.."
                         type="text"
                         required
@@ -42,7 +42,7 @@ const CreateEventForm = () => {
                     <input
                         id="date"
                         name="date"
-                        className="form-input w-full"
+                        className="form-input dark:dark-date"
                         type="date"
                         required
                     />
@@ -55,7 +55,7 @@ const CreateEventForm = () => {
                     <input
                         id="time"
                         name="time"
-                        className="form-input w-full"
+                        className="form-input dark:dark-date"
                         type="time"
                         required
                     />
@@ -68,7 +68,7 @@ const CreateEventForm = () => {
                     <input
                         id="duration"
                         name="duration"
-                        className="form-input w-full"
+                        className="form-input dark:dark-date"
                         type="time"
                         required
                     />
@@ -81,7 +81,7 @@ const CreateEventForm = () => {
                     <select
                         id="category"
                         name="category"
-                        className="form-input w-full"
+                        className="form-input"
                         required
                     >
                         <option value="">Select a category</option>
@@ -95,7 +95,7 @@ const CreateEventForm = () => {
                     <select
                         id="artist"
                         name="artist"
-                        className="form-input w-full"
+                        className="form-input"
                         required
                     >
 
@@ -111,7 +111,7 @@ const CreateEventForm = () => {
                     <textarea
                         id="about"
                         name="about"
-                        className="form-input w-full"
+                        className="form-input"
                         placeholder="Provide details about the event.."
                         required
                     ></textarea>

@@ -28,4 +28,22 @@
       -ms-overflow-style: none;  /* IE and Edge */
       scrollbar-width: none;  /* Firefox */
 }
+
+.dark-date::-webkit-calendar-picker-indicator{
+  filter: invert(1);
 }
+
+
+
+}
+
+
+
+
+
+
+ 
+    
+    
+  
+   
