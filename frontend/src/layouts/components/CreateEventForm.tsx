@@ -16,15 +16,11 @@ const CreateEventForm = () => {
         router.push('/register-organizer');
     }
 
-
-
     if (!hasAccount) return <NotConnected />
-
-
 
     return (
         <div className="mx-auto border shadow-md dark:border-gray-600 border-gray-300 rounded-lg">
-            <form className="grid grid-cols-2 gap-6 p-4 py-8" method="POST">
+            <form className="lg:grid md:grid lg:grid-cols-2 md:grid-cols-2 gap-6 p-4 py-8" method="POST">
                 <div className="mb-4">
                     <label htmlFor="title" className="form-label block">
                         Event Title

@@ -34,7 +34,7 @@ const OrganizerRegistrationForm = () => {
     //
     return (
         <div className="mx-auto border dark:border-gray-600 border-gray-300 rounded-lg">
-            <form className="grid grid-cols-2 gap-6 p-4 py-8" method="POST">
+            <form className="lg:grid md:grid lg:grid-cols-2 md:grid-cols-2 gap-6 p-4 py-8" method="POST">
                 <div className="mb-4">
                     <label htmlFor="type" className="form-label block">
                         Wallet Address
