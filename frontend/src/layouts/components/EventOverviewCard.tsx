@@ -4,11 +4,11 @@ export const EventOverviewCard = () => {
   return (
     <div className={"lg:col-7 h-full"}>
       <h3 className={"mb-6"}>Event Overview</h3>
-        <div className="h-full rounded bg-theme-light p-8 dark:bg-darkmode-theme-light flex gap-8 items-center">
-          <div className="h-[350px] w-[350px] rounded overflow-hidden object-cover">
+        <div className="h-full rounded bg-theme-light p-8 dark:bg-darkmode-theme-light flex flex-col gap-8 items-center lg:flex-row md:flex-row sm:flex-col">
+          <div className="h-full w-full rounded overflow-hidden object-cover lg:h-[350px] lg:w-[350px] md:h-[300px]">
               <ImageFallback
                   height={300}
-                  width={300}
+                  width={350}
                   src={'/images/event-image.png'}
                   alt="event-image"
                   className="object-cover w-full h-full"

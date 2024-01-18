@@ -102,7 +102,7 @@ const TicketModal = () => {
                 )
               })}
             </div>
-            <Link href={"/event/post-1/book"} className={"btn btn-primary w-full md:w-9/12"}>
+            <Link href={"/book"} className={"btn btn-primary w-full md:w-9/12"}>
               <h5 className={"text-white dark:text-dark flex justify-center"}>Book {ticket} Tickets</h5>
             </Link>
           </div>
