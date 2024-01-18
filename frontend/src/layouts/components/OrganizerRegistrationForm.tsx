@@ -43,7 +43,7 @@ const OrganizerRegistrationForm = () => {
                         disabled
                         id="address"
                         name="address"
-                        className="form-input-disable w-full shadow-md"
+                        className="form-input-disable w-full"
                         value={walletAddress}
                         type="text"
                         required
@@ -57,7 +57,7 @@ const OrganizerRegistrationForm = () => {
                     <input
                         id="name"
                         name="name"
-                        className="form-input w-full shadow-md"
+                        className="form-input w-full"
                         placeholder="Enter your full name.."
                         type="text"
                         required
@@ -71,7 +71,7 @@ const OrganizerRegistrationForm = () => {
                     <input
                         id="uname"
                         name="uname"
-                        className="form-input w-full shadow-md"
+                        className="form-input w-full"
                         placeholder="Enter your username.."
                         type="text"
                         required
@@ -86,7 +86,7 @@ const OrganizerRegistrationForm = () => {
                         disabled
                         id="type"
                         name="type"
-                        className="form-input-disable w-full shadow-md"
+                        className="form-input-disable w-full"
                         value={'organizer'}
                         type="text"
                         required
@@ -100,7 +100,7 @@ const OrganizerRegistrationForm = () => {
                     <input
                         id="organization"
                         name="organization"
-                        className="form-input w-full shadow-md"
+                        className="form-input w-full"
                         placeholder="Enter your organization name.."
                         type="text"
                     />
@@ -113,7 +113,7 @@ const OrganizerRegistrationForm = () => {
                     <input
                         id="aadhar"
                         name="aadhar"
-                        className="form-input shadow-md"
+                        className="form-input w-full"
                         placeholder="Enter your Aadhar number.."
                         type="text"
                         value={aadharNumber}

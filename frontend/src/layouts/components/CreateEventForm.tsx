@@ -19,7 +19,7 @@ const CreateEventForm = () => {
     if (!hasAccount) return <NotConnected />
 
     return (
-        <div className="mx-auto border shadow-md dark:border-gray-600 border-gray-300 rounded-lg">
+        <div className="mx-auto border dark:border-gray-600 border-gray-300 rounded-lg">
             <form className="lg:grid md:grid lg:grid-cols-2 md:grid-cols-2 gap-6 p-4 py-8" method="POST">
                 <div className="mb-4">
                     <label htmlFor="title" className="form-label block">
@@ -28,7 +28,7 @@ const CreateEventForm = () => {
                     <input
                         id="title"
                         name="title"
-                        className="form-input w-full shadow-md"
+                        className="form-input w-full"
                         placeholder="Enter the title of the event.."
                         type="text"
                         required
@@ -42,7 +42,7 @@ const CreateEventForm = () => {
                     <input
                         id="date"
                         name="date"
-                        className="form-input w-full shadow-md"
+                        className="form-input w-full"
                         type="date"
                         required
                     />
@@ -55,7 +55,7 @@ const CreateEventForm = () => {
                     <input
                         id="time"
                         name="time"
-                        className="form-input w-full shadow-md"
+                        className="form-input w-full"
                         type="time"
                         required
                     />
@@ -68,7 +68,7 @@ const CreateEventForm = () => {
                     <input
                         id="duration"
                         name="duration"
-                        className="form-input w-full shadow-md"
+                        className="form-input w-full"
                         type="time"
                         required
                     />
@@ -81,7 +81,7 @@ const CreateEventForm = () => {
                     <select
                         id="category"
                         name="category"
-                        className="form-input w-full shadow-md"
+                        className="form-input w-full"
                         required
                     >
                         <option value="">Select a category</option>
@@ -95,7 +95,7 @@ const CreateEventForm = () => {
                     <select
                         id="artist"
                         name="artist"
-                        className="form-input w-full shadow-md"
+                        className="form-input w-full"
                         required
                     >
 
@@ -111,7 +111,7 @@ const CreateEventForm = () => {
                     <textarea
                         id="about"
                         name="about"
-                        className="form-input w-full shadow-md"
+                        className="form-input w-full"
                         placeholder="Provide details about the event.."
                         required
                     ></textarea>
