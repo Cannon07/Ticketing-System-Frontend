@@ -38,7 +38,7 @@ const UserTicket = () => {
                         <div className={"h-8 w-4 rounded-tl-full rounded-bl-full bg-body dark:bg-darkmode-body absolute inset-y-0 right-0 my-auto"}></div>
                     </div>
 
-                    <div className='lg:hidden'>
+                    <div className='lg:hidden flex justify-center items-center'>
 
                         <div className={"h-4 w-8 rounded-tl-full rounded-tr-full  bg-body dark:bg-darkmode-body absolute bottom-0 mx-auto"}></div>
                         <div className={"h-8 w-4 rounded-tl-full rounded-bl-full bg-body dark:bg-darkmode-body absolute right-0 top-8 mx-auto"}></div>
