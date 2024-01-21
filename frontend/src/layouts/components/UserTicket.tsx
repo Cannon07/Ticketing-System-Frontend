@@ -6,7 +6,6 @@ import ImageFallback from '@/helpers/ImageFallback'
 const UserTicket = () => {
 
 
-
     return (
         <div className="p-3 flex items-center justify-center">
             <div className="rounded bg-theme-light p-8 dark:bg-darkmode-theme-light relative h-fit w-[250px] lg:w-fit lg:h-fit">
@@ -16,11 +15,11 @@ const UserTicket = () => {
                         <div className={"h-[200px] w-px border-r border-dashed dark:border-gray-600 border-gray-200"} />
                     </div>
                     <div className={"lg:hidden h-px w-full border-t border-dashed dark:border-gray-600 border-gray-200"} />
-                    <div className="lg:w-[200px] lg:h-[150px] rounded overflow-hidden object-cover">
+                    <div className="lg:w-auto lg:h-[170px] rounded overflow-hidden object-cover">
                         <ImageFallback
                             height={200}
                             width={200}
-                            src={'/images/event-image.png'}
+                            src={'/images/event-image2.jpg'}
                             alt="event-image"
                             className="object-cover w-full h-full"
                         />

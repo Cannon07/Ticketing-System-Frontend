@@ -20,14 +20,10 @@ const NotConnected = () => {
                 <strong>
                   To access this page, you need to connect to a wallet first.
                 </strong>{" "} 
-                {/* <br /> */}
-                {/* If you haven't connected to a wallet yet, please do so to proceed.
-                Once connected, you can access the content on this page. */}
+       
               </p>
             </div>
-            {/* <Link href="/" className="btn btn-primary mt-8">
-              Back to Home
-            </Link> */}
+          
           </div>
         </div>
       </div>

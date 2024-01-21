@@ -12,7 +12,7 @@ const Footer = () => {
   const { copyright } = config.params;
 
   return (
-    <footer className="bg-theme-light dark:bg-darkmode-theme-light">
+    <footer className="bg-theme-light dark:bg-darkmode-theme-light z-30">
       <div className="container">
         <div className="row items-center py-10">
           <div className="mb-8 text-center lg:col-3 lg:mb-0 lg:text-left">
