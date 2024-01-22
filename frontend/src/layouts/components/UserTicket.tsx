@@ -7,7 +7,7 @@ const UserTicket = () => {
 
 
     return (
-        <div className="p-3 flex items-center justify-center">
+        <div className="px-3 pb-3 flex items-center justify-center">
             <div className="rounded bg-theme-light p-8 dark:bg-darkmode-theme-light relative h-fit w-[250px] lg:w-fit lg:h-fit">
                 <div className={"flex flex-col lg:flex-row items-center gap-4"}>
                     <div></div>

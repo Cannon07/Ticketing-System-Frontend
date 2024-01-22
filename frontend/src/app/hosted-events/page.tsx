@@ -1,16 +1,16 @@
 
 
-import UserTicket from "@/components/UserTicket"
+
 import ProfileLayout from "@/partials/ProfileLayout"
 
 
-const UserProfile = () => {
+const HostedEvents = () => {
 
     return (
         <ProfileLayout>
 
             <div>
-                This is Profile Page
+                Hosted Events Page
             </div>
 
 
@@ -18,4 +18,4 @@ const UserProfile = () => {
     )
 }
 
-export default UserProfile;
+export default HostedEvents;
