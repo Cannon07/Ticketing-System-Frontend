@@ -23,8 +23,8 @@ export const ConnectWallet = () => {
   const installedWallets = useInstalledWallets();
   const uninstalledWallets = useUninstalledWallets();
   const {setHasAccount,setWalletAddress} = useGlobalContext();
-
-  
+  const [isRegistered, setIsRegistered] = useState(false);
+  const registerModal = document.getElementById("registerModal");
 
   //const {currentAccount, setCurrentAccount} = useState<AccountList>();
 
@@ -55,7 +55,7 @@ export const ConnectWallet = () => {
         source: account?.source,
         active: true,
       }
-    
+
     }
     if (accounts) {
       accountsList = accounts.map(({name, address, source}) => ({
@@ -67,6 +67,11 @@ export const ConnectWallet = () => {
     }
     console.log(currentAccount, accountsList);
   }, [account])
+
+  const checkRegisteredAccount = (child: any) => {
+    connect(child.extensionName);
+    if (!isRegistered) registerModal!.classList.add("show");
+  }
 
   if (!account) {
   return (
@@ -90,7 +95,7 @@ export const ConnectWallet = () => {
                         {child.installed ? (
                           <span
                             className="nav-dropdown-link block cursor-pointer"
-                            onClick={() => connect(child.extensionName)}
+                            onClick={() => checkRegisteredAccount(child)}
                           >
                             {child.name}
                           </span>
@@ -128,7 +133,7 @@ export const ConnectWallet = () => {
                   <span
                     className={`btn btn-outline-primary btn-sm hidden lg:inline-flex items-center cursor-pointer`}
                   >
-                    Hello, {account.name} 
+                    Hello, {account.name}
                     <svg className="h-4 w-4 fill-current" viewBox="0 0 20 20">
                       <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
                     </svg>
@@ -152,7 +157,7 @@ export const ConnectWallet = () => {
                           >
                             Disconnect
                           </span>
-                      </li>
+                    </li>
                   </ul>
                 </li>
             </React.Fragment>

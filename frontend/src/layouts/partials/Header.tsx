@@ -43,7 +43,7 @@ const Header = () => {
 
 
 
-  
+
 
   // scroll to top on route change
   useEffect(() => {
@@ -92,7 +92,7 @@ const Header = () => {
           id="nav-menu"
           className="navbar-nav order-3 hidden w-full pb-6 lg:order-1 lg:flex lg:w-auto lg:space-x-2 lg:pb-0 xl:space-x-8 lg:ml-36"
         >
-          {main.map((menu, i) => ( 
+          {main.map((menu, i) => (
             <React.Fragment key={`menu-${i}`}>
               {menu.hasChildren ? (
                 <li className="nav-item nav-dropdown group relative">
@@ -178,7 +178,9 @@ const Header = () => {
             </button>
           )}
           <ThemeSwitcher className="mr-5" />
-          <ConnectWallet />
+          <div>
+            <ConnectWallet />
+          </div>
         </div>
       </nav>
     </header>
