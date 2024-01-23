@@ -2,10 +2,12 @@
 
 import React, { useEffect } from "react";
 import { useGlobalContext } from "@/app/context/globalContext";
+import { useWallet } from "useink";
 
 const RegisterModal = () => {
 
   const { walletAddress } = useGlobalContext();
+  const { disconnect } = useWallet();
 
   useEffect(() => {
     const registerModal = document.getElementById("registerModal");
@@ -23,6 +25,7 @@ const RegisterModal = () => {
 
     registerModalOverlay!.addEventListener("click", function () {
       registerModal!.classList.remove("show");
+      disconnect()
     });
   }, []);
 
@@ -35,19 +38,34 @@ const RegisterModal = () => {
             <h3 className={"mb-4"}>Register Now!</h3>
             <div className="mx-auto mb-4 w-full sm:px-4 md:px-8 lg:px-12">
             <form className="flex flex-col gap-6" method="POST">
-                <div>
-                    <label htmlFor="title" className="form-label block">
-                      Wallet Address
-                    </label>
-                    <input
-                      disabled
-                      id="wallet-address"
-                      name="wallet-address"
-                      className="form-input-disable w-full"
-                      value={walletAddress}
-                      type="text"
-                      required
-                    />
+                <div className={"flex gap-6 flex-col md:flex-row w-full"}>
+                  <div className="w-full">
+                      <label htmlFor="title" className="form-label block">
+                        Wallet Address
+                      </label>
+                      <input
+                        disabled
+                        id="wallet-address"
+                        name="wallet-address"
+                        className="form-input-disable w-full"
+                        value={walletAddress}
+                        type="text"
+                        required
+                      />
+                  </div>
+                  <div className="w-full">
+                      <label htmlFor="title" className="form-label block">
+                        Email
+                      </label>
+                      <input
+                          id="Email"
+                          name="Email"
+                          className="form-input w-full"
+                          placeholder="Enter your email"
+                          type="text"
+                          required
+                      />
+                  </div>
                 </div>
                 <div className={"flex gap-6 flex-col md:flex-row w-full"}>
                   <div className="w-full">

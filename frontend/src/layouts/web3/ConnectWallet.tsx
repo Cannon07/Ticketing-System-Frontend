@@ -25,7 +25,6 @@ export const ConnectWallet = () => {
   const {setHasAccount,setWalletAddress} = useGlobalContext();
   const [isRegistered, setIsRegistered] = useState(false);
   const registerModal = document.getElementById("registerModal");
-
   //const {currentAccount, setCurrentAccount} = useState<AccountList>();
 
   const installedWalletsData: WalletList[] = installedWallets.map(({title, extensionName, installUrl}) => ({
