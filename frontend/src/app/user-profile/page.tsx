@@ -1,20 +1,11 @@
+import UserProfile from "@/layouts/profiles/UserProfile";
 
 
-import UserProfileCard from "@/components/UserProfileCard";
-
-import UserProfileLayout from "@/partials/UserProfileLayout"
-
-
-const UserProfile = () => {
+const UserProfilePage = () => {
 
     return (
-        <UserProfileLayout>
-
-            <UserProfileCard/>
-
-
-        </UserProfileLayout>
+       <UserProfile/>
     )
 }
 
-export default UserProfile;
+export default UserProfilePage;

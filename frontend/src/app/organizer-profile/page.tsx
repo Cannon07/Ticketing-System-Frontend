@@ -1,21 +1,16 @@
 
 
 
-import OrganizerProfileLayout from "@/partials/OrganizerProfileLayout";
+import OrganizerProfile from "@/layouts/profiles/OrganizerProfile";
 
 
 
 
-const UserProfile = () => {
+const OrganizerProfilePage = () => {
 
     return (
-        <OrganizerProfileLayout>
-
-             organizer profile
-
-
-        </OrganizerProfileLayout>
+        <OrganizerProfile/>
     )
 }
 
-export default UserProfile;
+export default OrganizerProfilePage;

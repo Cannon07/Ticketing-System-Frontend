@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import ImageFallback from '@/helpers/ImageFallback';
 
-const UserProfileCard = () => {
+const UserProfileSettings = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [name, setName] = useState('Nikhil Magar');
     const [username, setUsername] = useState('Nikhil44');
@@ -199,6 +199,6 @@ const UserProfileCard = () => {
     );
 };
 
-export default UserProfileCard;
+export default UserProfileSettings;
 
 
