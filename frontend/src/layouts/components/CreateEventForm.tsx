@@ -4,9 +4,10 @@ import React from 'react'
 import { useGlobalContext } from '@/app/context/globalContext';
 import NotConnected from '@/app/not-connected';
 import { useRouter } from 'next/navigation';
+import { SelectArtistDropdown } from './SelectArtistsDropdown';
 
 const CreateEventForm = () => {
-    
+
     const router = useRouter();
     const { hasAccount } = useGlobalContext();
     const registered = true;
@@ -89,19 +90,7 @@ const CreateEventForm = () => {
                 </div>
 
                 <div className="mb-4">
-                    <label htmlFor="artist" className="form-label block">
-                        Event Artists
-                    </label>
-                    <select
-                        id="artist"
-                        name="artist"
-                        className="form-input w-full"
-                        required
-                    >
-
-                        <option value="">Select the artists</option>
-                    
-                    </select>
+                    <SelectArtistDropdown />
                 </div>
 
                 <div className="mb-4">
@@ -117,20 +106,13 @@ const CreateEventForm = () => {
                     ></textarea>
                 </div>
 
-
-
                 <div className="col-span-2 pl-1">
                     <button type="submit" className="btn btn-primary">
                         Create Event
                     </button>
                 </div>
             </form>
-
-
-
         </div>
-
-
     )
 
 }
