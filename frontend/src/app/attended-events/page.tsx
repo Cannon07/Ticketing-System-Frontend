@@ -1,17 +1,20 @@
-import ProfileLayout from "@/partials/ProfileLayout"
+import AttendedEventsCard from "@/components/AttendedEventsCard";
+import UserProfileLayout from "@/partials/UserProfileLayout"
 
 const AttendedEvents = () => {
 
     return (
-        <ProfileLayout>
+        <UserProfileLayout>
 
-            <div>
-                Attended Events Page
-            </div>
+            <AttendedEventsCard />
+            <AttendedEventsCard />
+            <AttendedEventsCard />
 
 
-        </ProfileLayout>
+        </UserProfileLayout>
     )
 }
 
 export default AttendedEvents;
+
+

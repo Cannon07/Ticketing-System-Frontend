@@ -1,20 +1,18 @@
+import OrganizerProfileLayout from "@/partials/OrganizerProfileLayout";
 
-
-
-import ProfileLayout from "@/partials/ProfileLayout"
 
 
 const HostedEvents = () => {
 
     return (
-        <ProfileLayout>
+        <OrganizerProfileLayout>
 
             <div>
                 Hosted Events Page
             </div>
 
 
-        </ProfileLayout>
+        </OrganizerProfileLayout>
     )
 }
 

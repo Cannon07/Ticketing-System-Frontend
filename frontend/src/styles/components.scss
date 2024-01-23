@@ -19,6 +19,13 @@
   @apply w-full rounded border-gray-300 bg-theme-light px-6 py-4 text-light dark:border-darkmode-border dark:bg-darkmode-theme-light cursor-not-allowed;
 }
 
+.form-input-profile{
+  @apply mt-1 p-2 w-full rounded border-gray-300 bg-theme-light text-dark placeholder:text-light focus:border-primary focus:ring-transparent dark:border-darkmode-border focus:dark:border-gray-400 dark:bg-darkmode-theme-light dark:text-darkmode-light;
+}
+.form-label-profile{
+  @apply block text-sm font-medium
+}
+
 .form-label {
   @apply mb-4 block font-secondary text-xl font-normal text-dark dark:text-darkmode-light;
 }

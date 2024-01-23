@@ -1,18 +1,21 @@
+
+
+
 import OrganizerProfileLayout from "@/partials/OrganizerProfileLayout";
 
 
-const PastHostings = () => {
+
+
+const UserProfile = () => {
 
     return (
         <OrganizerProfileLayout>
 
-            <div>
-                Past Hosting Page
-            </div>
+             organizer profile
 
 
         </OrganizerProfileLayout>
     )
 }
 
-export default PastHostings;
+export default UserProfile;

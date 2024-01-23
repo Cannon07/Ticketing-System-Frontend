@@ -92,7 +92,7 @@ const LocationResult = ({
               ))}
               <hr className="h-px my-4 dark:bg-gray-600 border-0 bg-gray-200" />
               {showAllCities &&
-                <div>
+                <div> 
                   <h4>Other Cities</h4>
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 md:grid-cols-3 p-4 pl-12">
                       {other_cities.map(city => (

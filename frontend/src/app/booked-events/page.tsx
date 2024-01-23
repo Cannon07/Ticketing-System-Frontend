@@ -1,10 +1,10 @@
 import UserTicket from "@/components/UserTicket"
-import ProfileLayout from "@/partials/ProfileLayout"
+import UserProfileLayout from "@/partials/UserProfileLayout"
 
 const BookedEvents = () => {
 
     return (
-        <ProfileLayout>
+        <UserProfileLayout>
 
             <UserTicket />
             <UserTicket />
@@ -12,7 +12,7 @@ const BookedEvents = () => {
             <UserTicket />
             <UserTicket />
 
-        </ProfileLayout>
+        </UserProfileLayout>
     )
 }
 

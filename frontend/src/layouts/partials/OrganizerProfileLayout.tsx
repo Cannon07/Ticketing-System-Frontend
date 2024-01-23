@@ -1,7 +1,8 @@
-import Profile from "@/components/Profile"
+import OrganizerProfileSidebar from "@/components/OrganizerProfileSidebar";
+
 import Accordion from "@/shortcodes/Accordion"
 
-const ProfileLayout = ({children}:any) => {
+const OrganizerProfileLayout = ({children}:{ children: React.ReactNode }) => {
 
     return (
         <div className="section-sm">
@@ -10,14 +11,14 @@ const ProfileLayout = ({children}:any) => {
                     <div className="grid grid-cols-3">
                         <div className="lg:hidden flex col-span-3 md:px-8">
                             <Accordion title="..." className="w-full">
-                                 <Profile />
+                                 <OrganizerProfileSidebar />
                             </Accordion>
                         </div>
                         <div className="hidden lg:contents">
-                            <Profile />
+                        <OrganizerProfileSidebar />
                         </div>
 
-                        <div className="col-span-3 lg:col-span-2 pt-3">
+                        <div className="col-span-3 lg:col-span-2 ">
                             <div className="flex justify-center items-center flex-wrap">
 
                              {children}
@@ -34,4 +35,4 @@ const ProfileLayout = ({children}:any) => {
     )
 }
 
-export default ProfileLayout;
+export default OrganizerProfileLayout;
