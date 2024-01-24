@@ -5,7 +5,9 @@ import { useGlobalContext } from '@/app/context/globalContext';
 import NotConnected from '@/app/not-connected';
 import { useRouter } from 'next/navigation';
 import { SelectArtistDropdown } from './SelectArtistsDropdown';
+import { SelectVenueDropdown } from './SelectVenueDropdown';
 import AddNewArtistModal from './AddNewArtistModal';
+import AddNewVenueModal from './AddNewVenueModal';
 
 const CreateEventForm = () => {
 
@@ -13,7 +15,32 @@ const CreateEventForm = () => {
     const { hasAccount } = useGlobalContext();
     const registered = true;
     const [selectedArtists, setSelectedArtists] = useState<String[]>([]);
+    const [selectedVenue, setSelectedVenue] = useState<String>("");
 
+    const [venueNames, setVenueNames] = useState<String[]>(
+      [
+        'Starlight Lounge',
+        'Moonlit Garden',
+        'Cityscape Ballroom',
+        'Harmony Hall',
+        'Sunset Terrace',
+        'Epic Event Space',
+        'Crystal Pavilion',
+        'Royal Oasis',
+        'Grand Horizon Plaza',
+        'Enchanting Courtyard',
+        'Sapphire Skyline Club',
+        'Majestic Manor',
+        'Celestial Gardens',
+        'Azure Amphitheater',
+        'Prestige Palace',
+        'Radiant Rooftop Lounge',
+        'Whispering Woods Pavilion',
+        'Golden Gate Banquet Hall',
+        'Charm City Chapel',
+        'Ethereal Elegance Hall'
+      ]
+    )
     const [artistNames, setArtistNames] = useState<String[]>([
         'Alice',
         'Bob',
@@ -100,17 +127,21 @@ const CreateEventForm = () => {
                 </div>
 
                 <div className="mb-4">
-                    <label htmlFor="category" className="form-label block">
-                        Event Category
-                    </label>
-                    <select
-                        id="category"
-                        name="category"
-                        className="form-input w-full"
-                        required
-                    >
-                        <option value="">Select a category</option>
-                    </select>
+                    <AddNewVenueModal
+                      venueNames={venueNames}
+                      setVenueNames={setVenueNames}
+                      setSelectedVenue={setSelectedVenue}
+                    />
+                    <div className='flex flex-col gap-4'>
+                      <SelectVenueDropdown
+                        venueNames={venueNames}
+                        selectedVenue={selectedVenue}
+                        setSelectedVenue={setSelectedVenue}
+                      />
+                      <button className='btn btn-primary' data-add-venue-trigger>
+                        Add new Venue
+                      </button>
+                    </div>
                 </div>
 
                 <div className="mb-4">
