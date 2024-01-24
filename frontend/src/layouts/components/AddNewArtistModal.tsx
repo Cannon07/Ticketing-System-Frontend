@@ -2,9 +2,16 @@
 
 import React, { useState, useEffect } from "react";
 
-const AddNewArtistModal = () => {
-  const [file, setFile] = useState<File | null>(null);
+interface ArtistProps {
+  artistNames: String[];
+  setArtistNames: React.Dispatch<React.SetStateAction<String[]>>;
+  selectedArtists: String[];
+  setSelectedArtists: React.Dispatch<React.SetStateAction<String[]>>;
+}
 
+const AddNewArtistModal: React.FC<ArtistProps> = ({ artistNames, setArtistNames, selectedArtists, setSelectedArtists }) => {
+  const [file, setFile] = useState<File | null>(null);
+  const [newArtist, setNewArtist] = useState("");
   useEffect(() => {
     const addArtistModal = document.getElementById("addArtistModal");
     const addArtistModalOverlay = document.getElementById("addArtistModalOverlay");
@@ -41,6 +48,8 @@ const AddNewArtistModal = () => {
                       <input
                         id="artist-name"
                         name="artist-name"
+                        value={newArtist}
+                        onChange={(e) => setNewArtist(e.target.value)}
                         className="form-input w-full"
                         placeholder="Enter artist's name"
                         type="text"
@@ -98,7 +107,16 @@ const AddNewArtistModal = () => {
             </div>
           </div>
           <div className="w-full sm:px-4 md:px-8 lg:px-12">
-            <button className={"btn btn-primary w-full"}>
+            <button
+              className={"btn btn-primary w-full"}
+              onClick={() => {
+                setNewArtist("");
+                if (newArtist.length > 0) {
+                  setArtistNames([...artistNames, newArtist]);
+                  setSelectedArtists([...selectedArtists, newArtist]);
+                }
+              }}
+            >
               <h5 className={"text-white dark:text-dark flex justify-center"}>Add Artist</h5>
             </button>
           </div>

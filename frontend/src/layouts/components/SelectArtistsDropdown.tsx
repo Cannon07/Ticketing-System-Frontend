@@ -1,34 +1,17 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { FaAngleDown } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 
-export const SelectArtistDropdown = () => {
-  const artistNames = [
-    'Alice',
-    'Bob',
-    'Charlie',
-    'Diana',
-    'Eva',
-    'Frank',
-    'Grace',
-    'Henry',
-    'Ivy',
-    'Jack',
-    'Katherine',
-    'Leo',
-    'Mia',
-    'Nathan',
-    'Olivia',
-    'Peter',
-    'Quinn',
-    'Rachel',
-    'Samuel',
-    'Tessa'
-  ];
+interface ArtistDetails {
+  artistNames: String[];
+  selectedArtists: String[];
+  setSelectedArtists: React.Dispatch<React.SetStateAction<String[]>>;
+}
+
+export const SelectArtistDropdown: React.FC<ArtistDetails> = ({ artistNames, selectedArtists, setSelectedArtists }) => {
 
   const [artists, setArtists] = useState(null)
   const [inputValue, setInputValue] = useState("")
-  const [selectedArtists, setSelectedArtists] = useState<String[]>([]);
   const [open, setOpen] = useState(false);
 
   return (
@@ -36,13 +19,13 @@ export const SelectArtistDropdown = () => {
       <div className="form-label">
         Event Artists
       </div>
-      <div className={`flex gap-2 flex-wrap ${selectedArtists.length > 0 && "mb-2"}`}>
-        {selectedArtists.map((artist, index) => (
+      <div className={`flex gap-2 flex-wrap ${selectedArtists?.length > 0 && "mb-2"}`}>
+        {selectedArtists?.map((artist, index) => (
           <div
             key={index}
             className="btn btn-outline-primary px-4 py-2 flex gap-4 items-center justify-center"
             onClick={() => {
-              const newArtists = selectedArtists.filter((filterArtist) => (filterArtist !== artist))
+              const newArtists = selectedArtists?.filter((filterArtist) => (filterArtist !== artist))
               setSelectedArtists(newArtists)
             }}
           >
@@ -68,12 +51,12 @@ export const SelectArtistDropdown = () => {
             onChange={(e) => setInputValue(e.target.value.toLowerCase())}
           />
         </div>
-        {artistNames?.map((artist) => (
+        {artistNames?.map((artist, index) => (
           <li
-            key={artist}
-            className={`p-2 mx-4 hover:bg-gray-200 dark:hover:bg-gray-700 rounded ${artist?.toLowerCase().startsWith(inputValue) ? "block" : "hidden"}`}
+            key={index}
+            className={`p-2 mx-4 mb-1 ${selectedArtists?.includes(artist) && "bg-gray-200 dark:bg-gray-700"} hover:bg-gray-200 dark:hover:bg-gray-700 rounded ${artist?.toLowerCase().startsWith(inputValue) ? "block" : "hidden"}`}
             onClick={() => {
-              if (!selectedArtists.includes(artist)) setSelectedArtists([...selectedArtists, artist])
+              if (!selectedArtists?.includes(artist)) setSelectedArtists([...selectedArtists, artist])
               setInputValue("")
             }}
           >{artist}</li>

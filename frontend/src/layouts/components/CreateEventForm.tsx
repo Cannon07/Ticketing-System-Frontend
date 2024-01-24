@@ -1,6 +1,6 @@
 "use client"
 
-import React from 'react'
+import React, { useState } from 'react'
 import { useGlobalContext } from '@/app/context/globalContext';
 import NotConnected from '@/app/not-connected';
 import { useRouter } from 'next/navigation';
@@ -12,7 +12,30 @@ const CreateEventForm = () => {
     const router = useRouter();
     const { hasAccount } = useGlobalContext();
     const registered = true;
+    const [selectedArtists, setSelectedArtists] = useState<String[]>([]);
 
+    const [artistNames, setArtistNames] = useState<String[]>([
+        'Alice',
+        'Bob',
+        'Charlie',
+        'Diana',
+        'Eva',
+        'Frank',
+        'Grace',
+        'Henry',
+        'Ivy',
+        'Jack',
+        'Katherine',
+        'Leo',
+        'Mia',
+        'Nathan',
+        'Olivia',
+        'Peter',
+        'Quinn',
+        'Rachel',
+        'Samuel',
+        'Tessa'
+    ])
 
     if (!registered) {
         router.push('/register-organizer');
@@ -91,9 +114,18 @@ const CreateEventForm = () => {
                 </div>
 
                 <div className="mb-4">
-                    <AddNewArtistModal />
+                    <AddNewArtistModal
+                      artistNames={artistNames}
+                      setArtistNames={setArtistNames}
+                      selectedArtists={selectedArtists}
+                      setSelectedArtists={setSelectedArtists}
+                    />
                     <div className='flex flex-col gap-4'>
-                      <SelectArtistDropdown />
+                      <SelectArtistDropdown
+                        artistNames={artistNames}
+                        selectedArtists={selectedArtists}
+                        setSelectedArtists={setSelectedArtists}
+                      />
                       <button className='btn btn-primary' data-add-artist-trigger>
                         Add new Artist
                       </button>
