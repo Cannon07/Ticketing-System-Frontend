@@ -5,6 +5,7 @@ import { useGlobalContext } from '@/app/context/globalContext';
 import NotConnected from '@/app/not-connected';
 import { useRouter } from 'next/navigation';
 import { SelectArtistDropdown } from './SelectArtistsDropdown';
+import AddNewArtistModal from './AddNewArtistModal';
 
 const CreateEventForm = () => {
 
@@ -21,7 +22,7 @@ const CreateEventForm = () => {
 
     return (
         <div className="mx-auto border dark:border-gray-600 border-gray-300 rounded-lg">
-            <form className="lg:grid md:grid lg:grid-cols-2 md:grid-cols-2 gap-6 p-4 py-8" method="POST">
+            <div className="lg:grid md:grid lg:grid-cols-2 md:grid-cols-2 gap-6 p-4 py-8">
                 <div className="mb-4">
                     <label htmlFor="title" className="form-label block">
                         Event Title
@@ -90,7 +91,13 @@ const CreateEventForm = () => {
                 </div>
 
                 <div className="mb-4">
-                    <SelectArtistDropdown />
+                    <AddNewArtistModal />
+                    <div className='flex flex-col gap-4'>
+                      <SelectArtistDropdown />
+                      <button className='btn btn-primary' data-add-artist-trigger>
+                        Add new Artist
+                      </button>
+                    </div>
                 </div>
 
                 <div className="mb-4">
@@ -111,7 +118,7 @@ const CreateEventForm = () => {
                         Create Event
                     </button>
                 </div>
-            </form>
+            </div>
         </div>
     )
 
