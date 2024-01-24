@@ -56,20 +56,20 @@ const AddNewVenueModal: React.FC<VenueProps> = ({ venueNames, setVenueNames, set
                         value={newVenue}
                         onChange={(e) => setNewVenue(e.target.value)}
                         className="form-input w-full"
-                        placeholder="Enter venue's name"
+                        placeholder="Enter venue name"
                         type="text"
                         required
                       />
                   </div>
                   <div className="w-full">
                       <label htmlFor="title" className="form-label block">
-                        Venue's Capacity
+                        Venue Capacity
                       </label>
                       <input
                           id="venue-capacity"
                           name="venue-capacity"
                           className="form-input w-full"
-                          placeholder="Enter venue's capacity"
+                          placeholder="Enter venue capacity"
                           type="number"
                           required
                       />
@@ -86,7 +86,7 @@ const AddNewVenueModal: React.FC<VenueProps> = ({ venueNames, setVenueNames, set
                         value={newVenueAddress}
                         onChange={(e) => setNewVenueAddress(e.target.value)}
                         className="form-input w-full"
-                        placeholder="Enter venue's address"
+                        placeholder="Enter venue address"
                         type="text"
                         required
                       />
