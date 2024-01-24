@@ -3,10 +3,13 @@
 import Accordion from "@/shortcodes/Accordion"
 import { useState } from "react";
 import ImageFallback from "@/helpers/ImageFallback";
+import OrganizerProfileSettings from "@/components/OrganizerProfileSettings";
+import HostedEventsCard from "@/components/HostedEventsCard";
+import PastHostingsCard from "@/components/PastHostingsCard";
 
 const OrganizerProfile = () => {
 
-    const [tab, setTab] = useState('hosted-events')
+    const [tab, setTab] = useState('Hosted Events')
 
     return (
         <div className="section-sm">
@@ -14,7 +17,7 @@ const OrganizerProfile = () => {
                 <div className="row">
                     <div className="grid grid-cols-3">
                         <div className="lg:hidden flex col-span-3">
-                            <Accordion title="..." className="w-full">
+                            <Accordion title={tab} className="w-full">
                                 <aside className="w-full px-3 relative">
                                     <div className="lg:sticky lg:top-28 h-fit w-full px-3 py-4 overflow-y-auto bg-theme-light dark:bg-darkmode-theme-light rounded-lg  lg:border lg:border-border lg:dark:border-darkmode-border">
                                         <ul className="space-y-2 font-medium">
@@ -47,7 +50,7 @@ const OrganizerProfile = () => {
 
 
                                             <li>
-                                                <button onClick={() => setTab('hosted-events')} className={`w-full flex items-center justify-between px-6 py-2 text-gray-900 rounded-lg dark:text-white ${tab === 'hosted-events' ? 'bg-gray-200 dark:bg-gray-700' : ''} hover:bg-gray-200 dark:hover:bg-gray-700 group`}>
+                                                <button onClick={() => setTab('Hosted Events')} className={`w-full flex items-center justify-between px-6 py-2 text-gray-900 rounded-lg dark:text-white ${tab === 'Hosted Events' ? 'bg-gray-200 dark:bg-gray-700' : ''} hover:bg-gray-200 dark:hover:bg-gray-700 group`}>
 
                                                     <span className="">Hosted Events</span>
                                                     <span className="inline-flex items-center justify-center text-sm font-medium text-gray-800 rounded-full dark:text-gray-300">
@@ -59,7 +62,7 @@ const OrganizerProfile = () => {
                                             </li>
 
                                             <li>
-                                                <button onClick={() => setTab('past-hostings')} className={`w-full flex items-center justify-between px-6 py-2 text-gray-900 rounded-lg dark:text-white ${tab === 'past-hostings' ? 'bg-gray-200 dark:bg-gray-700' : ''} hover:bg-gray-200 dark:hover:bg-gray-700 group`}>
+                                                <button onClick={() => setTab('Past Hostings')} className={`w-full flex items-center justify-between px-6 py-2 text-gray-900 rounded-lg dark:text-white ${tab === 'Past Hostings' ? 'bg-gray-200 dark:bg-gray-700' : ''} hover:bg-gray-200 dark:hover:bg-gray-700 group`}>
 
                                                     <span className="">Past Hostings</span>
                                                     <span className="inline-flex items-center justify-center text-sm font-medium text-gray-800 rounded-full dark:text-gray-300">
@@ -72,7 +75,7 @@ const OrganizerProfile = () => {
 
 
                                             <li>
-                                                <button onClick={() => setTab('organizer-profile')} className={`w-full flex items-center justify-between px-6 py-2 text-gray-900 rounded-lg dark:text-white ${tab === 'organizer-profile' ? 'bg-gray-200 dark:bg-gray-700' : ''} hover:bg-gray-200 dark:hover:bg-gray-700 group`}>
+                                                <button onClick={() => setTab('Profile Settings')} className={`w-full flex items-center justify-between px-6 py-2 text-gray-900 rounded-lg dark:text-white ${tab === 'Profile Settings' ? 'bg-gray-200 dark:bg-gray-700' : ''} hover:bg-gray-200 dark:hover:bg-gray-700 group`}>
 
                                                     <span className="">Profile Settings</span>
                                                     <span className="inline-flex items-center justify-center text-sm font-medium text-gray-800 rounded-full dark:text-gray-300">
@@ -125,7 +128,7 @@ const OrganizerProfile = () => {
 
 
                                         <li>
-                                            <button onClick={() => setTab('hosted-events')} className={`w-full flex items-center justify-between px-6 py-2 text-gray-900 rounded-lg dark:text-white ${tab === 'hosted-events' ? 'bg-gray-200 dark:bg-gray-700' : ''} hover:bg-gray-200 dark:hover:bg-gray-700 group`}>
+                                            <button onClick={() => setTab('Hosted Events')} className={`w-full flex items-center justify-between px-6 py-2 text-gray-900 rounded-lg dark:text-white ${tab === 'Hosted Events' ? 'bg-gray-200 dark:bg-gray-700' : ''} hover:bg-gray-200 dark:hover:bg-gray-700 group`}>
 
                                                 <span className="">Hosted Events</span>
                                                 <span className="inline-flex items-center justify-center text-sm font-medium text-gray-800 rounded-full dark:text-gray-300">
@@ -137,7 +140,7 @@ const OrganizerProfile = () => {
                                         </li>
 
                                         <li>
-                                            <button onClick={() => setTab('past-hostings')} className={`w-full flex items-center justify-between px-6 py-2 text-gray-900 rounded-lg dark:text-white ${tab === 'past-hostings' ? 'bg-gray-200 dark:bg-gray-700' : ''} hover:bg-gray-200 dark:hover:bg-gray-700 group`}>
+                                            <button onClick={() => setTab('Past Hostings')} className={`w-full flex items-center justify-between px-6 py-2 text-gray-900 rounded-lg dark:text-white ${tab === 'Past Hostings' ? 'bg-gray-200 dark:bg-gray-700' : ''} hover:bg-gray-200 dark:hover:bg-gray-700 group`}>
 
                                                 <span className="">Past Hostings</span>
                                                 <span className="inline-flex items-center justify-center text-sm font-medium text-gray-800 rounded-full dark:text-gray-300">
@@ -150,7 +153,7 @@ const OrganizerProfile = () => {
 
 
                                         <li>
-                                            <button onClick={() => setTab('organizer-profile')} className={`w-full flex items-center justify-between px-6 py-2 text-gray-900 rounded-lg dark:text-white ${tab === 'organizer-profile' ? 'bg-gray-200 dark:bg-gray-700' : ''} hover:bg-gray-200 dark:hover:bg-gray-700 group`}>
+                                            <button onClick={() => setTab('Profile Settings')} className={`w-full flex items-center justify-between px-6 py-2 text-gray-900 rounded-lg dark:text-white ${tab === 'Profile Settings' ? 'bg-gray-200 dark:bg-gray-700' : ''} hover:bg-gray-200 dark:hover:bg-gray-700 group`}>
 
                                                 <span className="">Profile Settings</span>
                                                 <span className="inline-flex items-center justify-center text-sm font-medium text-gray-800 rounded-full dark:text-gray-300">
@@ -167,6 +170,7 @@ const OrganizerProfile = () => {
                                 </div>
                             </aside>
 
+
                         </div>
 
                         <div className="col-span-3 lg:col-span-2 ">
@@ -174,30 +178,39 @@ const OrganizerProfile = () => {
 
 
                             {
-                                tab === 'hosted-events' ? (
+                                tab === 'Hosted Events' ? (
 
                                     <div className="flex justify-center items-center flex-wrap">
 
-                                        hosted events
+                                        <HostedEventsCard />
+                                        <HostedEventsCard />
+                                        <HostedEventsCard />
+                                        <HostedEventsCard />
+                                        <HostedEventsCard />
 
                                     </div>
 
                                 ) : (
-                                    tab === 'past-hostings' ? (
+                                    tab === 'Past Hostings' ? (
 
                                         <div className="flex justify-center items-center flex-wrap">
 
-                                            past hostings
+                                            <PastHostingsCard />
+                                            <PastHostingsCard />
+                                            <PastHostingsCard />
+                                            <PastHostingsCard />
+                                            <PastHostingsCard />
+                                            <PastHostingsCard />
 
                                         </div>
 
 
                                     ) : (
 
-                                        tab === 'organizer-profile' ? (
+                                        tab === 'Profile Settings' ? (
                                             <div className="flex justify-center items-center flex-wrap">
 
-                                                organizer profile
+                                                <OrganizerProfileSettings />
 
                                             </div>
 

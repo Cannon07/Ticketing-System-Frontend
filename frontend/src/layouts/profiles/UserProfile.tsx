@@ -10,7 +10,7 @@ import UserProfileSettings from "@/components/UserProfileSettings";
 
 const UserProfile = () => {
 
-    const [tab, setTab] = useState('booked-events');
+    const [tab, setTab] = useState('Booked Events');
 
     return (
         <div className="section-sm">
@@ -18,7 +18,7 @@ const UserProfile = () => {
                 <div className="row">
                     <div className="grid grid-cols-3">
                         <div className="lg:hidden flex col-span-3">
-                            <Accordion title="..." className="w-full">
+                            <Accordion title={tab} className="w-full">
                             <aside className="w-full px-3 relative">
                                 <div className="lg:sticky lg:top-28 h-fit w-full px-3 py-4 overflow-y-auto bg-theme-light dark:bg-darkmode-theme-light rounded-lg  lg:border lg:border-border lg:dark:border-darkmode-border">
                                     <ul className="space-y-2 font-medium">
@@ -49,7 +49,7 @@ const UserProfile = () => {
 
 
                                         <li>
-                                            <button onClick={() => setTab('booked-events')} className={`w-full flex items-center justify-between px-6 py-2 text-gray-900 rounded-lg dark:text-white ${tab === 'booked-events' ? 'bg-gray-200 dark:bg-gray-700' : ''} hover:bg-gray-200 dark:hover:bg-gray-700 group`}>
+                                            <button onClick={() => setTab('Booked Events')} className={`w-full flex items-center justify-between px-6 py-2 text-gray-900 rounded-lg dark:text-white ${tab === 'Booked Events' ? 'bg-gray-200 dark:bg-gray-700' : ''} hover:bg-gray-200 dark:hover:bg-gray-700 group`}>
 
                                                 <span className="">Booked Events</span>
                                                 <span className="inline-flex items-center justify-center text-sm font-medium text-gray-800 rounded-full dark:text-gray-300">
@@ -61,7 +61,7 @@ const UserProfile = () => {
                                         </li>
 
                                         <li>
-                                            <button onClick={() => setTab('attended-events')} className={`w-full flex items-center justify-between px-6 py-2 text-gray-900 rounded-lg dark:text-white ${tab === 'attended-events' ? 'bg-gray-200 dark:bg-gray-700' : ''} hover:bg-gray-200 dark:hover:bg-gray-700 group`}>
+                                            <button onClick={() => setTab('Attended Events')} className={`w-full flex items-center justify-between px-6 py-2 text-gray-900 rounded-lg dark:text-white ${tab === 'Attended Events' ? 'bg-gray-200 dark:bg-gray-700' : ''} hover:bg-gray-200 dark:hover:bg-gray-700 group`}>
 
                                                 <span className="">Attended Events</span>
                                                 <span className="inline-flex items-center justify-center text-sm font-medium text-gray-800 rounded-full dark:text-gray-300">
@@ -72,7 +72,7 @@ const UserProfile = () => {
                                             </button>
                                         </li>
                                         <li>
-                                            <button onClick={() => setTab('user-profile')} className={`w-full flex items-center justify-between px-6 py-2 text-gray-900 rounded-lg dark:text-white ${tab === 'user-profile' ? 'bg-gray-200 dark:bg-gray-700' : ''} hover:bg-gray-200 dark:hover:bg-gray-700 group`}>
+                                            <button onClick={() => setTab('Profile Settings')} className={`w-full flex items-center justify-between px-6 py-2 text-gray-900 rounded-lg dark:text-white ${tab === 'Profile Settings' ? 'bg-gray-200 dark:bg-gray-700' : ''} hover:bg-gray-200 dark:hover:bg-gray-700 group`}>
 
                                                 <span className="">Profile Settings</span>
                                                 <span className="inline-flex items-center justify-center text-sm font-medium text-gray-800 rounded-full dark:text-gray-300">
@@ -120,7 +120,7 @@ const UserProfile = () => {
 
 
                                         <li>
-                                            <button onClick={() => setTab('booked-events')} className={`w-full flex items-center justify-between px-6 py-2 text-gray-900 rounded-lg dark:text-white ${tab === 'booked-events' ? 'bg-gray-200 dark:bg-gray-700' : ''} hover:bg-gray-200 dark:hover:bg-gray-700 group`}>
+                                            <button onClick={() => setTab('Booked Events')} className={`w-full flex items-center justify-between px-6 py-2 text-gray-900 rounded-lg dark:text-white ${tab === 'Booked Events' ? 'bg-gray-200 dark:bg-gray-700' : ''} hover:bg-gray-200 dark:hover:bg-gray-700 group`}>
 
                                                 <span className="">Booked Events</span>
                                                 <span className="inline-flex items-center justify-center text-sm font-medium text-gray-800 rounded-full dark:text-gray-300">
@@ -132,7 +132,7 @@ const UserProfile = () => {
                                         </li>
 
                                         <li>
-                                            <button onClick={() => setTab('attended-events')} className={`w-full flex items-center justify-between px-6 py-2 text-gray-900 rounded-lg dark:text-white ${tab === 'attended-events' ? 'bg-gray-200 dark:bg-gray-700' : ''} hover:bg-gray-200 dark:hover:bg-gray-700 group`}>
+                                            <button onClick={() => setTab('Attended Events')} className={`w-full flex items-center justify-between px-6 py-2 text-gray-900 rounded-lg dark:text-white ${tab === 'Attended Events' ? 'bg-gray-200 dark:bg-gray-700' : ''} hover:bg-gray-200 dark:hover:bg-gray-700 group`}>
 
                                                 <span className="">Attended Events</span>
                                                 <span className="inline-flex items-center justify-center text-sm font-medium text-gray-800 rounded-full dark:text-gray-300">
@@ -143,7 +143,7 @@ const UserProfile = () => {
                                             </button>
                                         </li>
                                         <li>
-                                            <button onClick={() => setTab('user-profile')} className={`w-full flex items-center justify-between px-6 py-2 text-gray-900 rounded-lg dark:text-white ${tab === 'user-profile' ? 'bg-gray-200 dark:bg-gray-700' : ''} hover:bg-gray-200 dark:hover:bg-gray-700 group`}>
+                                            <button onClick={() => setTab('Profile Settings')} className={`w-full flex items-center justify-between px-6 py-2 text-gray-900 rounded-lg dark:text-white ${tab === 'Profile Settings' ? 'bg-gray-200 dark:bg-gray-700' : ''} hover:bg-gray-200 dark:hover:bg-gray-700 group`}>
 
                                                 <span className="">Profile Settings</span>
                                                 <span className="inline-flex items-center justify-center text-sm font-medium text-gray-800 rounded-full dark:text-gray-300">
@@ -164,7 +164,7 @@ const UserProfile = () => {
 
 
                             {
-                                tab === 'booked-events' ? (
+                                tab === 'Booked Events' ? (
 
                                     <div className="flex justify-center items-center flex-wrap">
 
@@ -177,7 +177,7 @@ const UserProfile = () => {
                                     </div>
 
                                 ) : (
-                                    tab === 'attended-events' ? (
+                                    tab === 'Attended Events' ? (
 
                                         <div className="flex justify-center items-center flex-wrap">
                                             <AttendedEventsCard />
@@ -190,7 +190,7 @@ const UserProfile = () => {
 
                                     ) : (
 
-                                        tab === 'user-profile' ? (
+                                        tab === 'Profile Settings' ? (
                                             <div className="flex justify-center items-center flex-wrap">
                                                 <UserProfileSettings />
                                             </div>
