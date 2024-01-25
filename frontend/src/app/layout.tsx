@@ -8,6 +8,7 @@ import Header from "@/partials/Header";
 import Providers from "@/partials/Providers";
 import "@/styles/main.scss";
 import LocationModal from "@/components/LocationModal";
+import RegisterModal from "@/components/RegisterModal";
 import React from "react";
 
 export default function RootLayout({
@@ -67,6 +68,7 @@ export default function RootLayout({
           <Header/>
           <SearchModal />
           <LocationModal />
+          <RegisterModal />
           <main>{children}</main>
           <Footer />
         </Providers>
