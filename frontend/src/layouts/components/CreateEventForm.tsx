@@ -8,12 +8,15 @@ import { SelectArtistDropdown } from './SelectArtistsDropdown';
 import { SelectVenueDropdown } from './SelectVenueDropdown';
 import AddNewArtistModal from './AddNewArtistModal';
 import AddNewVenueModal from './AddNewVenueModal';
+import AddNewTierModal from './AddNewTierModal';
+import { IoClose } from 'react-icons/io5';
 
 const CreateEventForm = () => {
 
     const router = useRouter();
     const { hasAccount } = useGlobalContext();
     const registered = true;
+    const [tiers, setTiers] = useState<String[]>([])
     const [selectedArtists, setSelectedArtists] = useState<String[]>([]);
     const [selectedVenue, setSelectedVenue] = useState<String>("");
 
@@ -145,6 +148,46 @@ const CreateEventForm = () => {
                 </div>
 
                 <div className="mb-4">
+                    <AddNewTierModal
+                      tiers={tiers}
+                      setTiers={setTiers}
+                    />
+                    <div className='flex flex-col'>
+                      <label className='form-label block'>
+                        Event Tiers
+                      </label>
+
+                      <div className={`flex flex-col gap-4`}>
+                        <div className={`flex flex-wrap gap-2 dark:border-gray-600 border-gray-300 border-2 rounded border-dashed min-h-[57px] p-1`}>
+                          {tiers.length > 0 ?
+                            tiers.map((tier, index) => {
+                              return(
+                                <div
+                                  key={index}
+                                  className='btn btn-outline-primary flex gap-4 justify-center items-center'
+                                  onClick={() => {
+                                    const newTiers = tiers?.filter((filterTier) => (filterTier !== tier))
+                                    setTiers(newTiers)
+                                  }}
+                                >
+                                  {tier}
+                                  <IoClose size={20} />
+                                </div>
+                              )
+                            })
+                          :
+                          <p className='w-full flex justify-center items-center'>No Tiers Selected</p>
+                          }
+                        </div>
+
+                        <button className='btn btn-primary' data-add-tier-trigger>
+                          Add Seat Tier
+                        </button>
+                      </div>
+                    </div>
+                </div>
+
+                <div className="mb-4">
                     <AddNewArtistModal
                       artistNames={artistNames}
                       setArtistNames={setArtistNames}
@@ -170,7 +213,7 @@ const CreateEventForm = () => {
                     <textarea
                         id="about"
                         name="about"
-                        className="form-input w-full"
+                        className="form-input w-full min-h-48"
                         placeholder="Provide details about the event.."
                         required
                     ></textarea>

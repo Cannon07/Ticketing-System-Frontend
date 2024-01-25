@@ -25,7 +25,7 @@ export const SelectVenueDropdown: React.FC<VenueDetails> = ({ venueNames, select
         {selectedVenue === "" ? "Select the Venue" : selectedVenue}
         <FaAngleDown className={`${open && "rotate-180"}`}/>
       </div>
-      <ul className={`absolute w-full mt-2 p-0 form-input overflow-y-auto ${open ? "max-h-60" : "hidden"}`}>
+      <ul className={`absolute z-10 w-full mt-2 p-0 form-input overflow-y-auto ${open ? "max-h-60" : "hidden"}`}>
         <div className="sticky top-0">
           <input
             type="text"

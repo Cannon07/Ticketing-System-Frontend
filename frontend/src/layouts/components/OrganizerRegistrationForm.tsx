@@ -20,7 +20,7 @@ const OrganizerRegistrationForm = () => {
 
     const handleAadharChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         event.preventDefault()
-      
+
         event.target.value=event.target.value.replace(/\D/g, '');
         if(event.target.value.length>12){
             event.target.value=event.target.value.slice(0,12);
@@ -29,7 +29,7 @@ const OrganizerRegistrationForm = () => {
 
         setAadharNumber(inputAadhar);
 
-      
+
     };
     //
     return (
@@ -80,14 +80,13 @@ const OrganizerRegistrationForm = () => {
 
                 <div className="mb-4">
                     <label htmlFor="type" className="form-label block">
-                        Type of User
+                        Email
                     </label>
                     <input
-                        disabled
                         id="type"
                         name="type"
-                        className="form-input-disable w-full"
-                        value={'organizer'}
+                        className="form-input w-full"
+                        placeholder='Enter your email..'
                         type="text"
                         required
                     />

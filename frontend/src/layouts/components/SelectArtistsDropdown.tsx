@@ -19,20 +19,24 @@ export const SelectArtistDropdown: React.FC<ArtistDetails> = ({ artistNames, sel
       <div className="form-label">
         Event Artists
       </div>
-      <div className={`flex gap-2 flex-wrap ${selectedArtists?.length > 0 && "mb-2"}`}>
-        {selectedArtists?.map((artist, index) => (
-          <div
-            key={index}
-            className="btn btn-outline-primary px-4 py-2 flex gap-4 items-center justify-center"
-            onClick={() => {
-              const newArtists = selectedArtists?.filter((filterArtist) => (filterArtist !== artist))
-              setSelectedArtists(newArtists)
-            }}
-          >
-            {artist}
-            <IoClose size={20}/>
-          </div>
-        ))}
+      <div className={`flex gap-2 flex-wrap dark:border-gray-600 border-gray-300 border-2 rounded border-dashed min-h-[57px] p-1 mb-4`}>
+        {selectedArtists.length > 0 ?
+          selectedArtists?.map((artist, index) => (
+            <div
+              key={index}
+              className="btn btn-outline-primary px-4 py-2 flex gap-4 items-center justify-center"
+              onClick={() => {
+                const newArtists = selectedArtists?.filter((filterArtist) => (filterArtist !== artist))
+                setSelectedArtists(newArtists)
+              }}
+            >
+              {artist}
+              <IoClose size={20}/>
+            </div>
+          ))
+          :
+          <p className='w-full flex justify-center items-center'>No Artists Selected</p>
+        }
       </div>
       <div
         className="w-full form-input px-8 py-4 flex items-center justify-between rounded"
