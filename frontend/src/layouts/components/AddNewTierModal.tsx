@@ -41,7 +41,7 @@ const AddNewTierModal: React.FC<ArtistProps> = ({ tiers, setTiers }) => {
             <h3 className={"mb-4"}>New Tier</h3>
             <div className="mx-auto mb-4 w-full sm:px-4 md:px-8 lg:px-12">
             <div className="flex flex-col gap-6">
-                <div className={"flex gap-6 flex-col w-full"}>
+                <div className={"flex gap-6 lg:flex-row flex-col w-full"}>
                   <div className="w-full">
                       <label htmlFor="title" className="form-label block">
                         Tier Name
@@ -71,7 +71,9 @@ const AddNewTierModal: React.FC<ArtistProps> = ({ tiers, setTiers }) => {
                           required
                       />
                   </div>
+                </div>
 
+                <div className="flex flex-col w-full">
                   <div className="w-full">
                     <label htmlFor="title" className="form-label block">
                         Tier Price
@@ -86,6 +88,7 @@ const AddNewTierModal: React.FC<ArtistProps> = ({ tiers, setTiers }) => {
                       />
                   </div>
                 </div>
+
             </div>
           </div>
           <div className="w-full sm:px-4 md:px-8 lg:px-12">
