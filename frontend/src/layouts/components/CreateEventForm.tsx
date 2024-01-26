@@ -10,6 +10,7 @@ import AddNewArtistModal from './AddNewArtistModal';
 import AddNewVenueModal from './AddNewVenueModal';
 import AddNewTierModal from './AddNewTierModal';
 import { IoClose } from 'react-icons/io5';
+import { ImageSelector } from './ImageSelector';
 
 const CreateEventForm = () => {
 
@@ -217,6 +218,18 @@ const CreateEventForm = () => {
                         placeholder="Provide details about the event.."
                         required
                     ></textarea>
+                </div>
+
+                <div className='mb-4'>
+                  <ImageSelector
+                    title={"Primary Image"}
+                  />
+                </div>
+
+                <div className='mb-4'>
+                  <ImageSelector
+                    title={"Background Image"}
+                  />
                 </div>
 
                 <div className="col-span-2 pl-1">
