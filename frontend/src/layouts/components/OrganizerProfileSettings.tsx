@@ -3,6 +3,8 @@
 import React, { useState } from 'react';
 import ImageFallback from '@/helpers/ImageFallback';
 
+
+
 const OrganizerProfileSettings = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [name, setName] = useState('Nikhil Magar');

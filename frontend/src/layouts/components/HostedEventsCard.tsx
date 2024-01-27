@@ -2,13 +2,16 @@
 
 import React, { useState } from 'react'
 import ImageFallback from '@/helpers/ImageFallback'
+import { GoHourglass } from 'react-icons/go';
+
 
 const HostedEventsCard = () => {
 
 
     const content = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rerum saepe fuga voluptates laudantium odit delectus commodi eius quis harum quo amet odio, nisi explicabo exercitationem iusto quidem est iure minus non sed doloremque ut dignissimos? Facere eos explicabo natus est culpa fugit impedit quos praesentium Lorem,\nIpsum dolor sit amet consectetur adipisicing elit. Blanditiis corrupti temporibus architecto similique cumque eius vitae saepe ipsum possimus, in odit hic numquam, facilis voluptatum, repellendus asperiores laudantium quod voluptate. Fugit, accusantium? Voluptas maxime, aperiam earum porro nisi eveniet enim."
+    
 
-    const [toggle,setToggle] = useState(false);
+    const [toggle, setToggle] = useState(false);
 
 
     return (
@@ -16,7 +19,7 @@ const HostedEventsCard = () => {
             <div className="rounded bg-theme-light p-8 dark:bg-darkmode-theme-light relative  h-full w-auto">
                 <div className={"flex flex-col items-center gap-4"}>
 
-                    
+
 
 
 
@@ -40,14 +43,15 @@ const HostedEventsCard = () => {
 
                                 <h4>Lorem ipsum dolor sit.</h4>
 
-                         
-                                    <p>
-                                        {toggle ? content : content.slice(0, 150)}
-                                        <button className="font-semibold pl-2" onClick={(e) => setToggle(!toggle)}>{toggle ? 'Read less' : 'Read more'}</button>
-                                    </p>
 
-                              
+                                <p>
+                                    {toggle ? content : content.slice(0, 150)}
+                                    <button className="font-semibold pl-2" onClick={(e) => setToggle(!toggle)}>{toggle ? 'Read less' : 'Read more'}</button>
+                                </p>
+
+
                             </div>
+
 
                             <ul className='flex gap-4 flex-wrap'>
                                 <li className='flex gap-1'>
@@ -62,12 +66,20 @@ const HostedEventsCard = () => {
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                     </svg>
                                     <span>
-                                        1:32 pm</span></li>
+                                        1:32 pm</span>
+                                </li>
+
+                                <li className='flex gap-1'>
+                                    <GoHourglass size={24}/>
+                                    <span>
+                                        2 hrs</span>
+                                </li>
                                 <li className='flex gap-1'>
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
                                     </svg>
+
                                     <span>
                                         Gaothan,Shivajinagar,pune
                                     </span>

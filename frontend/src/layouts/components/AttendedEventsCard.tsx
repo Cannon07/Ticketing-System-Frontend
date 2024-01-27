@@ -1,6 +1,7 @@
 import React from 'react'
 
 import ImageFallback from '@/helpers/ImageFallback'
+import { GoHourglass } from 'react-icons/go'
 
 const AttendedEventsCard = () => {
 
@@ -62,12 +63,20 @@ const AttendedEventsCard = () => {
                                     </svg>
                                     <span>19/01/2024</span>
                                 </li>
+                                <div className='flex flex-col lg:flex-row lg:gap-10 gap-1'>
                                 <li className='flex gap-1'>
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                     </svg>
                                     <span>
                                         1:32 pm</span></li>
+
+                                        <li className='flex gap-1'>
+                                     <GoHourglass size={24}/>
+                                    <span>
+                                        2 hrs</span>
+                                </li>
+                                </div>
                                 <li className='flex gap-1'>
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
@@ -112,9 +121,9 @@ const AttendedEventsCard = () => {
 
                                 </li>
                                 <li className='flex justify-between'>
-                                    <strong>Seat No  </strong>
+                                    <strong>Total Seats</strong>
 
-                                    <span>234</span>
+                                    <span>10</span>
 
                                 </li>
                             </ul>

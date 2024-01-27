@@ -6,6 +6,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 import TicketModal from "./TicketModal";
+import { GoHourglass } from "react-icons/go";
+
+
+
 
 const artists = [
     { id: 1, name: 'Shreya Ghoshal' },
@@ -33,8 +37,11 @@ const EventPostPage = ({ similarPosts }: any) => {
 
     const containerRef = useRef<HTMLDivElement>(null);
     const [showLeftArrow, setShowLeftArrow] = useState(false);
-    const [showRightArrow, setShowRightArrow] = useState(true); // Initially assume there's content to scroll right
+    const [showRightArrow, setShowRightArrow] = useState(true); 
 
+    const iconStyle = {
+        strokeWidth: '4', 
+    };
 
 
 
@@ -86,11 +93,11 @@ const EventPostPage = ({ similarPosts }: any) => {
 
     return (
         <article className="">
-          <TicketModal />
+            <TicketModal />
             <div className="hidden lg:contents md:contents" style={{ color: "rgb(255, 255, 255)" }}>
                 <div className="flex items-center justify-center m-0 w-full">
                     <div className="h-[490px] overflow-hidden w-full bg-[url('/images/image-placeholder.png')]
-                  bg-no-repeat bg-cover flex items-center p-6">
+                  bg-no-repeat bg-cover flex items-center p-6 rounded">
                         <div className="flex items-start justify-between w-full">
                             <div className="flex gap-8">
                                 <div className="w-[261px] h-[416px] rounded overflow-hidden object-cover">
@@ -132,12 +139,38 @@ const EventPostPage = ({ similarPosts }: any) => {
                                         </div>
                                     </div>
 
-                                    <ul className="list-disc list-inside flex items-center gap-4 flex-wrap">
-                                        <li>date</li>
-                                        <li>time_duration</li>
-                                        <li>event_category</li>
-                                    </ul>
+                                    <ul className="flex items-center gap-4 flex-wrap">
+                                        <li className='flex gap-1'>
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                                            </svg>
+                                            <span>19/01/2024</span>
+                                        </li>
 
+                                        <li className='flex gap-1'>
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                            </svg>
+                                            <span>
+                                                1:32 pm</span></li>
+
+                                        <li className='flex gap-1'>
+                                             <GoHourglass size={24}/>
+                                            <span>
+                                                2 hrs</span></li>
+                                        <li className='flex gap-1'>
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+                                            </svg>
+
+                                            <span>
+                                                Gaothan,Shivajinagar,pune
+                                            </span>
+
+                                        </li>
+
+                                    </ul>
 
                                     <div>
                                         <button data-ticket-trigger className="btn btn-primary">
@@ -210,9 +243,34 @@ const EventPostPage = ({ similarPosts }: any) => {
                         </div> */}
 
                         <ul className="list-disc list-inside flex flex-col items-start">
-                            <li>date</li>
-                            <li>time_duration</li>
-                            <li>event_category</li>
+                            <li className='flex gap-1'>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                                </svg>
+                                <span>19/01/2024</span>
+                            </li>
+
+                            <li className='flex gap-1'>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                </svg>
+                                <span>
+                                    1:32 pm</span></li>
+                            <li className='flex gap-1'>
+                                 <GoHourglass size={24}/>
+                                <span>
+                                    2 hrs</span></li>
+                            <li className='flex gap-1'>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+                                </svg>
+
+                                <span>
+                                    Gaothan,Shivajinagar,pune
+                                </span>
+
+                            </li>
                         </ul>
 
 
@@ -286,7 +344,7 @@ const EventPostPage = ({ similarPosts }: any) => {
                         </div>
                     </div> */}
                     <div>
-                        <hr className="h-px my-8 dark:bg-gray-600 border-0 bg-gray-200"/>
+                        <hr className="h-px my-8 dark:bg-gray-600 border-0 bg-gray-200" />
 
                         <h2 className="h3">Artists</h2>
                         <div className="relative">
@@ -321,7 +379,7 @@ const EventPostPage = ({ similarPosts }: any) => {
                             </button>
                         </div>
 
-                        <hr className="h-px my-8 dark:bg-gray-600 border-0 bg-gray-200"/>
+                        <hr className="h-px my-8 dark:bg-gray-600 border-0 bg-gray-200" />
 
 
                     </div>
