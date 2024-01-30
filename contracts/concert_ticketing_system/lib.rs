@@ -35,6 +35,8 @@ mod concert_ticketing_system {
         NotRegisteredAsUser,
         AlreadyRegisteredAsOrganizer,
         NotRegisteredAsOrganizer,
+        NoSuchEventRegistered,
+        NoEventsRegistered,
     }
 
     pub type Result<T> = core::result::Result<T, Error>;
@@ -175,9 +177,43 @@ mod concert_ticketing_system {
         }
 
         #[ink(message)]
-        pub fn get_events(&self) -> Vec<String> {
+        pub fn get_events(&self) -> Result<Vec<String>> {
             let caller = self.env().caller(); 
-            self.events.get(caller).unwrap()
+            if !self.organizers.contains(caller) {
+                return Err(Error::NotRegisteredAsOrganizer);
+            }
+
+            if !self.events.contains(caller) {
+                return Err(Error::NoEventsRegistered);
+            }
+
+            Ok(self.events.get(caller).unwrap())
+        }
+
+        #[ink(message)]
+        pub fn update_events(&mut self, old_event: String, new_event: String) -> Result<()> { 
+            let caller = self.env().caller();
+
+            if !self.organizers.contains(caller) {
+                return Err(Error::NotRegisteredAsOrganizer);
+            }
+            
+            let mut event_vec = self.events.get(caller).unwrap();
+            match event_vec.binary_search(&old_event) {
+                Ok(e) => {
+                    event_vec.remove(e);
+                    event_vec.push(new_event);
+                    self.events.insert(caller, &event_vec);
+
+                    Self::env().emit_event(EventModified {
+                        account: Some(caller),
+                        data: event_vec,
+                    });
+
+                    return Ok(());
+                },
+                Err(_) => return Err(Error::NoSuchEventRegistered)
+            }
         }
     }
 
@@ -389,7 +425,7 @@ mod concert_ticketing_system {
             );
 
             assert_eq!(contract.register_event("Hello".to_string()), Ok(()));
-            assert_eq!(contract.get_events(), vec!["Hello"]);
+            assert_eq!(contract.get_events().unwrap(), vec!["Hello"]);
             
             let emitted_events = ink::env::test::recorded_events().collect::<Vec<_>>();
             assert_eq!(2, emitted_events.len());
@@ -400,7 +436,7 @@ mod concert_ticketing_system {
             );
 
             assert_eq!(contract.register_event("Gekki".to_string()), Ok(()));
-            assert_eq!(contract.get_events(), vec!["Hello", "Gekki"]);
+            assert_eq!(contract.get_events().unwrap(), vec!["Hello", "Gekki"]);
 
             let emitted_events = ink::env::test::recorded_events().collect::<Vec<_>>();
             assert_eq!(3, emitted_events.len());
@@ -414,6 +450,7 @@ mod concert_ticketing_system {
         #[ink::test]
         fn register_event_fails() {
             let mut contract = ConcertTicketingSystem::new();
+
             assert_eq!(contract.register_user("Gekki".to_string()), Ok(()));
             assert_eq!(contract.get_user().unwrap(), "Gekki".to_string());
 
@@ -426,6 +463,138 @@ mod concert_ticketing_system {
             );
 
             assert_eq!(contract.register_event("Gekki".to_string()), Err(Error::NotRegisteredAsOrganizer));
+        }
+
+        #[ink::test]
+        fn update_event_works() {
+            let mut contract = ConcertTicketingSystem::new();
+
+            assert_eq!(contract.register_organizer("Gekki".to_string()), Ok(()));
+            assert_eq!(contract.get_organizer().unwrap(), "Gekki".to_string());
+
+            let emitted_events = ink::env::test::recorded_events().collect::<Vec<_>>();
+            assert_eq!(1, emitted_events.len());
+            assert_account_event(
+                &emitted_events[0],
+                Some(AccountId::from([0x01; 32])),
+                "Gekki".to_string(),
+            );
+
+            assert_eq!(contract.register_event("Hello".to_string()), Ok(()));
+            assert_eq!(contract.get_events().unwrap(), vec!["Hello"]);
+            
+            let emitted_events = ink::env::test::recorded_events().collect::<Vec<_>>();
+            assert_eq!(2, emitted_events.len());
+            assert_events_event(
+                &emitted_events[1],
+                Some(AccountId::from([0x01; 32])),
+                vec!["Hello".to_string()],
+            );
+
+            assert_eq!(contract.register_event("Hello1".to_string()), Ok(()));
+            assert_eq!(contract.get_events().unwrap(), vec!["Hello", "Hello1"]);
+            
+            let emitted_events = ink::env::test::recorded_events().collect::<Vec<_>>();
+            assert_eq!(3, emitted_events.len());
+            assert_events_event(
+                &emitted_events[2],
+                Some(AccountId::from([0x01; 32])),
+                vec!["Hello".to_string(), "Hello1".to_string()],
+            );
+
+            assert_eq!(contract.update_events("Hello".to_string(), "Bye".to_string()), Ok(()));
+            assert_eq!(contract.get_events().unwrap(), vec!["Hello1", "Bye"]);
+            
+            let emitted_events = ink::env::test::recorded_events().collect::<Vec<_>>();
+            assert_eq!(4, emitted_events.len());
+            assert_events_event(
+                &emitted_events[3],
+                Some(AccountId::from([0x01; 32])),
+                vec!["Hello1".to_string(), "Bye".to_string()],
+            );
+        }
+
+        #[ink::test]
+        fn update_event_fails_when_user_registers_event() {
+            let mut contract = ConcertTicketingSystem::new();
+
+            assert_eq!(contract.register_user("Gekki".to_string()), Ok(()));
+            assert_eq!(contract.get_user().unwrap(), "Gekki".to_string());
+
+            let emitted_events = ink::env::test::recorded_events().collect::<Vec<_>>();
+            assert_eq!(1, emitted_events.len());
+            assert_account_event(
+                &emitted_events[0],
+                Some(AccountId::from([0x01; 32])),
+                "Gekki".to_string(),
+            );
+
+            assert_eq!(contract.register_event("Hello".to_string()), Err(Error::NotRegisteredAsOrganizer));
+        }
+
+        #[ink::test]
+        fn update_event_fails_when_old_event_does_not_exsist() {
+            let mut contract = ConcertTicketingSystem::new();
+
+            assert_eq!(contract.register_organizer("Gekki".to_string()), Ok(()));
+            assert_eq!(contract.get_organizer().unwrap(), "Gekki".to_string());
+
+            let emitted_events = ink::env::test::recorded_events().collect::<Vec<_>>();
+            assert_eq!(1, emitted_events.len());
+            assert_account_event(
+                &emitted_events[0],
+                Some(AccountId::from([0x01; 32])),
+                "Gekki".to_string(),
+            );
+
+            assert_eq!(contract.register_event("Hello".to_string()), Ok(()));
+            assert_eq!(contract.get_events().unwrap(), vec!["Hello"]);
+            
+            let emitted_events = ink::env::test::recorded_events().collect::<Vec<_>>();
+            assert_eq!(2, emitted_events.len());
+            assert_events_event(
+                &emitted_events[1],
+                Some(AccountId::from([0x01; 32])),
+                vec!["Hello".to_string()],
+            );
+
+            assert_eq!(contract.update_events("Hello1".to_string(), "Bye".to_string()), Err(Error::NoSuchEventRegistered));
+        }
+
+        #[ink::test]
+        fn get_event_fails_when_not_registerd_as_organizer() {
+            let mut contract = ConcertTicketingSystem::new();
+
+            assert_eq!(contract.register_user("Gekki".to_string()), Ok(()));
+            assert_eq!(contract.get_user().unwrap(), "Gekki".to_string());
+
+            let emitted_events = ink::env::test::recorded_events().collect::<Vec<_>>();
+            assert_eq!(1, emitted_events.len());
+            assert_account_event(
+                &emitted_events[0],
+                Some(AccountId::from([0x01; 32])),
+                "Gekki".to_string(),
+            );
+
+            assert_eq!(contract.get_events(), Err(Error::NotRegisteredAsOrganizer)); 
+        }
+
+        #[ink::test]
+        fn get_event_fails_when_no_events_are_registered() {
+            let mut contract = ConcertTicketingSystem::new();
+
+            assert_eq!(contract.register_organizer("Gekki".to_string()), Ok(()));
+            assert_eq!(contract.get_organizer().unwrap(), "Gekki".to_string());
+
+            let emitted_events = ink::env::test::recorded_events().collect::<Vec<_>>();
+            assert_eq!(1, emitted_events.len());
+            assert_account_event(
+                &emitted_events[0],
+                Some(AccountId::from([0x01; 32])),
+                "Gekki".to_string(),
+            );
+
+            assert_eq!(contract.get_events(), Err(Error::NoEventsRegistered)); 
         }
     }
 }
