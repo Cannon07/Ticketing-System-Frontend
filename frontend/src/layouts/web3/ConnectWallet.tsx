@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import { useInstalledWallets, useUninstalledWallets, useWallet } from 'useink';
 import { useGlobalContext } from "@/app/context/globalContext";
-
+import { GetUserByWalletId } from "@/constants/UserEndpoints";
 
 export interface WalletList {
   name: string;
@@ -22,8 +22,7 @@ export const ConnectWallet = () => {
   const { account, accounts, setAccount, connect, disconnect } = useWallet();
   const installedWallets = useInstalledWallets();
   const uninstalledWallets = useUninstalledWallets();
-  const {setHasAccount,setWalletAddress} = useGlobalContext();
-  const [isRegistered, setIsRegistered] = useState(false);
+  const {setHasAccount, setWalletAddress} = useGlobalContext();
   const registerModal = document.getElementById("registerModal");
   //const {currentAccount, setCurrentAccount} = useState<AccountList>();
 
@@ -47,6 +46,13 @@ export const ConnectWallet = () => {
 
 
   useEffect (() => {
+    const fetchUser = async () => {
+      const response = await fetch(`${GetUserByWalletId}${account?.address}`);
+      if (await response.text() === "") {
+        registerModal!.classList.add("show");
+      }
+    }
+
     if (account) {
       currentAccount = {
         name: account?.name,
@@ -55,7 +61,10 @@ export const ConnectWallet = () => {
         active: true,
       }
 
+      fetchUser();
+
     }
+
     if (accounts) {
       accountsList = accounts.map(({name, address, source}) => ({
         name: name,
@@ -66,11 +75,6 @@ export const ConnectWallet = () => {
     }
     console.log(currentAccount, accountsList);
   }, [account])
-
-  const checkRegisteredAccount = (child: any) => {
-    connect(child.extensionName);
-    if (!isRegistered) registerModal!.classList.add("show");
-  }
 
   if (!account) {
   return (
@@ -94,7 +98,7 @@ export const ConnectWallet = () => {
                         {child.installed ? (
                           <span
                             className="nav-dropdown-link block cursor-pointer"
-                            onClick={() => checkRegisteredAccount(child)}
+                            onClick={() => connect(child.extensionName)}
                           >
                             {child.name}
                           </span>
