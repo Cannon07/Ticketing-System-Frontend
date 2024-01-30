@@ -10,6 +10,7 @@ import "@/styles/main.scss";
 import LocationModal from "@/components/LocationModal";
 import RegisterModal from "@/components/RegisterModal";
 import React from "react";
+import { ToastConfig } from "./toast-config";
 
 export default function RootLayout({
   children,
@@ -69,6 +70,7 @@ export default function RootLayout({
           <SearchModal />
           <LocationModal />
           <RegisterModal />
+          <ToastConfig/>
           <main>{children}</main>
           <Footer />
         </Providers>

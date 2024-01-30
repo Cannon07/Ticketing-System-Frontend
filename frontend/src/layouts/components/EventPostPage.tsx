@@ -110,7 +110,10 @@ const EventPostPage = ({ similarPosts }: any) => {
                                     />
                                 </div>
                                 <div className="flex flex-col gap-6 justify-center">
+                                  
+                                    {/* <p>Music Event</p> */}
                                     <p className="text-3xl font-bold">Lorem ipsum dolor sit amet consectetur.</p>
+                                   
                                     <button className="rounded">
                                         <div className="flex items-center gap-2">
                                             <Image
@@ -210,6 +213,7 @@ const EventPostPage = ({ similarPosts }: any) => {
 
 
                     <div className="flex flex-col gap-4 mt-[16px]">
+                        {/* <p>Music Event</p> */}
                         <p className="text-3xl font-bold">Event Name Lorem ipsum</p>
 
                         <button className="rounded">

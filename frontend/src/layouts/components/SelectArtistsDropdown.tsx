@@ -45,7 +45,7 @@ export const SelectArtistDropdown: React.FC<ArtistDetails> = ({ artistNames, sel
         Select the Artists
         <FaAngleDown className={`${open && "rotate-180"}`}/>
       </div>
-      <ul className={`absolute w-full mt-2 p-0 form-input overflow-y-auto ${open ? "max-h-60" : "hidden"}`}>
+      <ul className={`absolute w-full mt-2 p-0 form-input overflow-y-auto ${open ? "max-h-60" : "hidden"} z-10`}>
         <div className="sticky top-0">
           <input
             type="text"

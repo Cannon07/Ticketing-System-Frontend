@@ -11,6 +11,7 @@ import AddNewVenueModal from './AddNewVenueModal';
 import AddNewTierModal from './AddNewTierModal';
 import { IoClose } from 'react-icons/io5';
 import { ImageSelector } from './ImageSelector';
+import { SelectCategoryDropdown } from './SelectCategoryDropdown';
 
 const CreateEventForm = () => {
 
@@ -20,6 +21,7 @@ const CreateEventForm = () => {
     const [tiers, setTiers] = useState<String[]>([])
     const [selectedArtists, setSelectedArtists] = useState<String[]>([]);
     const [selectedVenue, setSelectedVenue] = useState<String>("");
+    const [selectedCategory, setSelectedCategory] = useState<String>("");
 
     const [venueNames, setVenueNames] = useState<String[]>(
       [
@@ -43,6 +45,20 @@ const CreateEventForm = () => {
         'Golden Gate Banquet Hall',
         'Charm City Chapel',
         'Ethereal Elegance Hall'
+      ]
+    )
+    const [categoryNames, setCategoryNames] = useState<String[]>(
+      [
+        'Rock',
+        'Pop',
+        'Jazz',
+        'Classical',
+        'Hip-hop',
+        'Electronic/Dance',
+        'Country',
+        'R&B/Soul',
+        'Folk',
+        'Alternative'
       ]
     )
     const [artistNames, setArtistNames] = useState<String[]>([
@@ -90,31 +106,37 @@ const CreateEventForm = () => {
                         required
                     />
                 </div>
+                
 
                 <div className="mb-4">
                     <label htmlFor="date" className="form-label block">
-                        Event Date
+                        Event Date and Time
                     </label>
+
                     <input
-                        id="date"
-                        name="date"
+                        id="datetimelocal"
+                        name="datetimelocal"
                         className="form-input dark:dark-date"
-                        type="date"
+                        type="datetime-local"
                         required
                     />
                 </div>
 
+                
                 <div className="mb-4">
-                    <label htmlFor="time" className="form-label block">
-                        Event Start Time (AM/PM)
-                    </label>
-                    <input
-                        id="time"
-                        name="time"
-                        className="form-input dark:dark-date"
-                        type="time"
-                        required
-                    />
+                    {/* <AddNewVenueModal
+                      venueNames={venueNames}
+                      setVenueNames={setVenueNames}
+                      setSelectedVenue={setSelectedVenue}
+                    /> */}
+                    <div className='flex flex-col gap-4'>
+                      <SelectCategoryDropdown
+                        categoryNames={categoryNames}
+                        selectedCategory={selectedCategory}
+                        setselectedCategory={setSelectedCategory}
+                      />
+                   
+                    </div>
                 </div>
 
                 <div className="mb-4">
@@ -147,6 +169,8 @@ const CreateEventForm = () => {
                       </button>
                     </div>
                 </div>
+                
+
 
                 <div className="mb-4">
                     <AddNewTierModal
@@ -231,6 +255,7 @@ const CreateEventForm = () => {
                     title={"Background Image"}
                   />
                 </div>
+
 
                 <div className="col-span-2 pl-1">
                     <button type="submit" className="btn btn-primary">

@@ -1,10 +1,11 @@
 "use client"
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ImageFallback from '@/helpers/ImageFallback';
+import toast from 'react-hot-toast';
 
 const UserProfileSettings = () => {
-    const [isEditing, setIsEditing] = useState(false);
+    const [isEditing, setIsEditing] = useState<boolean>(false);
     const [name, setName] = useState('Nikhil Magar');
     const [username, setUsername] = useState('Nikhil44');
     const [email, setEmail] = useState('nikhildmagar@gmail.com');
@@ -17,21 +18,23 @@ const UserProfileSettings = () => {
     const [originalProfilePic, setOriginalProfilePic] = useState(null);
 
 
-
     const handleEditClick = () => {
         setIsEditing(true);
         setOriginalName(name);
         setOriginalUsername(username);
         setOriginalEmail(email);
         setOriginalProfilePic(profilePic);
+
     };
 
     const handleSaveChanges = (e: any) => {
+
         e.preventDefault();
         setFileName('');
         setIsEditing(false);
     };
 
+  
     const handleCancelEdit = () => {
         setName(originalName);
         setUsername(originalUsername);
@@ -41,6 +44,14 @@ const UserProfileSettings = () => {
         setFileName('');
 
     };
+
+    // if(isEditing){
+    //     toast.success("editing...")
+    //     toast.error("editing...")
+    //     toast.success("editing...")
+    // }
+    
+
 
     const handleProfilePicChange = (e: any) => {
         const file = e.target.files?.[0];

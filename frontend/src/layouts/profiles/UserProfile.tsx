@@ -18,7 +18,8 @@ const UserProfile = () => {
                 <div className="row">
                     <div className="grid grid-cols-3">
                         <div className="lg:hidden flex col-span-3">
-                            <Accordion title={tab} className="w-full">
+
+                            <Accordion title={tab} className="w-full mx-auto">
                             <aside className="w-full px-3 relative">
                                 <div className="lg:sticky lg:top-28 h-fit w-full px-3 py-4 overflow-y-auto bg-theme-light dark:bg-darkmode-theme-light rounded-lg  lg:border lg:border-border lg:dark:border-darkmode-border">
                                     <ul className="space-y-2 font-medium">
@@ -160,7 +161,7 @@ const UserProfile = () => {
 
                         </div>
 
-                        <div className="col-span-3 lg:col-span-2 ">
+                        <div className="col-span-3 lg:col-span-2">
 
 
                             {
