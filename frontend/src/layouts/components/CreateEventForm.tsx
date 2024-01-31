@@ -12,6 +12,11 @@ import AddNewTierModal from './AddNewTierModal';
 import { IoClose } from 'react-icons/io5';
 import { ImageSelector } from './ImageSelector';
 import { SelectCategoryDropdown } from './SelectCategoryDropdown';
+import { handleClientScriptLoad } from 'next/script';
+import { useContract, useTx } from 'useink';
+import { useTxNotifications } from 'useink/notifications';
+
+
 
 const CreateEventForm = () => {
 
@@ -84,11 +89,31 @@ const CreateEventForm = () => {
         'Tessa'
     ])
 
+
+
+
     if (!registered) {
         router.push('/register-organizer');
     }
 
     if (!hasAccount) return <NotConnected />
+
+
+    // const contract = useContract(main_contract_address,metadata);
+
+    // const registerEvent = useTx(contract,'registerEvent');
+    // useTxNotifications(registerEvent);
+    
+
+
+
+
+    const handleCreateEvent=(e:any)=> {
+        e.preventDefault();
+        // registerEvent.signAndSend([hash]);
+
+    }
+
 
     return (
         <div className="mx-auto border dark:border-gray-600 border-gray-300 rounded-lg">
@@ -258,7 +283,7 @@ const CreateEventForm = () => {
 
 
                 <div className="col-span-2 pl-1">
-                    <button type="submit" className="btn btn-primary">
+                    <button onClick={handleCreateEvent} type="submit" className="btn btn-primary">
                         Create Event
                     </button>
                 </div>

@@ -19,6 +19,7 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
+    "crypto": "^1.0.1",
     "date-fns": "^3.0.6",
     "disqus-react": "^1.1.5",
     "github-slugger": "^2.0.0",

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import ImageFallback from '@/helpers/ImageFallback';
 import toast from 'react-hot-toast';
 
+
 const UserProfileSettings = () => {
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const [name, setName] = useState('Nikhil Magar');
@@ -45,6 +46,8 @@ const UserProfileSettings = () => {
 
     };
 
+ 
+
     // if(isEditing){
     //     toast.success("editing...")
     //     toast.error("editing...")
@@ -65,6 +68,7 @@ const UserProfileSettings = () => {
 
 
                     <h1 className="text-2xl font-semibold mb-4 text-center">Profile Settings</h1>
+                    
 
 
 
