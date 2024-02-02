@@ -4,6 +4,8 @@
 mod tickets_NFT {
     
     use ink::storage::Mapping;
+    use ink::prelude::string::String;
+    use ink::prelude::vec::Vec;
 
     use scale::{
         Decode,
@@ -15,6 +17,7 @@ mod tickets_NFT {
     #[ink(storage)]
     #[derive(Default)]
     pub struct TicketsNft {
+        tiers: Mapping<String, u32>,
         token_owner: Mapping<TokenId, AccountId>,
         owned_tokens_count: Mapping<AccountId, u32>,
     }
@@ -30,6 +33,8 @@ mod tickets_NFT {
         NotAllowed,
     }
 
+    pub type Result<T> = core::result::Result<T, Error>;
+
     #[ink(event)]
     pub struct Transfer {
         #[ink(topic)]
@@ -42,8 +47,21 @@ mod tickets_NFT {
 
     impl TicketsNft {
         #[ink(constructor)]
-        pub fn new() -> Self {
-            Default::default()
+        pub fn new(tier_list: Vec<String>, seats_list: Vec<u32>) -> Self {
+            let mut tiers = Mapping::default();
+            for i in 0..tier_list.len() {
+                tiers.insert(&tier_list[i], &seats_list[i]);
+            }
+            Self {
+                tiers,
+                token_owner: Mapping::default(),
+                owned_tokens_count: Mapping::default(),
+            }
+        }
+
+        #[ink(message)]
+        pub fn get_tiers(&self, tier: String) -> Option<u32> {
+            self.tiers.get(tier)
         }
 
         #[ink(message)]
@@ -61,14 +79,14 @@ mod tickets_NFT {
             &mut self,
             destination: AccountId,
             id: TokenId,
-        ) -> Result<(), Error> {
+        ) -> Result<()> {
             let caller = self.env().caller();
             self.transfer_token_from(&caller, &destination, id)?;
             Ok(())
         }
 
         #[ink(message)]
-        pub fn mint(&mut self, id: TokenId) -> Result<(), Error> {
+        pub fn mint(&mut self, id: TokenId) -> Result<()> {
             let caller = self.env().caller();
             self.add_token_to(&caller, id)?;
             self.env().emit_event(Transfer {
@@ -80,7 +98,7 @@ mod tickets_NFT {
         }
 
         #[ink(message)]
-        pub fn burn(&mut self, id: TokenId) -> Result<(), Error> {
+        pub fn burn(&mut self, id: TokenId) -> Result<()> {
             let caller = self.env().caller();
             let Self {
                 token_owner,
@@ -114,7 +132,7 @@ mod tickets_NFT {
             from: &AccountId,
             to: &AccountId,
             id: TokenId,
-        ) -> Result<(), Error> {
+        ) -> Result<()> {
             let caller = self.env().caller();
             if !self.exists(id) {
                 return Err(Error::TokenNotFound)
@@ -133,7 +151,7 @@ mod tickets_NFT {
             &mut self,
             from: &AccountId,
             id: TokenId,
-        ) -> Result<(), Error> {
+        ) -> Result<()> {
             let Self {
                 token_owner,
                 owned_tokens_count,
@@ -154,7 +172,7 @@ mod tickets_NFT {
             Ok(())
         }
 
-        fn add_token_to(&mut self, to: &AccountId, id: TokenId) -> Result<(), Error> {
+        fn add_token_to(&mut self, to: &AccountId, id: TokenId) -> Result<()> {
             let Self {
                 token_owner,
                 owned_tokens_count,
@@ -188,13 +206,25 @@ mod tickets_NFT {
 
     #[cfg(test)]
     mod tests {
+
         use super::*;
 
         #[ink::test]
+        fn constructor_works() {
+            let tier_list = vec!["tier1".to_string(), "tier2".to_string()];
+            let seats_list = vec![10, 20];
+            
+            let contract = TicketsNft::new(tier_list, seats_list);
+            assert_eq!(contract.get_tiers("tier1".to_string()).unwrap(), 10)
+        }
+
+        #[ink::test]
         fn mint_works() {
+            let tier_list = vec!["tier1".to_string(), "tier2".to_string()];
+            let seats_list = vec![10, 20];
             let accounts =
                 ink::env::test::default_accounts::<ink::env::DefaultEnvironment>();
-            let mut tickets_NFT = TicketsNft::new();
+            let mut tickets_NFT = TicketsNft::new(tier_list, seats_list);
             assert_eq!(tickets_NFT.owner_of(1), None);
             assert_eq!(tickets_NFT.balance_of(accounts.alice), 0);
             assert_eq!(tickets_NFT.mint(1), Ok(()));
@@ -203,9 +233,11 @@ mod tickets_NFT {
 
         #[ink::test]
         fn mint_existing_should_fail() {
+            let tier_list = vec!["tier1".to_string(), "tier2".to_string()];
+            let seats_list = vec![10, 20];
             let accounts =
                 ink::env::test::default_accounts::<ink::env::DefaultEnvironment>();
-            let mut erc721 = TicketsNft::new();
+            let mut erc721 = TicketsNft::new(tier_list, seats_list);
             assert_eq!(erc721.mint(1), Ok(()));
             assert_eq!(1, ink::env::test::recorded_events().count());
             assert_eq!(erc721.balance_of(accounts.alice), 1);
@@ -215,9 +247,11 @@ mod tickets_NFT {
 
         #[ink::test]
         fn transfer_works() {
+            let tier_list = vec!["tier1".to_string(), "tier2".to_string()];
+            let seats_list = vec![10, 20];
             let accounts =
                 ink::env::test::default_accounts::<ink::env::DefaultEnvironment>();
-            let mut erc721 = TicketsNft::new();
+            let mut erc721 = TicketsNft::new(tier_list, seats_list);
             assert_eq!(erc721.mint(1), Ok(()));
             assert_eq!(erc721.balance_of(accounts.alice), 1);
             assert_eq!(erc721.balance_of(accounts.bob), 0);
@@ -229,9 +263,11 @@ mod tickets_NFT {
 
         #[ink::test]
         fn invalid_transfer_should_fail() {
+            let tier_list = vec!["tier1".to_string(), "tier2".to_string()];
+            let seats_list = vec![10, 20];
             let accounts =
                 ink::env::test::default_accounts::<ink::env::DefaultEnvironment>();
-            let mut erc721 = TicketsNft::new();
+            let mut erc721 = TicketsNft::new(tier_list, seats_list);
             assert_eq!(erc721.transfer(accounts.bob, 2), Err(Error::TokenNotFound));
             assert_eq!(erc721.owner_of(2), None);
             assert_eq!(erc721.mint(2), Ok(()));
@@ -242,9 +278,11 @@ mod tickets_NFT {
 
         #[ink::test]
         fn burn_works() {
+            let tier_list = vec!["tier1".to_string(), "tier2".to_string()];
+            let seats_list = vec![10, 20];
             let accounts =
                 ink::env::test::default_accounts::<ink::env::DefaultEnvironment>();
-            let mut erc721 = TicketsNft::new();
+            let mut erc721 = TicketsNft::new(tier_list, seats_list);
             assert_eq!(erc721.mint(1), Ok(()));
             assert_eq!(erc721.balance_of(accounts.alice), 1);
             assert_eq!(erc721.owner_of(1), Some(accounts.alice));
@@ -255,15 +293,19 @@ mod tickets_NFT {
 
         #[ink::test]
         fn burn_fails_token_not_found() {
-            let mut erc721 = TicketsNft::new();
+            let tier_list = vec!["tier1".to_string(), "tier2".to_string()];
+            let seats_list = vec![10, 20];
+            let mut erc721 = TicketsNft::new(tier_list, seats_list);
             assert_eq!(erc721.burn(1), Err(Error::TokenNotFound));
         }
 
         #[ink::test]
         fn burn_fails_not_owner() {
+            let tier_list = vec!["tier1".to_string(), "tier2".to_string()];
+            let seats_list = vec![10, 20];
             let accounts =
                 ink::env::test::default_accounts::<ink::env::DefaultEnvironment>();
-            let mut erc721 = TicketsNft::new();
+            let mut erc721 = TicketsNft::new(tier_list, seats_list);
             assert_eq!(erc721.mint(1), Ok(()));
             set_caller(accounts.eve);
             assert_eq!(erc721.burn(1), Err(Error::NotOwner));
@@ -272,6 +314,5 @@ mod tickets_NFT {
         fn set_caller(sender: AccountId) {
             ink::env::test::set_caller::<ink::env::DefaultEnvironment>(sender);
         }
-
     }
 }
