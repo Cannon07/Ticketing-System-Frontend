@@ -1,0 +1,918 @@
+{
+    "source": {
+      "hash": "0x4ba8c9e8ad1949bb7378b942927bd4c5d5f8dc73c06c5b38fa71e43c0ce2dace",
+      "language": "ink! 4.3.0",
+      "compiler": "rustc 1.75.0",
+      "build_info": {
+        "build_mode": "Debug",
+        "cargo_contract_version": "3.2.0",
+        "rust_toolchain": "stable-x86_64-unknown-linux-gnu",
+        "wasm_opt_settings": {
+          "keep_debug_symbols": false,
+          "optimization_passes": "Z"
+        }
+      }
+    },
+    "contract": {
+      "name": "ticketing_system",
+      "version": "0.1.0",
+      "authors": [
+        "[your_name] <[your_email]>"
+      ]
+    },
+    "spec": {
+      "constructors": [
+        {
+          "args": [],
+          "default": false,
+          "docs": [],
+          "label": "new",
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "ink_primitives",
+              "ConstructorResult"
+            ],
+            "type": 2
+          },
+          "selector": "0x9bae9d5e"
+        }
+      ],
+      "docs": [],
+      "environment": {
+        "accountId": {
+          "displayName": [
+            "AccountId"
+          ],
+          "type": 13
+        },
+        "balance": {
+          "displayName": [
+            "Balance"
+          ],
+          "type": 16
+        },
+        "blockNumber": {
+          "displayName": [
+            "BlockNumber"
+          ],
+          "type": 19
+        },
+        "chainExtension": {
+          "displayName": [
+            "ChainExtension"
+          ],
+          "type": 20
+        },
+        "hash": {
+          "displayName": [
+            "Hash"
+          ],
+          "type": 17
+        },
+        "maxEventTopics": 4,
+        "timestamp": {
+          "displayName": [
+            "Timestamp"
+          ],
+          "type": 18
+        }
+      },
+      "events": [
+        {
+          "args": [
+            {
+              "docs": [],
+              "indexed": true,
+              "label": "account",
+              "type": {
+                "displayName": [
+                  "Option"
+                ],
+                "type": 12
+              }
+            },
+            {
+              "docs": [],
+              "indexed": false,
+              "label": "data",
+              "type": {
+                "displayName": [
+                  "String"
+                ],
+                "type": 0
+              }
+            }
+          ],
+          "docs": [],
+          "label": "AccountModified"
+        },
+        {
+          "args": [
+            {
+              "docs": [],
+              "indexed": true,
+              "label": "account",
+              "type": {
+                "displayName": [
+                  "Option"
+                ],
+                "type": 12
+              }
+            },
+            {
+              "docs": [],
+              "indexed": false,
+              "label": "data",
+              "type": {
+                "displayName": [
+                  "Vec"
+                ],
+                "type": 1
+              }
+            }
+          ],
+          "docs": [],
+          "label": "EventModified"
+        }
+      ],
+      "lang_error": {
+        "displayName": [
+          "ink",
+          "LangError"
+        ],
+        "type": 4
+      },
+      "messages": [
+        {
+          "args": [
+            {
+              "label": "data_hash",
+              "type": {
+                "displayName": [
+                  "String"
+                ],
+                "type": 0
+              }
+            }
+          ],
+          "default": false,
+          "docs": [],
+          "label": "register_user",
+          "mutates": true,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "ink",
+              "MessageResult"
+            ],
+            "type": 5
+          },
+          "selector": "0xf093f13c"
+        },
+        {
+          "args": [
+            {
+              "label": "data_hash",
+              "type": {
+                "displayName": [
+                  "String"
+                ],
+                "type": 0
+              }
+            }
+          ],
+          "default": false,
+          "docs": [],
+          "label": "update_user",
+          "mutates": true,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "ink",
+              "MessageResult"
+            ],
+            "type": 5
+          },
+          "selector": "0x50d56931"
+        },
+        {
+          "args": [],
+          "default": false,
+          "docs": [],
+          "label": "get_user",
+          "mutates": false,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "ink",
+              "MessageResult"
+            ],
+            "type": 8
+          },
+          "selector": "0xa4ca534e"
+        },
+        {
+          "args": [
+            {
+              "label": "data_hash",
+              "type": {
+                "displayName": [
+                  "String"
+                ],
+                "type": 0
+              }
+            }
+          ],
+          "default": false,
+          "docs": [],
+          "label": "register_organizer",
+          "mutates": true,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "ink",
+              "MessageResult"
+            ],
+            "type": 5
+          },
+          "selector": "0x83ca23d1"
+        },
+        {
+          "args": [
+            {
+              "label": "data_hash",
+              "type": {
+                "displayName": [
+                  "String"
+                ],
+                "type": 0
+              }
+            }
+          ],
+          "default": false,
+          "docs": [],
+          "label": "update_organizer",
+          "mutates": true,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "ink",
+              "MessageResult"
+            ],
+            "type": 5
+          },
+          "selector": "0xe4aeed8d"
+        },
+        {
+          "args": [],
+          "default": false,
+          "docs": [],
+          "label": "get_organizer",
+          "mutates": false,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "ink",
+              "MessageResult"
+            ],
+            "type": 8
+          },
+          "selector": "0x31aa06a6"
+        },
+        {
+          "args": [
+            {
+              "label": "data_hash",
+              "type": {
+                "displayName": [
+                  "String"
+                ],
+                "type": 0
+              }
+            }
+          ],
+          "default": false,
+          "docs": [],
+          "label": "register_event",
+          "mutates": true,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "ink",
+              "MessageResult"
+            ],
+            "type": 5
+          },
+          "selector": "0x75d5ba2b"
+        },
+        {
+          "args": [],
+          "default": false,
+          "docs": [],
+          "label": "get_events",
+          "mutates": false,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "ink",
+              "MessageResult"
+            ],
+            "type": 10
+          },
+          "selector": "0x468ca9c0"
+        },
+        {
+          "args": [
+            {
+              "label": "old_event",
+              "type": {
+                "displayName": [
+                  "String"
+                ],
+                "type": 0
+              }
+            },
+            {
+              "label": "new_event",
+              "type": {
+                "displayName": [
+                  "String"
+                ],
+                "type": 0
+              }
+            }
+          ],
+          "default": false,
+          "docs": [],
+          "label": "update_events",
+          "mutates": true,
+          "payable": false,
+          "returnType": {
+            "displayName": [
+              "ink",
+              "MessageResult"
+            ],
+            "type": 5
+          },
+          "selector": "0xc3a15a58"
+        }
+      ]
+    },
+    "storage": {
+      "root": {
+        "layout": {
+          "struct": {
+            "fields": [
+              {
+                "layout": {
+                  "root": {
+                    "layout": {
+                      "leaf": {
+                        "key": "0xb354fa45",
+                        "ty": 0
+                      }
+                    },
+                    "root_key": "0xb354fa45"
+                  }
+                },
+                "name": "users"
+              },
+              {
+                "layout": {
+                  "root": {
+                    "layout": {
+                      "leaf": {
+                        "key": "0xddbc6bab",
+                        "ty": 0
+                      }
+                    },
+                    "root_key": "0xddbc6bab"
+                  }
+                },
+                "name": "organizers"
+              },
+              {
+                "layout": {
+                  "root": {
+                    "layout": {
+                      "leaf": {
+                        "key": "0xfc8d00c0",
+                        "ty": 1
+                      }
+                    },
+                    "root_key": "0xfc8d00c0"
+                  }
+                },
+                "name": "events"
+              }
+            ],
+            "name": "ConcertTicketingSystem"
+          }
+        },
+        "root_key": "0x00000000"
+      }
+    },
+    "types": [
+      {
+        "id": 0,
+        "type": {
+          "def": {
+            "primitive": "str"
+          }
+        }
+      },
+      {
+        "id": 1,
+        "type": {
+          "def": {
+            "sequence": {
+              "type": 0
+            }
+          }
+        }
+      },
+      {
+        "id": 2,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "fields": [
+                    {
+                      "type": 3
+                    }
+                  ],
+                  "index": 0,
+                  "name": "Ok"
+                },
+                {
+                  "fields": [
+                    {
+                      "type": 4
+                    }
+                  ],
+                  "index": 1,
+                  "name": "Err"
+                }
+              ]
+            }
+          },
+          "params": [
+            {
+              "name": "T",
+              "type": 3
+            },
+            {
+              "name": "E",
+              "type": 4
+            }
+          ],
+          "path": [
+            "Result"
+          ]
+        }
+      },
+      {
+        "id": 3,
+        "type": {
+          "def": {
+            "tuple": []
+          }
+        }
+      },
+      {
+        "id": 4,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "index": 1,
+                  "name": "CouldNotReadInput"
+                }
+              ]
+            }
+          },
+          "path": [
+            "ink_primitives",
+            "LangError"
+          ]
+        }
+      },
+      {
+        "id": 5,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "fields": [
+                    {
+                      "type": 6
+                    }
+                  ],
+                  "index": 0,
+                  "name": "Ok"
+                },
+                {
+                  "fields": [
+                    {
+                      "type": 4
+                    }
+                  ],
+                  "index": 1,
+                  "name": "Err"
+                }
+              ]
+            }
+          },
+          "params": [
+            {
+              "name": "T",
+              "type": 6
+            },
+            {
+              "name": "E",
+              "type": 4
+            }
+          ],
+          "path": [
+            "Result"
+          ]
+        }
+      },
+      {
+        "id": 6,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "fields": [
+                    {
+                      "type": 3
+                    }
+                  ],
+                  "index": 0,
+                  "name": "Ok"
+                },
+                {
+                  "fields": [
+                    {
+                      "type": 7
+                    }
+                  ],
+                  "index": 1,
+                  "name": "Err"
+                }
+              ]
+            }
+          },
+          "params": [
+            {
+              "name": "T",
+              "type": 3
+            },
+            {
+              "name": "E",
+              "type": 7
+            }
+          ],
+          "path": [
+            "Result"
+          ]
+        }
+      },
+      {
+        "id": 7,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "index": 0,
+                  "name": "AlreadyRegisteredAsUser"
+                },
+                {
+                  "index": 1,
+                  "name": "NotRegisteredAsUser"
+                },
+                {
+                  "index": 2,
+                  "name": "AlreadyRegisteredAsOrganizer"
+                },
+                {
+                  "index": 3,
+                  "name": "NotRegisteredAsOrganizer"
+                },
+                {
+                  "index": 4,
+                  "name": "NoSuchEventRegistered"
+                },
+                {
+                  "index": 5,
+                  "name": "NoEventsRegistered"
+                }
+              ]
+            }
+          },
+          "path": [
+            "ticketing_system",
+            "concert_ticketing_system",
+            "Error"
+          ]
+        }
+      },
+      {
+        "id": 8,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "fields": [
+                    {
+                      "type": 9
+                    }
+                  ],
+                  "index": 0,
+                  "name": "Ok"
+                },
+                {
+                  "fields": [
+                    {
+                      "type": 4
+                    }
+                  ],
+                  "index": 1,
+                  "name": "Err"
+                }
+              ]
+            }
+          },
+          "params": [
+            {
+              "name": "T",
+              "type": 9
+            },
+            {
+              "name": "E",
+              "type": 4
+            }
+          ],
+          "path": [
+            "Result"
+          ]
+        }
+      },
+      {
+        "id": 9,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "index": 0,
+                  "name": "None"
+                },
+                {
+                  "fields": [
+                    {
+                      "type": 0
+                    }
+                  ],
+                  "index": 1,
+                  "name": "Some"
+                }
+              ]
+            }
+          },
+          "params": [
+            {
+              "name": "T",
+              "type": 0
+            }
+          ],
+          "path": [
+            "Option"
+          ]
+        }
+      },
+      {
+        "id": 10,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "fields": [
+                    {
+                      "type": 11
+                    }
+                  ],
+                  "index": 0,
+                  "name": "Ok"
+                },
+                {
+                  "fields": [
+                    {
+                      "type": 4
+                    }
+                  ],
+                  "index": 1,
+                  "name": "Err"
+                }
+              ]
+            }
+          },
+          "params": [
+            {
+              "name": "T",
+              "type": 11
+            },
+            {
+              "name": "E",
+              "type": 4
+            }
+          ],
+          "path": [
+            "Result"
+          ]
+        }
+      },
+      {
+        "id": 11,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "fields": [
+                    {
+                      "type": 1
+                    }
+                  ],
+                  "index": 0,
+                  "name": "Ok"
+                },
+                {
+                  "fields": [
+                    {
+                      "type": 7
+                    }
+                  ],
+                  "index": 1,
+                  "name": "Err"
+                }
+              ]
+            }
+          },
+          "params": [
+            {
+              "name": "T",
+              "type": 1
+            },
+            {
+              "name": "E",
+              "type": 7
+            }
+          ],
+          "path": [
+            "Result"
+          ]
+        }
+      },
+      {
+        "id": 12,
+        "type": {
+          "def": {
+            "variant": {
+              "variants": [
+                {
+                  "index": 0,
+                  "name": "None"
+                },
+                {
+                  "fields": [
+                    {
+                      "type": 13
+                    }
+                  ],
+                  "index": 1,
+                  "name": "Some"
+                }
+              ]
+            }
+          },
+          "params": [
+            {
+              "name": "T",
+              "type": 13
+            }
+          ],
+          "path": [
+            "Option"
+          ]
+        }
+      },
+      {
+        "id": 13,
+        "type": {
+          "def": {
+            "composite": {
+              "fields": [
+                {
+                  "type": 14,
+                  "typeName": "[u8; 32]"
+                }
+              ]
+            }
+          },
+          "path": [
+            "ink_primitives",
+            "types",
+            "AccountId"
+          ]
+        }
+      },
+      {
+        "id": 14,
+        "type": {
+          "def": {
+            "array": {
+              "len": 32,
+              "type": 15
+            }
+          }
+        }
+      },
+      {
+        "id": 15,
+        "type": {
+          "def": {
+            "primitive": "u8"
+          }
+        }
+      },
+      {
+        "id": 16,
+        "type": {
+          "def": {
+            "primitive": "u128"
+          }
+        }
+      },
+      {
+        "id": 17,
+        "type": {
+          "def": {
+            "composite": {
+              "fields": [
+                {
+                  "type": 14,
+                  "typeName": "[u8; 32]"
+                }
+              ]
+            }
+          },
+          "path": [
+            "ink_primitives",
+            "types",
+            "Hash"
+          ]
+        }
+      },
+      {
+        "id": 18,
+        "type": {
+          "def": {
+            "primitive": "u64"
+          }
+        }
+      },
+      {
+        "id": 19,
+        "type": {
+          "def": {
+            "primitive": "u32"
+          }
+        }
+      },
+      {
+        "id": 20,
+        "type": {
+          "def": {
+            "variant": {}
+          },
+          "path": [
+            "ink_env",
+            "types",
+            "NoChainExtension"
+          ]
+        }
+      }
+    ],
+    "version": "4"
+  }
