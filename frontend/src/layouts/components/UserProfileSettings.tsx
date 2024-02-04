@@ -3,9 +3,19 @@
 import React, { useEffect, useState } from 'react';
 import ImageFallback from '@/helpers/ImageFallback';
 import toast from 'react-hot-toast';
+import { useContract, useTx } from 'useink';
+import { CONTRACT_ADDRESS } from '@/constants/contractAddress';
+import metadata from '@/constants/TicketingSystem.json'
+import { useTxNotifications } from 'useink/notifications';
+import { generateHash } from '@/lib/utils/hashGenerator';
+
 
 
 const UserProfileSettings = () => {
+    const contract = useContract(CONTRACT_ADDRESS,metadata);
+    const updateUser = useTx(contract,'updateUser');
+    useTxNotifications(updateUser);
+
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const [name, setName] = useState('Nikhil Magar');
     const [username, setUsername] = useState('Nikhil44');
@@ -28,11 +38,15 @@ const UserProfileSettings = () => {
 
     };
 
-    const handleSaveChanges = (e: any) => {
+    
 
+    const handleSaveChanges = (e: any) => {
         e.preventDefault();
+        const hashData = generateHash([name,username,email,profilePic]);
         setFileName('');
         setIsEditing(false);
+        updateUser.signAndSend([hashData]);
+
     };
 
   

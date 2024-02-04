@@ -1,13 +1,27 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useGlobalContext } from "@/app/context/globalContext";
-import { useWallet } from "useink";
+import { useContract, useTx, useWallet } from "useink";
+import { CONTRACT_ADDRESS } from '@/constants/contractAddress';
+import metadata from '@/constants/TicketingSystem.json';
+import { useTxNotifications } from "useink/notifications";
+import { generateHash } from "@/lib/utils/hashGenerator";
 
 const RegisterModal = () => {
 
   const { walletAddress } = useGlobalContext();
   const { disconnect } = useWallet();
+
+  const contract = useContract(CONTRACT_ADDRESS,metadata);
+
+  const registerUser = useTx(contract,'registerUser');
+  useTxNotifications(registerUser);
+
+  const [email,setEmail] = useState('');
+  const [fullname,setFullname] = useState('');
+  const [username,setUsername] = useState('');
+
 
   useEffect(() => {
     const registerModal = document.getElementById("registerModal");
@@ -15,6 +29,8 @@ const RegisterModal = () => {
     const registerModalTriggers = document.querySelectorAll(
       "[data-register-trigger]",
     );
+
+
 
     registerModalTriggers.forEach((button) => {
       button.addEventListener("click", function () {
@@ -29,8 +45,23 @@ const RegisterModal = () => {
     });
   }, []);
 
+
+  
+
+  const handleRegisterClick=(e:any)=>{
+      e.preventDefault();
+      const hashData = generateHash([walletAddress,email,fullname,username])
+      const registerModal = document.getElementById("registerModal");
+      registerUser.signAndSend([hashData]);
+
+      registerModal!.classList.remove("show");
+      
+
+  }
+
   return (
     <div id="registerModal" className="search-modal">
+      {/* <p>{hashData}</p> */}
       <div id="registerModalOverlay" className="search-modal-overlay" />
       <div className="search-wrapper">
         <div className="search-wrapper-header">
@@ -63,6 +94,8 @@ const RegisterModal = () => {
                           className="form-input w-full"
                           placeholder="Enter your email"
                           type="text"
+                          value={email}
+                          onChange={(e)=>setEmail(e.target.value)}
                           required
                       />
                   </div>
@@ -78,6 +111,8 @@ const RegisterModal = () => {
                           className="form-input w-full"
                           placeholder="Enter your full name"
                           type="text"
+                          value={fullname}
+                          onChange={(e)=>setFullname(e.target.value)}
                           required
                       />
                   </div>
@@ -92,6 +127,8 @@ const RegisterModal = () => {
                           className="form-input w-full"
                           placeholder="Enter your username"
                           type="text"
+                          value={username}
+                          onChange={(e)=>setUsername(e.target.value)}
                           required
                       />
                   </div>
@@ -99,7 +136,7 @@ const RegisterModal = () => {
             </form>
           </div>
           <div className="w-full sm:px-4 md:px-8 lg:px-12">
-            <button className={"btn btn-primary w-full"}>
+            <button onClick={handleRegisterClick} className={"btn btn-primary w-full"}>
               <h5 className={"text-white dark:text-dark flex justify-center"}>Register</h5>
             </button>
           </div>
