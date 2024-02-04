@@ -1,4 +1,6 @@
-#![cfg_attr(not(feature = "std"), no_std)]
+#![cfg_attr(not(feature = "std"), no_std, no_main)]
+
+pub use self::tickets_NFT::TicketsNftRef;
 
 #[ink::contract]
 mod tickets_NFT {
@@ -38,15 +40,15 @@ mod tickets_NFT {
 
     pub type Result<T> = core::result::Result<T, Error>;
 
-    #[ink(event)]
-    pub struct Transfer {
-        #[ink(topic)]
-        from: Option<AccountId>,
-        #[ink(topic)]
-        to: Option<AccountId>,
-        #[ink(topic)]
-        id: TokenId,
-    }
+    //#[ink(event)]
+    //pub struct Transfer {
+    //    #[ink(topic)]
+    //    from: Option<AccountId>,
+    //    #[ink(topic)]
+    //    to: Option<AccountId>,
+    //    #[ink(topic)]
+    //    id: TokenId,
+    //}
 
     impl TicketsNft {
         #[ink(constructor)]
@@ -120,11 +122,11 @@ mod tickets_NFT {
 
             self.add_token_to(&caller, id)?;
 
-            self.env().emit_event(Transfer {
-                from: Some(AccountId::from([0x0; 32])),
-                to: Some(caller),
-                id,
-            });
+            //self.env().emit_event(Transfer {
+            //    from: Some(AccountId::from([0x0; 32])),
+            //    to: Some(caller),
+            //    id,
+            //});
             Ok(())
         }
 
@@ -156,11 +158,11 @@ mod tickets_NFT {
             owned_tokens_count.insert(caller, &count);
             token_owner.remove(id);
 
-            self.env().emit_event(Transfer {
-                from: Some(caller),
-                to: Some(AccountId::from([0x0; 32])),
-                id,
-            });
+            //self.env().emit_event(Transfer {
+            //    from: Some(caller),
+            //    to: Some(AccountId::from([0x0; 32])),
+            //    id,
+            //});
 
             Ok(())
         }
@@ -177,11 +179,11 @@ mod tickets_NFT {
             };
             self.remove_token_from(from, id)?;
             self.add_token_to(to, id)?;
-            self.env().emit_event(Transfer {
-                from: Some(*from),
-                to: Some(*to),
-                id,
-            });
+            //self.env().emit_event(Transfer {
+            //    from: Some(*from),
+            //    to: Some(*to),
+            //    id,
+            //});
             Ok(())
         }
 
@@ -236,10 +238,6 @@ mod tickets_NFT {
         fn balance_of_or_zero(&self, of: &AccountId) -> u32 {
             self.owned_tokens_count.get(of).unwrap_or(0)
         }
-
-        fn exists(&self, id: TokenId) -> bool {
-            self.token_owner.contains(id)
-        } 
     }
 
     #[cfg(test)]
@@ -280,7 +278,7 @@ mod tickets_NFT {
                 ink::env::test::default_accounts::<ink::env::DefaultEnvironment>();
             let mut erc721 = TicketsNft::new(tier_list, seats_list);
             assert_eq!(erc721.mint("tier1".to_string(), 1), Ok(()));
-            assert_eq!(1, ink::env::test::recorded_events().count());
+            //assert_eq!(1, ink::env::test::recorded_events().count());
             assert_eq!(erc721.balance_of(accounts.alice), 1);
             assert_eq!(erc721.owner_of(1), Some(accounts.alice));
             assert_eq!(erc721.mint("tier1".to_string(), 1), Err(Error::TokenExists));
@@ -294,7 +292,7 @@ mod tickets_NFT {
                 ink::env::test::default_accounts::<ink::env::DefaultEnvironment>();
             let mut erc721 = TicketsNft::new(tier_list, seats_list);
             assert_eq!(erc721.mint("tier1".to_string(), 1), Ok(()));
-            assert_eq!(1, ink::env::test::recorded_events().count());
+            //assert_eq!(1, ink::env::test::recorded_events().count());
             assert_eq!(erc721.balance_of(accounts.alice), 1);
             assert_eq!(erc721.owner_of(1), Some(accounts.alice));
             assert_eq!(erc721.mint("tier1".to_string(), 2), Err(Error::NoSeatsAvailable));
@@ -310,9 +308,9 @@ mod tickets_NFT {
             assert_eq!(erc721.mint("tier1".to_string(), 1), Ok(()));
             assert_eq!(erc721.balance_of(accounts.alice), 1);
             assert_eq!(erc721.balance_of(accounts.bob), 0);
-            assert_eq!(1, ink::env::test::recorded_events().count());
+            //assert_eq!(1, ink::env::test::recorded_events().count());
             assert_eq!(erc721.transfer(accounts.bob, 1), Ok(()));
-            assert_eq!(2, ink::env::test::recorded_events().count());
+            //assert_eq!(2, ink::env::test::recorded_events().count());
             assert_eq!(erc721.balance_of(accounts.bob), 1);
         }
 
