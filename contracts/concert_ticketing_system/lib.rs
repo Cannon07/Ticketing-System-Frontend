@@ -53,8 +53,10 @@ mod concert_ticketing_system {
         InvalidTier,
         InvalidToken,
         TokenExists,
+        NotOwner,
         NoSeatsAvailable,
         NotAllowed,
+        CannotFetchValue,
         SomethingWentWrong,
     }
 
@@ -336,6 +338,35 @@ mod concert_ticketing_system {
                 Err(TicketsError::NoSeatsAvailable) => return Err(Error::NoSeatsAvailable),
                 Err(TicketsError::TokenExists) => return Err(Error::TokenExists),
                 Err(TicketsError::NotAllowed) => return Err(Error::NotAllowed),
+                Err(_) => return Err(Error::SomethingWentWrong),
+            }
+        }
+
+        #[ink(message)]
+        pub fn burn(&mut self, event_hash: String, id: u32) -> Result<()> {
+            let caller = self.env().caller();
+            if !self.users.contains(caller) {
+                return Err(Error::NotRegisteredAsUser);
+            }
+
+            if !self.tickets.contains(event_hash.clone()) {
+                return Err(Error::NoSuchEventRegistered);
+            }
+
+            let mut event_tickets = self.tickets.get(event_hash.clone()).unwrap();
+            match event_tickets.burn(caller, id) {
+                Ok(()) => {
+                    self.env().emit_event(Transfer {
+                        from: Some(caller),
+                        to: Some(AccountId::from([0x0; 32])),
+                        id,
+                    });
+
+                    return Ok(())
+                },
+                Err(TicketsError::TokenNotFound) => return Err(Error::InvalidToken),
+                Err(TicketsError::NotOwner) => return Err(Error::NotOwner),
+                Err(TicketsError::CannotFetchValue) => return Err(Error::CannotFetchValue),
                 Err(_) => return Err(Error::SomethingWentWrong),
             }
         }

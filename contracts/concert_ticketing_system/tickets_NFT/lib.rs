@@ -126,17 +126,11 @@ mod tickets_NFT {
 
             self.add_token_to(&from, id)?;
 
-            //self.env().emit_event(Transfer {
-            //    from: Some(AccountId::from([0x0; 32])),
-            //    to: Some(caller),
-            //    id,
-            //});
             Ok(())
         }
 
         #[ink(message)]
-        pub fn burn(&mut self, id: TokenId) -> Result<()> {
-            let caller = self.env().caller();
+        pub fn burn(&mut self, from: AccountId, id: TokenId) -> Result<()> {
             let Self {
                 token_owner,
                 owned_tokens_count,
@@ -146,7 +140,7 @@ mod tickets_NFT {
             } = self;
 
             let owner = token_owner.get(id).ok_or(Error::TokenNotFound)?;
-            if owner != caller {
+            if owner != from {
                 return Err(Error::NotOwner)
             };
 
@@ -156,17 +150,11 @@ mod tickets_NFT {
             token_tier.remove(id);
 
             let count = owned_tokens_count
-                .get(caller)
+                .get(from)
                 .map(|c| c - 1)
                 .ok_or(Error::CannotFetchValue)?;
-            owned_tokens_count.insert(caller, &count);
+            owned_tokens_count.insert(from, &count);
             token_owner.remove(id);
-
-            //self.env().emit_event(Transfer {
-            //    from: Some(caller),
-            //    to: Some(AccountId::from([0x0; 32])),
-            //    id,
-            //});
 
             Ok(())
         }
@@ -356,7 +344,7 @@ mod tickets_NFT {
             assert_eq!(erc721.owner_of(1), Some(accounts.alice));
             assert_eq!(erc721.get_token_tier(1).unwrap(), "tier1".to_string());
             assert_eq!(erc721.get_booked_seats_by_tier("tier1".to_string()).unwrap(), 1);
-            assert_eq!(erc721.burn(1), Ok(()));
+            assert_eq!(erc721.burn(accounts.alice, 1), Ok(()));
             assert_eq!(erc721.balance_of(accounts.alice), 0);
             assert_eq!(erc721.owner_of(1), None);
             assert_eq!(erc721.get_token_tier(1), Err(Error::TokenNotFound));
@@ -367,8 +355,10 @@ mod tickets_NFT {
         fn burn_fails_token_not_found() {
             let tier_list = vec!["tier1".to_string(), "tier2".to_string()];
             let seats_list = vec![10, 20];
+            let accounts =
+                ink::env::test::default_accounts::<ink::env::DefaultEnvironment>();
             let mut erc721 = TicketsNft::new(tier_list, seats_list);
-            assert_eq!(erc721.burn(1), Err(Error::TokenNotFound));
+            assert_eq!(erc721.burn(accounts.alice, 1), Err(Error::TokenNotFound));
         }
 
         #[ink::test]
@@ -380,7 +370,7 @@ mod tickets_NFT {
             let mut erc721 = TicketsNft::new(tier_list, seats_list);
             assert_eq!(erc721.mint(accounts.alice, "tier1".to_string(), 1), Ok(()));
             set_caller(accounts.eve);
-            assert_eq!(erc721.burn(1), Err(Error::NotOwner));
+            assert_eq!(erc721.burn(accounts.eve, 1), Err(Error::NotOwner));
         }
 
         fn set_caller(sender: AccountId) {
