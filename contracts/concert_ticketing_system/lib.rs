@@ -4,6 +4,7 @@
 mod concert_ticketing_system {
 
     use tickets_NFT::TicketsNftRef;
+    use tickets_NFT::Error as TicketsError;
     use ink::storage::Mapping;
     use ink::prelude::string::String;
     use ink::prelude::vec::Vec;
@@ -30,6 +31,16 @@ mod concert_ticketing_system {
         data: Vec<String>,
     }
 
+    #[ink(event)]
+    pub struct Transfer {
+        #[ink(topic)]
+        from: Option<AccountId>,
+        #[ink(topic)]
+        to: Option<AccountId>,
+        #[ink(topic)]
+        id: u32,
+    }
+
     #[derive(Debug, PartialEq, Eq, scale::Encode, scale::Decode)]
     #[cfg_attr(feature = "std", derive(scale_info::TypeInfo))]
     pub enum Error {
@@ -41,6 +52,10 @@ mod concert_ticketing_system {
         NoEventsRegistered,
         InvalidTier,
         InvalidToken,
+        TokenExists,
+        NoSeatsAvailable,
+        NotAllowed,
+        SomethingWentWrong,
     }
 
     pub type Result<T> = core::result::Result<T, Error>;
@@ -292,6 +307,36 @@ mod concert_ticketing_system {
             match event_tickets.owner_of(id) {
                 Some(user) => return Ok(user),
                 None => return Err(Error::InvalidToken),
+            }
+        }
+
+        #[ink(message)]
+        pub fn mint(&mut self, event_hash: String, tier: String, id: u32) -> Result<()> {
+            let caller = self.env().caller();
+            if !self.users.contains(caller) {
+                return Err(Error::NotRegisteredAsUser);
+            }
+
+            if !self.tickets.contains(event_hash.clone()) {
+                return Err(Error::NoSuchEventRegistered);
+            }
+
+            let mut event_tickets = self.tickets.get(event_hash.clone()).unwrap();
+            match event_tickets.mint(caller, tier, id) {
+                Ok(()) => {
+                    self.env().emit_event(Transfer {
+                        from: Some(AccountId::from([0x0; 32])),
+                        to: Some(caller),
+                        id,
+                    });
+
+                    return Ok(())
+                },
+                Err(TicketsError::InvalidTier) => return Err(Error::InvalidTier),
+                Err(TicketsError::NoSeatsAvailable) => return Err(Error::NoSeatsAvailable),
+                Err(TicketsError::TokenExists) => return Err(Error::TokenExists),
+                Err(TicketsError::NotAllowed) => return Err(Error::NotAllowed),
+                Err(_) => return Err(Error::SomethingWentWrong),
             }
         }
     }
