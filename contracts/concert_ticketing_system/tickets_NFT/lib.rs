@@ -102,11 +102,11 @@ mod tickets_NFT {
         #[ink(message)]
         pub fn transfer(
             &mut self,
+            from: AccountId,
             destination: AccountId,
             id: TokenId,
         ) -> Result<()> {
-            let caller = self.env().caller();
-            self.transfer_token_from(&caller, &destination, id)?;
+            self.transfer_token_from(&from, &destination, id)?;
             Ok(())
         }
 
@@ -171,11 +171,7 @@ mod tickets_NFT {
             };
             self.remove_token_from(from, id)?;
             self.add_token_to(to, id)?;
-            //self.env().emit_event(Transfer {
-            //    from: Some(*from),
-            //    to: Some(*to),
-            //    id,
-            //});
+            
             Ok(())
         }
 
@@ -311,7 +307,7 @@ mod tickets_NFT {
             assert_eq!(erc721.balance_of(accounts.alice), 1);
             assert_eq!(erc721.balance_of(accounts.bob), 0);
             //assert_eq!(1, ink::env::test::recorded_events().count());
-            assert_eq!(erc721.transfer(accounts.bob, 1), Ok(()));
+            assert_eq!(erc721.transfer(accounts.alice, accounts.bob, 1), Ok(()));
             //assert_eq!(2, ink::env::test::recorded_events().count());
             assert_eq!(erc721.balance_of(accounts.bob), 1);
         }
@@ -323,13 +319,13 @@ mod tickets_NFT {
             let accounts =
                 ink::env::test::default_accounts::<ink::env::DefaultEnvironment>();
             let mut erc721 = TicketsNft::new(tier_list, seats_list);
-            assert_eq!(erc721.transfer(accounts.bob, 2), Err(Error::TokenNotFound));
+            assert_eq!(erc721.transfer(accounts.alice, accounts.bob, 2), Err(Error::TokenNotFound));
             assert_eq!(erc721.owner_of(2), None);
             assert_eq!(erc721.mint(accounts.alice, "tier1".to_string(), 2), Ok(()));
             assert_eq!(erc721.balance_of(accounts.alice), 1);
             assert_eq!(erc721.owner_of(2), Some(accounts.alice));
             set_caller(accounts.bob);
-            assert_eq!(erc721.transfer(accounts.eve, 2), Err(Error::NotOwner))
+            assert_eq!(erc721.transfer(accounts.bob, accounts.eve, 2), Err(Error::NotOwner))
         }
 
         #[ink::test]
