@@ -15,6 +15,7 @@ mod concert_ticketing_system {
         organizers: Mapping<AccountId, String>,
         events: Mapping<AccountId, Vec<String>>, 
         tickets: Mapping<String, TicketsNftRef>,
+        version: u32,
     }
 
     #[ink(event)]
@@ -70,6 +71,7 @@ mod concert_ticketing_system {
                 organizers: Mapping::default(),
                 events: Mapping::default(),
                 tickets: Mapping::default(),
+                version: 0,
             }
         }
 
@@ -168,7 +170,6 @@ mod concert_ticketing_system {
             &mut self, 
             data_hash: String, 
             tickets_code_hash: Hash,
-            version: u32,
             tier_list: Vec<String>, 
             seats_list: Vec<u32>
         ) -> Result<()> {
@@ -191,12 +192,14 @@ mod concert_ticketing_system {
             }
 
             let total_balance = Self::env().balance();
-            let salt = version.to_le_bytes();
+            let salt = self.version.to_le_bytes();
             let tickets_contract = TicketsNftRef::new(tier_list, seats_list)
                                     .endowment(total_balance / 4)
                                     .code_hash(tickets_code_hash)
                                     .salt_bytes(salt)
                                     .instantiate();
+
+            self.version += 1;
             
             self.tickets.insert(data_hash.clone(), &tickets_contract);
 
@@ -313,7 +316,7 @@ mod concert_ticketing_system {
         }
 
         #[ink(message)]
-        pub fn mint(&mut self, event_hash: String, tier: String, id: u32) -> Result<()> {
+        pub fn mint(&mut self, event_hash: String, tier: String) -> Result<()> {
             let caller = self.env().caller();
             if !self.users.contains(caller) {
                 return Err(Error::NotRegisteredAsUser);
@@ -324,8 +327,8 @@ mod concert_ticketing_system {
             }
 
             let mut event_tickets = self.tickets.get(event_hash.clone()).unwrap();
-            match event_tickets.mint(caller, tier, id) {
-                Ok(()) => {
+            match event_tickets.mint(caller, tier) {
+                Ok(id) => {
                     self.env().emit_event(Transfer {
                         from: Some(AccountId::from([0x0; 32])),
                         to: Some(caller),
