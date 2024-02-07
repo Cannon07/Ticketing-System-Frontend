@@ -16,6 +16,7 @@ mod concert_ticketing_system {
         events: Mapping<AccountId, Vec<String>>, 
         tickets: Mapping<String, TicketsNftRef>,
         version: u32,
+        tickets_code_hash: Hash,
     }
 
     #[ink(event)]
@@ -65,13 +66,14 @@ mod concert_ticketing_system {
 
     impl ConcertTicketingSystem {
         #[ink(constructor)]
-        pub fn new() -> Self {
+        pub fn new(tickets_code_hash: Hash) -> Self {
             Self { 
                 users: Mapping::default(), 
                 organizers: Mapping::default(),
                 events: Mapping::default(),
                 tickets: Mapping::default(),
                 version: 0,
+                tickets_code_hash,
             }
         }
 
@@ -169,10 +171,12 @@ mod concert_ticketing_system {
         pub fn register_event(
             &mut self, 
             data_hash: String, 
-            tickets_code_hash: Hash,
             tier_list: Vec<String>, 
             seats_list: Vec<u32>
         ) -> Result<()> {
+             
+            
+
             let caller = self.env().caller();
             
             if !self.organizers.contains(caller) {
@@ -195,7 +199,7 @@ mod concert_ticketing_system {
             let salt = self.version.to_le_bytes();
             let tickets_contract = TicketsNftRef::new(tier_list, seats_list)
                                     .endowment(total_balance / 4)
-                                    .code_hash(tickets_code_hash)
+                                    .code_hash(self.tickets_code_hash)
                                     .salt_bytes(salt)
                                     .instantiate();
 
@@ -440,7 +444,7 @@ mod concert_ticketing_system {
 
         #[ink::test]
         fn register_user_works() {
-            let mut contract = ConcertTicketingSystem::new(); 
+            let mut contract = ConcertTicketingSystem::new(Hash::from([0x99; 32])); 
 
             assert_eq!(contract.register_user("Gekki".to_string()), Ok(()));
             assert_eq!(contract.get_user().unwrap(), "Gekki".to_string());
@@ -456,7 +460,7 @@ mod concert_ticketing_system {
 
         #[ink::test]
         fn register_user_fails() {
-            let mut contract = ConcertTicketingSystem::new(); 
+            let mut contract = ConcertTicketingSystem::new(Hash::from([0x99; 32])); 
 
             assert_eq!(contract.register_organizer("Gekki".to_string()), Ok(()));
             assert_eq!(contract.get_organizer().unwrap(), "Gekki".to_string());
@@ -475,7 +479,7 @@ mod concert_ticketing_system {
 
         #[ink::test]
         fn update_user_works() {
-            let mut contract = ConcertTicketingSystem::new(); 
+            let mut contract = ConcertTicketingSystem::new(Hash::from([0x99; 32])); 
 
             assert_eq!(contract.register_user("Gekki".to_string()), Ok(()));
             assert_eq!(contract.get_user().unwrap(), "Gekki".to_string());
@@ -502,7 +506,7 @@ mod concert_ticketing_system {
 
         #[ink::test]
         fn update_user_fails() {
-            let mut contract = ConcertTicketingSystem::new(); 
+            let mut contract = ConcertTicketingSystem::new(Hash::from([0x99; 32])); 
 
             assert_eq!(contract.update_user("Hello".to_string()), Err(Error::NotRegisteredAsUser));
 
@@ -522,7 +526,7 @@ mod concert_ticketing_system {
 
         #[ink::test]
         fn register_organizer_works() {
-            let mut contract = ConcertTicketingSystem::new(); 
+            let mut contract = ConcertTicketingSystem::new(Hash::from([0x99; 32])); 
 
             assert_eq!(contract.register_organizer("Gekki".to_string()), Ok(()));
             assert_eq!(contract.get_organizer().unwrap(), "Gekki".to_string());
@@ -538,7 +542,7 @@ mod concert_ticketing_system {
 
         #[ink::test]
         fn register_organizer_fails() {
-            let mut contract = ConcertTicketingSystem::new(); 
+            let mut contract = ConcertTicketingSystem::new(Hash::from([0x99; 32])); 
 
             assert_eq!(contract.register_user("Gekki".to_string()), Ok(()));
             assert_eq!(contract.get_user().unwrap(), "Gekki".to_string());
@@ -557,7 +561,7 @@ mod concert_ticketing_system {
 
         #[ink::test]
         fn update_organizer_works() {
-            let mut contract = ConcertTicketingSystem::new(); 
+            let mut contract = ConcertTicketingSystem::new(Hash::from([0x99; 32])); 
 
             assert_eq!(contract.register_organizer("Gekki".to_string()), Ok(()));
             assert_eq!(contract.get_organizer().unwrap(), "Gekki".to_string());
@@ -584,7 +588,7 @@ mod concert_ticketing_system {
 
         #[ink::test]
         fn update_organizer_fails() {
-            let mut contract = ConcertTicketingSystem::new(); 
+            let mut contract = ConcertTicketingSystem::new(Hash::from([0x99; 32])); 
 
             assert_eq!(contract.update_organizer("Hello".to_string()), Err(Error::NotRegisteredAsOrganizer));
 
@@ -616,11 +620,12 @@ mod concert_ticketing_system {
         //        Some(AccountId::from([0x01; 32])),
         //        "Gekki".to_string(),
         //    );
-
+        //    let code_hash_str = "0xc4a74dc03b1108b6169dbe8fd3fb33e95dc88d3857fb497effcb7fba1db641b0".to_string();
+        //    let code_hash_bytes = code_hash_str.as_bytes();
+        //    let code_hash = Hash::try_from(code_hash_bytes).expect("Something went wrong");
         //    let tiers_1 = vec!["tier1".to_string(), "tier2".to_string()];
         //    let seats_1 = vec![3, 4];
-        //    let tickets_code_hash: Hash = Hash::from_str("0xb45d139582b560745b18ebe220d188fb5d24427e7e35ff2b5623bc7733c687c9");
-        //    assert_eq!(contract.register_event("Hello".to_string(), tickets_code_hash, 10, tiers_1, seats_1), Ok(()));
+        //    assert_eq!(contract.register_event("Hello".to_string(), code_hash, tiers_1, seats_1), Ok(()));
         //    assert_eq!(contract.get_events().unwrap(), vec!["Hello"]);
         //    
         //    let emitted_events = ink::env::test::recorded_events().collect::<Vec<_>>();
@@ -633,7 +638,7 @@ mod concert_ticketing_system {
 
         //    let tiers_2 = vec!["tier3".to_string(), "tier4".to_string()];
         //    let seats_2 = vec![5, 6];
-        //    assert_eq!(contract.register_event("Gekki".to_string(), tickets_code_hash, 11, tiers_2, seats_2), Ok(()));
+        //    assert_eq!(contract.register_event("Gekki".to_string(), code_hash, tiers_2, seats_2), Ok(()));
         //    assert_eq!(contract.get_events().unwrap(), vec!["Hello", "Gekki"]);
 
         //    let emitted_events = ink::env::test::recorded_events().collect::<Vec<_>>();
