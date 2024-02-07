@@ -320,7 +320,7 @@ mod concert_ticketing_system {
         }
 
         #[ink(message)]
-        pub fn mint(&mut self, event_hash: String, tier: String) -> Result<()> {
+        pub fn mint(&mut self, event_hash: String, tier: String) -> Result<u32> {
             let caller = self.env().caller();
             if !self.users.contains(caller) {
                 return Err(Error::NotRegisteredAsUser);
@@ -339,7 +339,7 @@ mod concert_ticketing_system {
                         id,
                     });
 
-                    return Ok(())
+                    return Ok(id)
                 },
                 Err(TicketsError::InvalidTier) => return Err(Error::InvalidTier),
                 Err(TicketsError::NoSeatsAvailable) => return Err(Error::NoSeatsAvailable),
