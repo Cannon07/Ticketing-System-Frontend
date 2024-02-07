@@ -296,6 +296,22 @@ mod concert_ticketing_system {
         }
 
         #[ink(message)]
+        pub fn get_owned_tokens(&self, event_hash: String, owner: AccountId) -> Result<Vec<u32>> {
+            if !self.tickets.contains(event_hash.clone()) {
+                return Err(Error::NoSuchEventRegistered);
+            }
+            if !self.users.contains(owner) {
+                return Err(Error::NotRegisteredAsUser);
+            }
+            let event_tickets = self.tickets.get(event_hash.clone()).unwrap();
+            match event_tickets.get_owned_tokens(owner) {
+                Ok(tokens) => return Ok(tokens), 
+                Err(TicketsError::TokenNotFound) => return Err(Error::InvalidToken),
+                Err(_) => return Err(Error::SomethingWentWrong)
+            }
+        }
+
+        #[ink(message)]
         pub fn balanace_of(&self, event_hash: String, owner: AccountId) -> Result<u32> {
             if !self.tickets.contains(event_hash.clone()) {
                 return Err(Error::NoSuchEventRegistered);
@@ -320,7 +336,7 @@ mod concert_ticketing_system {
         }
 
         #[ink(message)]
-        pub fn mint(&mut self, event_hash: String, tier: String) -> Result<u32> {
+        pub fn mint(&mut self, event_hash: String, tier: String, ticket_count: u32) -> Result<Vec<u32>> {
             let caller = self.env().caller();
             if !self.users.contains(caller) {
                 return Err(Error::NotRegisteredAsUser);
@@ -331,22 +347,25 @@ mod concert_ticketing_system {
             }
 
             let mut event_tickets = self.tickets.get(event_hash.clone()).unwrap();
-            match event_tickets.mint(caller, tier) {
-                Ok(id) => {
-                    self.env().emit_event(Transfer {
-                        from: Some(AccountId::from([0x0; 32])),
-                        to: Some(caller),
-                        id,
-                    });
-
-                    return Ok(id)
-                },
-                Err(TicketsError::InvalidTier) => return Err(Error::InvalidTier),
-                Err(TicketsError::NoSeatsAvailable) => return Err(Error::NoSeatsAvailable),
-                Err(TicketsError::TokenExists) => return Err(Error::TokenExists),
-                Err(TicketsError::NotAllowed) => return Err(Error::NotAllowed),
-                Err(_) => return Err(Error::SomethingWentWrong),
+            let mut tickets_vec = Vec::new();
+            for _ in 0..ticket_count {
+                match event_tickets.mint(caller, tier.clone()) {
+                    Ok(id) => {
+                        self.env().emit_event(Transfer {
+                            from: Some(AccountId::from([0x0; 32])),
+                            to: Some(caller),
+                            id,
+                        });
+                        tickets_vec.push(id);
+                    },
+                    Err(TicketsError::InvalidTier) => return Err(Error::InvalidTier),
+                    Err(TicketsError::NoSeatsAvailable) => return Err(Error::NoSeatsAvailable),
+                    Err(TicketsError::TokenExists) => return Err(Error::TokenExists),
+                    Err(TicketsError::NotAllowed) => return Err(Error::NotAllowed),
+                    Err(_) => return Err(Error::SomethingWentWrong),
+                }
             }
+            Ok(tickets_vec)
         }
 
         #[ink(message)]

@@ -24,6 +24,7 @@ mod tickets_NFT {
         token_tier: Mapping<TokenId, String>, 
         booked_seats_count: Mapping<String, u32>,
         token_owner: Mapping<TokenId, AccountId>,
+        owned_tokens: Mapping<AccountId, Vec<u32>>,
         owned_tokens_count: Mapping<AccountId, u32>,
         token_id: u32,
     }
@@ -57,6 +58,7 @@ mod tickets_NFT {
                 token_tier: Mapping::default(),
                 booked_seats_count,
                 token_owner: Mapping::default(),
+                owned_tokens: Mapping::default(),
                 owned_tokens_count: Mapping::default(),
                 token_id: 0,
             }
@@ -79,6 +81,14 @@ mod tickets_NFT {
             }
 
             Ok(self.token_tier.get(id).unwrap())
+        }
+
+        #[ink(message)]
+        pub fn get_owned_tokens(&self, owner: AccountId) -> Result<Vec<u32>> {
+            if !self.owned_tokens.contains(owner) {
+                return Err(Error::TokenNotFound);
+            }
+            return Ok(self.owned_tokens.get(owner).unwrap())
         }
 
         #[ink(message)]
@@ -117,6 +127,15 @@ mod tickets_NFT {
             self.token_tier.insert(self.token_id, &tier);
 
             self.add_token_to(&from, self.token_id)?;
+
+            let mut tickets_vec;
+            if self.owned_tokens.contains(from) {
+                tickets_vec = self.owned_tokens.get(from).unwrap();
+            } else {
+                tickets_vec = Vec::new();
+            }
+            tickets_vec.push(self.token_id);
+            self.owned_tokens.insert(from, &tickets_vec);
 
             self.token_id += 1;
 
@@ -247,6 +266,7 @@ mod tickets_NFT {
             assert_eq!(tickets_NFT.owner_of(1), None);
             assert_eq!(tickets_NFT.balance_of(accounts.alice), 0);
             assert_eq!(tickets_NFT.mint(accounts.alice, "tier1".to_string()), Ok(0));
+            assert_eq!(tickets_NFT.get_owned_tokens(accounts.alice), Ok(Vec::from([0])));
             assert_eq!(tickets_NFT.balance_of(accounts.alice), 1);
             assert_eq!(tickets_NFT.get_booked_seats_by_tier("tier1".to_string()).unwrap(), 1);
             assert_eq!(tickets_NFT.get_token_tier(0).unwrap(), "tier1");
