@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import Link from "next/link";
 import { useInstalledWallets, useUninstalledWallets, useWallet } from 'useink';
 import { useGlobalContext } from "@/app/context/globalContext";
-import { GetUserByWalletId } from "@/constants/UserEndpoints";
 
 export interface WalletList {
   name: string;
@@ -46,12 +45,12 @@ export const ConnectWallet = () => {
 
 
   useEffect (() => {
-    const fetchUser = async () => {
-      const response = await fetch(`${GetUserByWalletId}${account?.address}`);
-      if (await response.text() === "") {
-        registerModal!.classList.add("show");
-      }
-    }
+    // const fetchUser = async () => {
+      // const response = await fetch(`${GetUserByWalletId}${account?.address}`);
+      // if (await response.text() === "") {
+        // registerModal!.classList.add("show");
+      // }
+    // }
 
     if (account) {
       currentAccount = {
@@ -61,7 +60,7 @@ export const ConnectWallet = () => {
         active: true,
       }
 
-      fetchUser();
+      // fetchUser();
 
     }
 

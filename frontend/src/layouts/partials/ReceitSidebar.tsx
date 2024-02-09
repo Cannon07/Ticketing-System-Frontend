@@ -4,6 +4,16 @@ import { humanize } from "@/lib/utils/textConverter";
 import Link from "next/link";
 import Accordion from "@/shortcodes/Accordion";
 import { useState } from "react";
+import { CONTRACT_ADDRESS } from '@/constants/contract_constants/ContractAddress';
+import metadata from '@/constants/contract_constants/assets/TicketingSystem.json';
+
+import { useCall, useCallSubscription, useContract, useEventSubscription, useEvents, useTx, useWallet } from "useink";
+import { useTxNotifications } from "useink/notifications";
+import { stringify } from "querystring";
+import { pickDecoded, pickError } from 'useink/utils';
+
+
+
 
 const ReceitSidebar = ({
   tags,
@@ -14,11 +24,84 @@ const ReceitSidebar = ({
   categories: string[];
   allCategories: string[];
 }) => {
+
+ 
+
+
+  const TicketsNft = useContract(CONTRACT_ADDRESS,metadata);
+  // const {account}  =useWallet();
+
+
+  const mintResult = useCallSubscription(TicketsNft, 'mint',['event 2','tier 2',5],{
+    defaultCaller: true,
+  });
+
+  console.log(mintResult)
+
+ 
+  
+
+  
+
+
+
+  const mint = useTx(TicketsNft,'mint');
+  useTxNotifications(mint);
+
+  // const balaceOf = useTx(TicketsNft,'balance');
+  // useTxNotifications(mint);
+
+  
+  // const balanceOf = useCall(TicketsNft,'balanceOf');
+  
+  
+
+  // const [nft,setNft] = useState();
+
+  const eventHash = 'event 2';
+  const tier = 'tier 2';
+  const mintCount = 5;
+
+  // useEventSubscription(TicketsNft);
+
+  // const { events: transferEvents } = useEvents(CONTRACT_ADDRESS, ['Transfer']);
+
+  // let token;
+  // transferEvents.map((event)=>(
+  //   token = event.args[2]
+  // ))
+  // setNft(token);
+  // console.log(transferEvents.map(e))
+  
+  const handleProceedClick=(e:any)=>{ 
+  
+        e.preventDefault();
+        mint.signAndSend([eventHash,tier,mintCount]);
+
+  }
+
+  // const args =['event 1',account?.address]
+  // balanceOf.send(args, { defaultCaller: true })
+
+  // console.log(balanceOf.result)
+
+  let data;
+  if(mintResult.result?.ok){
+     data = JSON.parse(JSON.stringify(mintResult.result.value.decoded))
+  }
+
   return (
     <div className="lg:col-5">
+     
       <div className="mb-8 mt-8 lg:mt-0">
         <h3 className="mb-6">Booking Summary</h3>
         <div className="rounded bg-theme-light p-8 dark:bg-darkmode-theme-light relative">
+        {mintResult.result?.ok &&
+          <h2 className='text-white font-bold text-xl mt-3 text-center'>
+              {data.Ok}
+              {data.Err}
+          </h2>
+        }
           <div className={"flex flex-col gap-4 items-center"}>
             <h4 className={"h5 sm:h4"}>Tier</h4>
             <ul className="flex gap-4 flex-wrap justify-center">
@@ -67,12 +150,14 @@ const ReceitSidebar = ({
 
         </div>
 
-        <button className={"mt-6 w-full btn btn-primary flex justify-between"}>
+        <button onClick={handleProceedClick} className={"mt-6 w-full btn btn-primary flex justify-between"}>
           <h5 className={"text-white dark:text-dark"}>Total: Rs 1500</h5>
           <h5 className={"text-white dark:text-dark"}>Proceed</h5>
         </button>
       </div>
     </div>
+
+    
   );
 };
 
