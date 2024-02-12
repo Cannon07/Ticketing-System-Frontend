@@ -52,7 +52,7 @@ const Home = () => {
                 <ImageFallback
                   src={banner.image}
                   className="mx-auto"
-                  width="800"
+                  width="770"
                   height="420"
                   alt="banner image"
                   priority
@@ -71,7 +71,7 @@ const Home = () => {
           <div className="container">
             <div className="row items-center justify-between">
               <div
-                className={`mb:md-0 mb-6 md:col-5 ${
+                className={`mb:md-0 md:col-5 ${
                   index % 2 !== 0 && "md:order-2"
                 }`}
               >

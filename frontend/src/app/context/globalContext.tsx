@@ -9,7 +9,8 @@ interface ContextProps{
     setWalletAddress: Dispatch<SetStateAction<string>>,
     hasAccount: boolean,
     setHasAccount: Dispatch<SetStateAction<boolean>>,
-
+    connectLoading: boolean,
+    setConnectLoading: Dispatch<SetStateAction<boolean>>,
 }
 
 const GlobalContext = createContext<ContextProps>({
@@ -19,6 +20,8 @@ const GlobalContext = createContext<ContextProps>({
     setWalletAddress: (): string=>'',
     hasAccount: false,
     setHasAccount: (): boolean=>false,
+    connectLoading: false,
+    setConnectLoading: (): boolean=>false,
 })
 
 interface GlobalContextProviderProps{
@@ -30,9 +33,10 @@ export const GlobalContextProvider = ({children}:GlobalContextProviderProps)=>{
     const [selectedCity,setSelectCity] = useState(city?city.toString():"");
     const [walletAddress,setWalletAddress] = useState('');
     const [hasAccount,setHasAccount] = useState(false);
+    const [connectLoading, setConnectLoading] = useState(false);
 
     return (
-        <GlobalContext.Provider value = {{selectedCity,setSelectCity,walletAddress,setWalletAddress,hasAccount,setHasAccount}}>
+        <GlobalContext.Provider value = {{selectedCity,setSelectCity,walletAddress,setWalletAddress,hasAccount,setHasAccount,connectLoading,setConnectLoading}}>
 
             {children}
 

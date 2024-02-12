@@ -1,7 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useInstalledWallets, useUninstalledWallets, useWallet } from 'useink';
 import { useGlobalContext } from "@/app/context/globalContext";
+import { GetUserByWalletId } from "@/constants/UserEndpoints";
+import toast from "react-hot-toast";
 
 export interface WalletList {
   name: string;
@@ -21,7 +23,7 @@ export const ConnectWallet = () => {
   const { account, accounts, setAccount, connect, disconnect } = useWallet();
   const installedWallets = useInstalledWallets();
   const uninstalledWallets = useUninstalledWallets();
-  const {setHasAccount, setWalletAddress} = useGlobalContext();
+  const {setHasAccount, setWalletAddress, connectLoading, setConnectLoading} = useGlobalContext();
   const registerModal = document.getElementById("registerModal");
   //const {currentAccount, setCurrentAccount} = useState<AccountList>();
 
@@ -43,14 +45,25 @@ export const ConnectWallet = () => {
   let accountsList: AccountList[] = [];
   let currentAccount: AccountList;
 
-
   useEffect (() => {
-    // const fetchUser = async () => {
-      // const response = await fetch(`${GetUserByWalletId}${account?.address}`);
-      // if (await response.text() === "") {
-        // registerModal!.classList.add("show");
-      // }
-    // }
+    const fetchUser = async () => {
+      setConnectLoading(true);
+      toast.loading("Fetching user..")
+      var requestOptions = {
+        method: 'GET',
+      };
+      let response = await fetch(`${GetUserByWalletId}${account?.address}`, requestOptions)
+      let result = await response.json()
+      console.log(result)
+      if (response.status == 404) {
+        toast.dismiss();
+        registerModal!.classList.add("show");
+      } else {
+        toast.dismiss();
+        toast.success("User Fetched");
+        setConnectLoading(false);
+      }
+    }
 
     if (account) {
       currentAccount = {
@@ -60,7 +73,7 @@ export const ConnectWallet = () => {
         active: true,
       }
 
-      // fetchUser();
+      fetchUser();
 
     }
 
@@ -84,12 +97,12 @@ export const ConnectWallet = () => {
             <React.Fragment key={'wallet-map'}>
                 <li className="nav-item nav-dropdown group relative">
                   <span
-                    className={`btn btn-outline-primary btn-sm hidden lg:inline-flex items-center cursor-pointer`}
+                    className={`btn btn-outline-primary btn-sm hidden lg:inline-flex items-center cursor-pointer w-40 justify-center`}
                   >
-                    Connect Wallet
-                    <svg className="h-4 w-4 fill-current" viewBox="0 0 20 20">
+                    <p className="overflow-hidden whitespace-nowrap text-ellipsis">{connectLoading ? "Loading..." : "Connect Wallet"}</p>
+                    {!connectLoading && <svg className="h-4 w-4 fill-current" viewBox="0 0 20 20">
                       <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                    </svg>
+                    </svg>}
                   </span>
                   <ul className="nav-dropdown-list hidden group-hover:block lg:invisible lg:absolute lg:block lg:opacity-0 lg:group-hover:visible lg:group-hover:opacity-100">
                     {allWallets.map((child: WalletList, i: number) => (
@@ -133,12 +146,12 @@ export const ConnectWallet = () => {
             <React.Fragment key={'wallet-map'}>
                 <li className="nav-item nav-dropdown group relative">
                   <span
-                    className={`btn btn-outline-primary btn-sm hidden lg:inline-flex items-center cursor-pointer`}
+                    className={`btn btn-outline-primary btn-sm hidden lg:inline-flex items-center cursor-pointer w-40 justify-center`}
                   >
-                    Hello, {account.name}
-                    <svg className="h-4 w-4 fill-current" viewBox="0 0 20 20">
+                    <p className="overflow-hidden whitespace-nowrap text-ellipsis">{connectLoading ? "Loading..." : `${account.name}`}</p>
+                    {!connectLoading && <svg className="h-4 w-4 fill-current" viewBox="0 0 20 20">
                       <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                    </svg>
+                    </svg>}
                   </span>
                   <ul className="nav-dropdown-list hidden group-hover:block lg:invisible lg:absolute lg:block lg:opacity-0 lg:group-hover:visible lg:group-hover:opacity-100">
                     {accounts && accounts.map((child) => (

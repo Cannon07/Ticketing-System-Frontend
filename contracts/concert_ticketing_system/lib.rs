@@ -115,6 +115,19 @@ mod concert_ticketing_system {
             
             Ok(())
         }
+
+        #[ink(message)]
+        pub fn remove_user(&mut self) -> Result<()> {
+            let caller = self.env().caller();
+
+            if !self.users.contains(caller) {
+                return Err(Error::NotRegisteredAsUser)
+            } 
+
+            self.users.remove(caller); 
+            
+            Ok(())
+        }
         
         #[ink(message)]
         pub fn get_user(&self) -> Option<String> {
