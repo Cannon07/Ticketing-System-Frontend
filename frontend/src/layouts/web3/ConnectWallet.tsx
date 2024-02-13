@@ -106,7 +106,7 @@ export const ConnectWallet = () => {
                   </span>
                   <ul className="nav-dropdown-list hidden group-hover:block lg:invisible lg:absolute lg:block lg:opacity-0 lg:group-hover:visible lg:group-hover:opacity-100">
                     {allWallets.map((child: WalletList, i: number) => (
-                      <li className="nav-dropdown-item" key={`children-${i}`}>
+                      <li className="w-32 nav-dropdown-item" key={`children-${i}`}>
                         {child.installed ? (
                           <span
                             className="nav-dropdown-link block cursor-pointer"
@@ -156,21 +156,21 @@ export const ConnectWallet = () => {
                   <ul className="nav-dropdown-list hidden group-hover:block lg:invisible lg:absolute lg:block lg:opacity-0 lg:group-hover:visible lg:group-hover:opacity-100">
                     {accounts && accounts.map((child) => (
                       (account !== child) &&
-                      <li className="nav-dropdown-item" key={`children-${Math.random()}`}>
+                      <li className="w-32 nav-dropdown-item" key={`children-${Math.random()}`}>
                           <span
                             className="nav-dropdown-link block cursor-pointer"
                             onClick={() => (setAccount(child))}
                           >
-                            {child.name}
+                            <p className="overflow-hidden whitespace-nowrap text-ellipsis">{child.name}</p>
                           </span>
                       </li>
                     ))}
-                    <li className="nav-dropdown-item" key={`children-${Math.random()}`}>
+                    <li className="w-32 nav-dropdown-item" key={`children-${Math.random()}`}>
                           <span
                             className="nav-dropdown-link block cursor-pointer"
                             onClick={disconnectWallet}
                           >
-                            Disconnect
+                            <p className="overflow-hidden whitespace-nowrap text-ellipsis">Disconnect</p>
                           </span>
                     </li>
                   </ul>
