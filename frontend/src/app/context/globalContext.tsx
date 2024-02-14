@@ -2,6 +2,17 @@
 
 import { createContext, useContext, Dispatch, SetStateAction,useState, ReactNode } from "react";
 
+
+interface UserData {
+  id: string,
+  name: string,
+  profileImg: string,
+  transactionId: string,
+  userEmail: string,
+  userName: string,
+  walletId: string,
+}
+
 interface ContextProps{
     selectedCity: string,
     setSelectCity: Dispatch<SetStateAction<string>>,
@@ -11,6 +22,8 @@ interface ContextProps{
     setHasAccount: Dispatch<SetStateAction<boolean>>,
     connectLoading: boolean,
     setConnectLoading: Dispatch<SetStateAction<boolean>>,
+    userData: UserData | null,
+    setUserData: Dispatch<SetStateAction<UserData | null>>,
 }
 
 const GlobalContext = createContext<ContextProps>({
@@ -22,6 +35,8 @@ const GlobalContext = createContext<ContextProps>({
     setHasAccount: (): boolean=>false,
     connectLoading: false,
     setConnectLoading: (): boolean=>false,
+    userData: null,
+    setUserData: (): UserData | null => null,
 })
 
 interface GlobalContextProviderProps{
@@ -34,9 +49,10 @@ export const GlobalContextProvider = ({children}:GlobalContextProviderProps)=>{
     const [walletAddress,setWalletAddress] = useState('');
     const [hasAccount,setHasAccount] = useState(false);
     const [connectLoading, setConnectLoading] = useState(false);
+    const [userData, setUserData] = useState<UserData | null>(null);
 
     return (
-        <GlobalContext.Provider value = {{selectedCity,setSelectCity,walletAddress,setWalletAddress,hasAccount,setHasAccount,connectLoading,setConnectLoading}}>
+        <GlobalContext.Provider value = {{selectedCity,setSelectCity,walletAddress,setWalletAddress,hasAccount,setHasAccount,connectLoading,setConnectLoading,userData,setUserData}}>
 
             {children}
 

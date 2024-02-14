@@ -34,11 +34,19 @@ const RegisterModal = () => {
         txId = Object.values(value.args[1]).slice(0, 64).join("")
       });
       toast.dismiss()
-      toast.success('Transaction finalized!')
-      let register_toast = toast.loading('Registering User..')
-      uploadImage(txId);
-      toast.dismiss(register_toast);
-      toast.success('User Registered!')
+      if (txId === "") {
+        toast.error("Something went wrong!")
+        setFullname("");
+        setUsername("");
+        setEmail("");
+        setFile(undefined);
+        disconnect();
+      } else {
+        toast.success('Transaction finalized!')
+        let register_toast = toast.loading('Registering User..')
+        uploadImage(txId);
+        toast.dismiss(register_toast);
+      }
       setConnectLoading(false)
     }
     else if(registerUser.status === 'PendingSignature'){
@@ -105,7 +113,9 @@ const RegisterModal = () => {
 
       let response = await fetch(`${PostUser}`, requestOptions)
       if (response.ok) {
-        console.log(response);
+        let result = await response.json();
+        console.log(result)
+        toast.success("User Registered!")
         setFullname("");
         setUsername("");
         setEmail("");

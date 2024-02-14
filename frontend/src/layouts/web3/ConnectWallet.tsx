@@ -23,7 +23,7 @@ export const ConnectWallet = () => {
   const { account, accounts, setAccount, connect, disconnect } = useWallet();
   const installedWallets = useInstalledWallets();
   const uninstalledWallets = useUninstalledWallets();
-  const {setHasAccount, setWalletAddress, connectLoading, setConnectLoading} = useGlobalContext();
+  const {setHasAccount, setWalletAddress, connectLoading, setConnectLoading, setUserData} = useGlobalContext();
   const registerModal = document.getElementById("registerModal");
   //const {currentAccount, setCurrentAccount} = useState<AccountList>();
 
@@ -59,6 +59,7 @@ export const ConnectWallet = () => {
         toast.dismiss();
         registerModal!.classList.add("show");
       } else {
+        setUserData(result);
         toast.dismiss();
         toast.success("User Fetched");
         setConnectLoading(false);
@@ -136,6 +137,7 @@ export const ConnectWallet = () => {
       setHasAccount(false);
       setWalletAddress('');
       disconnect();
+      setUserData(null);
     }
 
   return (
@@ -153,6 +155,7 @@ export const ConnectWallet = () => {
                       <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
                     </svg>}
                   </span>
+                  {!connectLoading &&
                   <ul className="nav-dropdown-list hidden group-hover:block lg:invisible lg:absolute lg:block lg:opacity-0 lg:group-hover:visible lg:group-hover:opacity-100">
                     {accounts && accounts.map((child) => (
                       (account !== child) &&
@@ -173,7 +176,7 @@ export const ConnectWallet = () => {
                             <p className="overflow-hidden whitespace-nowrap text-ellipsis">Disconnect</p>
                           </span>
                     </li>
-                  </ul>
+                  </ul>}
                 </li>
             </React.Fragment>
           </ul>

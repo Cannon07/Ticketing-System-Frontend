@@ -8,4 +8,18 @@ const nextConfig = {
   output: 'standalone',
 };
 
+module.exports = {
+  reactStrictMode: true,
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'firebasestorage.googleapis.com',
+        port: '',
+        pathname: '/v0/b/concert-ticketing-system-67922.appspot.com/o/**',
+      },
+    ],
+  },
+}
+
 
