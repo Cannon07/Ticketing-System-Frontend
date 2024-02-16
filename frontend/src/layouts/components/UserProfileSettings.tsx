@@ -7,8 +7,8 @@ import { CONTRACT_ADDRESS } from '@/constants/contract_constants/ContractAddress
 import metadata from '@/constants/contract_constants/assets/TicketingSystem.json';
 import { useTxNotifications } from 'useink/notifications';
 import { generateHash } from '@/lib/utils/hashGenerator';
-import { PostImage } from '@/constants/ImageEndpoints';
-import { UpdateUserById } from '@/constants/UserEndpoints';
+import { PostImage } from '@/constants/endpoint_constants/ImageEndpoints';
+import { UpdateUserById } from '@/constants/endpoint_constants/UserEndpoints';
 
 interface UserData {
   id: string,

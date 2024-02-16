@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import { useInstalledWallets, useUninstalledWallets, useWallet } from 'useink';
 import { useGlobalContext } from "@/app/context/globalContext";
-import { GetUserByWalletId } from "@/constants/UserEndpoints";
 import toast from "react-hot-toast";
+import { GetUserByWalletId } from "@/constants/endpoint_constants/UserEndpoints";
 
 export interface WalletList {
   name: string;

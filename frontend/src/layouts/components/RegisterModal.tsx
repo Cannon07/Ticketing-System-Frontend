@@ -8,8 +8,8 @@ import metadata from '@/constants/contract_constants/assets/TicketingSystem.json
 import { useTxNotifications } from "useink/notifications";
 import { generateHash } from "@/lib/utils/hashGenerator";
 import toast from "react-hot-toast";
-import { PostUser } from "@/constants/UserEndpoints";
-import { PostImage } from "@/constants/ImageEndpoints";
+import { PostUser } from "@/constants/endpoint_constants/UserEndpoints";
+import { PostImage } from "@/constants/endpoint_constants/ImageEndpoints";
 
 const RegisterModal = () => {
 
