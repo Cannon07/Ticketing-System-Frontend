@@ -2,12 +2,12 @@
 
 import React, { useEffect, useState } from "react";
 import LocationResult from "./LocationResult";
-
-
+import { useGlobalContext } from "@/app/context/globalContext";
 
 const LocationModal = () => {
   const [searchString, setSearchString] = useState("");
   const [searchLength,setSearchLength] = useState(0);
+  const { selectedCity } = useGlobalContext();
 
   // handle input change
   const handleSearch = (e: React.FormEvent<HTMLInputElement>) => {
@@ -41,9 +41,12 @@ const LocationModal = () => {
     });
 
     // search modal close
-    //locationModalOverlay!.addEventListener("click", function () {
-    //  locationModal!.classList.remove("show");
-    //});
+    if (selectedCity !== "") {
+      locationModalOverlay!.addEventListener("click", function () {
+        locationModal!.classList.remove("show");
+      });
+    }
+
 
     // keyboard navigation
     let selectedIndex = -1;
@@ -97,7 +100,7 @@ const LocationModal = () => {
 
       updateSelection();
     });
-  }, []);
+  }, [selectedCity]);
 
 
  const handleSearchLength=(len:any)=>{
