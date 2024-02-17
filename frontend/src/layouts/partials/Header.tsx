@@ -35,18 +35,17 @@ const Header = () => {
   // const router = useRouter();
   const { main }: { main: INavigationLink[] } = menu;
   const { navigation_button, settings } = config;
+
   // get current path
   const pathname = usePathname();
   const { selectedCity, userData } = useGlobalContext();
 
-
-
-
-
-
-
   // scroll to top on route change
   useEffect(() => {
+    if (selectedCity === "") {
+      const locationModal = document.getElementById("locationModal");
+      locationModal!.classList.add("show");
+    }
     window.scroll(0, 0);
   }, [pathname]);
   settings

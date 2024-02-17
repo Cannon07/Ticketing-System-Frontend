@@ -41,9 +41,9 @@ const LocationModal = () => {
     });
 
     // search modal close
-    locationModalOverlay!.addEventListener("click", function () {
-      locationModal!.classList.remove("show");
-    });
+    //locationModalOverlay!.addEventListener("click", function () {
+    //  locationModal!.classList.remove("show");
+    //});
 
     // keyboard navigation
     let selectedIndex = -1;
