@@ -67,10 +67,9 @@ const Events = () => {
 
   const router = useRouter();
   const params = useParams<{ page: string }>();
-  console.log(params.page)
   const [events, setEvents] = useState<event_data[]>([]);
   const [totalPages, setTotalPages] = useState(0);
-  const { selectedCity } = useGlobalContext();
+  const { date, price, categories, selectedCity } = useGlobalContext();
 
   const sortEventsByDate = (events: event_data[]) => {
     return [...events].sort((prev, curr) => {
@@ -78,6 +77,43 @@ const Events = () => {
       let currTimestamp = Date.parse(curr.dateAndTime.split(" ")[0]);
       return prevTimestamp - currTimestamp;
     })
+  }
+
+  const getEventsByDateFilter = (events: event_data[]) => {
+    let today = new Date();
+
+    let events_today: event_data[] = [];
+    if (date.today) {
+      events_today = events.filter((event) => {
+        let event_timestamp = Date.parse(event.dateAndTime.split(" ")[0]);
+        let event_date = new Date(event_timestamp);
+        return event_date.getDate() == today.getDate() && event_date.getFullYear() == today.getFullYear() && event_date.getMonth() == today.getMonth();
+      })
+    }
+
+    let events_tomorrow: event_data[] = [];
+    if (date.tomorrow) {
+      events_tomorrow = events.filter((event) => {
+        let event_timestamp = Date.parse(event.dateAndTime.split(" ")[0]);
+        let event_date = new Date(event_timestamp);
+        return event_date.getDate() == today.getDate() + 1 && event_date.getFullYear() == today.getFullYear() && event_date.getMonth() == today.getMonth();
+      })
+    }
+
+    let events_weekend: event_data[] = [];
+    if (date.weekend) {
+      events_weekend = events.filter((event) => {
+        let event_timestamp = Date.parse(event.dateAndTime.split(" ")[0]);
+        let event_date = new Date(event_timestamp);
+        let daysUntilSat = (6 - today.getDay() + 7) % 7;
+        let daysUntilSun = (7 - today.getDay()) % 7;
+        return (event_date.getDate() == today.getDate() + daysUntilSat && event_date.getFullYear() == today.getFullYear() && event_date.getMonth() == today.getMonth())
+          ||
+          (event_date.getDate() == today.getDate() + daysUntilSun && event_date.getFullYear() == today.getFullYear() && event_date.getMonth() == today.getMonth());
+      })
+    }
+
+    return [...new Set([...events_today, ...events_tomorrow, ...events_weekend])];
   }
 
   useEffect(() => {
@@ -94,13 +130,24 @@ const Events = () => {
       if (response.status != 404) {
         let result = await response.json();
         console.log(result);
+
         if (result.length > pagination * (Number(params.page)-1)) {
           toast.success("Events fetched successufully!", {
             id: 'eventsFetched'
           })
-          let sortedEvents = sortEventsByDate(result);
-          setEvents(sortedEvents);
-          setTotalPages(Math.ceil(result.length / pagination));
+          if (date.today || date.tomorrow || date.weekend) {
+            let filtered_events = getEventsByDateFilter(result);
+            if (filtered_events.length > pagination * (Number(params.page)-1)) {
+              setEvents(filtered_events);
+              setTotalPages(Math.ceil(filtered_events.length / pagination));
+            } else {
+             router.push('/event');
+            }
+          } else {
+            let sortedEvents = sortEventsByDate(result);
+            setEvents(sortedEvents);
+            setTotalPages(Math.ceil(sortedEvents.length / pagination));
+          }
         } else {
           router.push('/event');
         }
@@ -111,7 +158,7 @@ const Events = () => {
     }
 
     fetchEventsByCity();
-  }, [selectedCity])
+  }, [selectedCity, date])
 
   return (
     <>

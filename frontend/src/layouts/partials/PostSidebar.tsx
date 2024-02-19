@@ -1,21 +1,10 @@
 'use client'
 
 import Accordion from "@/shortcodes/Accordion";
-import { useState } from "react";
+import { useGlobalContext } from "@/app/context/globalContext";
 
 const PostSidebar = () => {
-  const [date, setDate] = useState({
-    "today": false,
-    "tomorrow": false,
-    "weekend": false
-  });
-
-  const [price, setPrice] = useState({
-    "Free": false,
-    "below_500": false,
-    "between_500_1000": false,
-    "Above_2000": false
-  })
+  const {date, setDate, price, setPrice, categories, setCategories} = useGlobalContext();
 
   return (
     <div className="lg:col-4">
@@ -99,6 +88,112 @@ const PostSidebar = () => {
               })}
           >
             Above 2000
+          </button>
+        </div>
+      </Accordion>
+
+      <Accordion
+        title={"Categories"}
+      >
+        <div className="flex flex-wrap flex-row gap-4 mb-6">
+          <button
+            className={`btn ${categories.Rock ? 'btn-primary': 'btn-outline-primary'} px-4 lg:inline-flex items-center cursor-pointer`}
+            onClick={() => setCategories({
+              ...categories,
+              Rock: !categories.Rock
+              })}
+          >
+            Rock
+          </button>
+
+          <button
+            className={`btn ${categories.Pop ? 'btn-primary': 'btn-outline-primary'} px-4 lg:inline-flex items-center cursor-pointer`}
+            onClick={() => setCategories({
+              ...categories,
+              Pop: !categories.Pop
+              })}
+          >
+            Pop
+          </button>
+
+          <button
+            className={`btn ${categories.Jazz ? 'btn-primary': 'btn-outline-primary'} px-4 lg:inline-flex items-center cursor-pointer`}
+            onClick={() => setCategories({
+              ...categories,
+              Jazz: !categories.Jazz
+              })}
+          >
+            Jazz
+          </button>
+
+          <button
+            className={`btn ${categories.Classical ? 'btn-primary': 'btn-outline-primary'} px-4 lg:inline-flex items-center cursor-pointer`}
+            onClick={() => setCategories({
+              ...categories,
+              Classical: !categories.Classical
+              })}
+          >
+            Classical
+          </button>
+
+          <button
+            className={`btn ${categories.Hip_hop ? 'btn-primary': 'btn-outline-primary'} px-4 lg:inline-flex items-center cursor-pointer`}
+            onClick={() => setCategories({
+              ...categories,
+              Hip_hop: !categories.Hip_hop
+              })}
+          >
+            Hip-hop
+          </button>
+
+          <button
+            className={`btn ${categories.Electronic_Dance ? 'btn-primary': 'btn-outline-primary'} px-4 lg:inline-flex items-center cursor-pointer`}
+            onClick={() => setCategories({
+              ...categories,
+              Electronic_Dance: !categories.Electronic_Dance
+              })}
+          >
+            Electronic/Dance
+          </button>
+
+          <button
+            className={`btn ${categories.Country ? 'btn-primary': 'btn-outline-primary'} px-4 lg:inline-flex items-center cursor-pointer`}
+            onClick={() => setCategories({
+              ...categories,
+              Country: !categories.Country
+              })}
+          >
+            Country
+          </button>
+
+          <button
+            className={`btn ${categories.R_B_Soul ? 'btn-primary': 'btn-outline-primary'} px-4 lg:inline-flex items-center cursor-pointer`}
+            onClick={() => setCategories({
+              ...categories,
+              R_B_Soul: !categories.R_B_Soul
+              })}
+          >
+            R&B/Soul
+          </button>
+
+          <button
+            className={`btn ${categories.Folk ? 'btn-primary': 'btn-outline-primary'} px-4 lg:inline-flex items-center cursor-pointer`}
+            onClick={() => setCategories({
+              ...categories,
+              Folk: !categories.Folk
+              })}
+          >
+            Folk
+          </button>
+
+          <button
+            className={`btn ${categories.Alternative ? 'btn-primary': 'btn-outline-primary'} px-4 lg:inline-flex items-center cursor-pointer`}
+            onClick={() => setCategories({
+              ...categories,
+              Alternative: !categories.Alternative
+              })}
+          >
+            Alternative
           </button>
         </div>
       </Accordion>

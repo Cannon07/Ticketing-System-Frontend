@@ -48,7 +48,7 @@ interface event_data {
 const Events = () => {
   const [events, setEvents] = useState<event_data[]>([]);
   const [totalPages, setTotalPages] = useState(0);
-  const { selectedCity } = useGlobalContext();
+  const { date, price, categories, selectedCity } = useGlobalContext();
 
   const sortEventsByDate = (events: event_data[]) => {
     return [...events].sort((prev, curr) => {
@@ -56,6 +56,43 @@ const Events = () => {
       let currTimestamp = Date.parse(curr.dateAndTime.split(" ")[0]);
       return prevTimestamp - currTimestamp;
     })
+  }
+
+  const getEventsByDateFilter = (events: event_data[]) => {
+    let today = new Date();
+
+    let events_today: event_data[] = [];
+    if (date.today) {
+      events_today = events.filter((event) => {
+        let event_timestamp = Date.parse(event.dateAndTime.split(" ")[0]);
+        let event_date = new Date(event_timestamp);
+        return event_date.getDate() == today.getDate() && event_date.getFullYear() == today.getFullYear() && event_date.getMonth() == today.getMonth();
+      })
+    }
+
+    let events_tomorrow: event_data[] = [];
+    if (date.tomorrow) {
+      events_tomorrow = events.filter((event) => {
+        let event_timestamp = Date.parse(event.dateAndTime.split(" ")[0]);
+        let event_date = new Date(event_timestamp);
+        return event_date.getDate() == today.getDate() + 1 && event_date.getFullYear() == today.getFullYear() && event_date.getMonth() == today.getMonth();
+      })
+    }
+
+    let events_weekend: event_data[] = [];
+    if (date.weekend) {
+      events_weekend = events.filter((event) => {
+        let event_timestamp = Date.parse(event.dateAndTime.split(" ")[0]);
+        let event_date = new Date(event_timestamp);
+        let daysUntilSat = (6 - today.getDay() + 7) % 7;
+        let daysUntilSun = (7 - today.getDay()) % 7;
+        return (event_date.getDate() == today.getDate() + daysUntilSat && event_date.getFullYear() == today.getFullYear() && event_date.getMonth() == today.getMonth())
+          ||
+          (event_date.getDate() == today.getDate() + daysUntilSun && event_date.getFullYear() == today.getFullYear() && event_date.getMonth() == today.getMonth());
+      })
+    }
+
+    return [...new Set([...events_today, ...events_tomorrow, ...events_weekend])];
   }
 
   useEffect(() => {
@@ -75,9 +112,15 @@ const Events = () => {
         toast.success("Events fetched successufully!", {
           id: 'eventsFetched'
         })
-        let sortedEvents = sortEventsByDate(result);
-        setEvents(sortedEvents);
-        setTotalPages(Math.ceil(result.length / pagination));
+        if (date.today || date.weekend || date.tomorrow) {
+          let filtered_events = getEventsByDateFilter(result)
+          setEvents(filtered_events);
+          setTotalPages(Math.ceil(filtered_events.length / pagination));
+        } else {
+          let sorted_events = sortEventsByDate(result);
+          setEvents(sorted_events);
+          setTotalPages(Math.ceil(sorted_events.length / pagination));
+        }
       } else {
         toast.error("No events available!")
         setEvents([]);
@@ -85,7 +128,7 @@ const Events = () => {
     }
     fetchEventsByCity();
     console.log(events)
-  }, [selectedCity])
+  }, [selectedCity, date])
 
   return (
     <>
