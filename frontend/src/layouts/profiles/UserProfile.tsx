@@ -8,6 +8,7 @@ import AttendedEventsCard from "@/components/AttendedEventsCard";
 import UserProfileSettings from "@/components/UserProfileSettings";
 import { useGlobalContext } from "@/app/context/globalContext";
 import NotConnected from "@/app/not-connected";
+import PageHeader from "@/partials/PageHeader";
 
 const UserProfile = () => {
 
@@ -24,6 +25,7 @@ const UserProfile = () => {
 
     return (
         <>
+          <PageHeader title={"Profile"} />
           {userData == null ? <NotConnected /> :
             <div className="section-sm">
                 <div className="container">

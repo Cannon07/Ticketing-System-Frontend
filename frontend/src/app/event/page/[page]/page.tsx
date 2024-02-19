@@ -1,3 +1,6 @@
+'use client'
+
+import { useState, useEffect } from "react";
 import EventCard from "@/components/EventCard";
 import Pagination from "@/components/Pagination";
 import config from "@/config/config.json";
@@ -8,86 +11,136 @@ import PageHeader from "@/partials/PageHeader";
 import PostSidebar from "@/partials/PostSidebar";
 import SeoMeta from "@/partials/SeoMeta";
 import { Post } from "@/types";
+import { useParams } from "next/navigation";
+import { useGlobalContext } from "@/app/context/globalContext";
+import { GetEventsByCity } from "@/constants/endpoint_constants/EventEndpoints";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
-const { blog_folder, pagination } = config.event_settings;
+const { blog_folder, pagination } = config.event_settings_2;
 
-// remove dynamicParams
-export const dynamicParams = false;
+interface artist_data {
+  id: String,
+  name: String,
+  profileImg: String,
+  userName: String,
+  govId: String,
+  email: String,
+}
 
-// generate static params
-export const generateStaticParams = () => {
-  const allPost: Post[] = getSinglePage(blog_folder);
-  const allSlug: string[] = allPost.map((item) => item.slug!);
-  const totalPages = Math.ceil(allSlug.length / pagination);
-  let paths: { page: string }[] = [];
+interface tier_data {
+  id: String,
+  name: String,
+  capacity: number,
+  price: number,
+}
 
-  for (let i = 1; i < totalPages; i++) {
-    paths.push({
-      page: (i + 1).toString(),
-    });
-  }
-
-  return paths;
-};
-
-function spreadPages(num: number): number[] {
-  let pages = [];
-
-  for (let i = 2; i <= num; i++) {
-    pages.push(i);
-  }
-
-  return pages;
+interface event_data {
+  id: String,
+  name: String,
+  description: String,
+  dateAndTime: String,
+  eventDuration: String,
+  venueId: String,
+  transactionId: String,
+  categoryList: String[],
+  imageUrls: String[],
+  artists: artist_data[],
+  tiers: tier_data[],
 }
 
 // for all regular pages
-const Events = ({ params }: { params: { page: number } }) => {
-  const postIndex: Post = getListPage(`${blog_folder}/_index.md`);
-  const { title, meta_title, description, image } = postIndex.frontmatter;
-  const posts: Post[] = getSinglePage(blog_folder);
-  const allCategories = getAllTaxonomy(blog_folder, "categories");
-  const categories = getTaxonomy(blog_folder, "categories");
-  const tags = getTaxonomy(blog_folder, "tags");
-  const sortedPosts = sortByDate(posts);
-  const totalPages = Math.ceil(posts.length / pagination);
-  const currentPage =
-    params.page && !isNaN(Number(params.page)) ? Number(params.page) : 1;
-  const indexOfLastPost = currentPage * pagination;
-  const indexOfFirstPost = indexOfLastPost - pagination;
-  const currentPosts = sortedPosts.slice(indexOfFirstPost, indexOfLastPost);
+const Events = () => {
+  //const postIndex: Post = getListPage(`${blog_folder}/_index.md`);
+  //const { title, meta_title, description, image } = postIndex.frontmatter;
+  //const posts: Post[] = getSinglePage(blog_folder);
+  //const allCategories = getAllTaxonomy(blog_folder, "categories");
+  //const categories = getTaxonomy(blog_folder, "categories");
+  //const tags = getTaxonomy(blog_folder, "tags");
+  //const sortedPosts = sortByDate(posts);
+  //const totalPages = Math.ceil(posts.length / pagination);
+  //const currentPage =
+  //  params.page && !isNaN(Number(params.page)) ? Number(params.page) : 1;
+  //const indexOfLastPost = currentPage * pagination;
+  //const indexOfFirstPost = indexOfLastPost - pagination;
+  //const currentPosts = sortedPosts.slice(indexOfFirstPost, indexOfLastPost);
+
+  const router = useRouter();
+  const params = useParams<{ page: string }>();
+  console.log(params.page)
+  const [events, setEvents] = useState<event_data[]>([]);
+  const [totalPages, setTotalPages] = useState(0);
+  const { selectedCity } = useGlobalContext();
+
+  const sortEventsByDate = (events: event_data[]) => {
+    return [...events].sort((prev, curr) => {
+      let prevTimestamp = Date.parse(prev.dateAndTime.split(" ")[0]);
+      let currTimestamp = Date.parse(curr.dateAndTime.split(" ")[0]);
+      return prevTimestamp - currTimestamp;
+    })
+  }
+
+  useEffect(() => {
+    const fetchEventsByCity = async () => {
+      var requestOptions = {
+        method: 'GET',
+      };
+      toast.dismiss();
+      toast.loading("Fetching events..", {
+        id: 'eventsLoading'
+      })
+      let response = await fetch(`${GetEventsByCity}city=${selectedCity}`, requestOptions)
+      toast.dismiss()
+      if (response.status != 404) {
+        let result = await response.json();
+        console.log(result);
+        if (result.length > pagination * (Number(params.page)-1)) {
+          toast.success("Events fetched successufully!", {
+            id: 'eventsFetched'
+          })
+          let sortedEvents = sortEventsByDate(result);
+          setEvents(sortedEvents);
+          setTotalPages(Math.ceil(result.length / pagination));
+        } else {
+          router.push('/event');
+        }
+      } else {
+        toast.error("No events available!")
+        setEvents([]);
+      }
+    }
+
+    fetchEventsByCity();
+  }, [selectedCity])
 
   return (
     <>
-      <SeoMeta
+      {/*<SeoMeta
         title={title}
         meta_title={meta_title}
         description={description}
         image={image}
-      />
-      <PageHeader title={postIndex.frontmatter.title} />
+      />*/}
+      <PageHeader title={"Events"} />
       <section className="section">
         <div className="container">
           <div className="row gx-5">
             <div className="lg:col-8">
               <div className="row">
-                {currentPosts.map((post: any, index: number) => (
+                {events.slice((Number(params.page)-1)*pagination, Number(params.page)*pagination).map((event: any, index: number) => (
                   <div key={index} className="mb-14 lg:col-4 md:col-6">
-                    <EventCard data={post} />
+                    <EventCard data={event} />
                   </div>
                 ))}
               </div>
               <Pagination
-                section={blog_folder}
-                currentPage={currentPage}
+                section={'event'}
+                currentPage={Number(params.page)}
                 totalPages={totalPages}
               />
             </div>
 
-            <PostSidebar
-              categories={categories}
-              tags={tags}
-              allCategories={allCategories}
-            />
+            <PostSidebar />
           </div>
         </div>
       </section>

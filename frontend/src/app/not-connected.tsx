@@ -6,7 +6,7 @@ const NotConnected = () => {
   return (
     <>
 
-      <div className="container text-center">
+      <div className="pt-16 pb-16 container text-center">
         <div className="row justify-center">
           <div className="sm:col-10 md:col-8 lg:col-6">
 
@@ -16,14 +16,14 @@ const NotConnected = () => {
                 We are sorry, but it seems like the page you are looking for is
                 temporarily unavailable.
               </p>
-              <p>
+              <p className="mb-0">
                 <strong>
                   To access this page, you need to connect to a wallet first.
-                </strong>{" "} 
-       
+                </strong>{" "}
+
               </p>
             </div>
-          
+
           </div>
         </div>
       </div>

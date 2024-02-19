@@ -1,61 +1,129 @@
+'use client'
+
+import { useState, useEffect } from "react";
+
 import EventCard from "@/components/EventCard";
 import Pagination from "@/components/Pagination";
 import config from "@/config/config.json";
-import { getListPage, getSinglePage } from "@/lib/contentParser";
-import { getAllTaxonomy, getTaxonomy } from "@/lib/taxonomyParser";
-import { sortByDate } from "@/lib/utils/sortFunctions";
 import PageHeader from "@/partials/PageHeader";
 import PostSidebar from "@/partials/PostSidebar";
 import SeoMeta from "@/partials/SeoMeta";
-import { Post } from "@/types";
-const { blog_folder, pagination } = config.event_settings_2;
+import { GetEventsByCity } from "@/constants/endpoint_constants/EventEndpoints";
+import toast from "react-hot-toast";
+import { useGlobalContext } from "../context/globalContext";
+import NotConnected from "../not-connected";
+
+const { pagination } = config.event_settings_2;
+
+interface artist_data {
+  id: String,
+  name: String,
+  profileImg: String,
+  userName: String,
+  govId: String,
+  email: String,
+}
+
+interface tier_data {
+  id: String,
+  name: String,
+  capacity: number,
+  price: number,
+}
+
+interface event_data {
+  id: String,
+  name: String,
+  description: String,
+  dateAndTime: String,
+  eventDuration: String,
+  venueId: String,
+  transactionId: String,
+  categoryList: String[],
+  imageUrls: String[],
+  artists: artist_data[],
+  tiers: tier_data[],
+}
 
 const Events = () => {
-  const postIndex: Post = getListPage(`${blog_folder}/_index.md`);
-  const { title, meta_title, description, image } = postIndex.frontmatter;
-  const posts: Post[] = getSinglePage(blog_folder);
-  const allCategories = getAllTaxonomy(blog_folder, "categories");
-  const categories = getTaxonomy(blog_folder, "categories");
-  const tags = getTaxonomy(blog_folder, "tags");
-  const sortedPosts = sortByDate(posts);
-  const totalPages = Math.ceil(posts.length / pagination);
-  const currentPosts = sortedPosts.slice(0, pagination);
+  const [events, setEvents] = useState<event_data[]>([]);
+  const [totalPages, setTotalPages] = useState(0);
+  const { selectedCity } = useGlobalContext();
+
+  const sortEventsByDate = (events: event_data[]) => {
+    return [...events].sort((prev, curr) => {
+      let prevTimestamp = Date.parse(prev.dateAndTime.split(" ")[0]);
+      let currTimestamp = Date.parse(curr.dateAndTime.split(" ")[0]);
+      return prevTimestamp - currTimestamp;
+    })
+  }
+
+  useEffect(() => {
+    const fetchEventsByCity = async () => {
+      var requestOptions = {
+        method: 'GET',
+      };
+      toast.dismiss();
+      toast.loading("Fetching events..", {
+        id: 'eventsLoading'
+      })
+      let response = await fetch(`${GetEventsByCity}city=${selectedCity}`, requestOptions)
+      let result = await response.json()
+      toast.dismiss()
+      console.log(result)
+      if (response.status != 404) {
+        toast.success("Events fetched successufully!", {
+          id: 'eventsFetched'
+        })
+        let sortedEvents = sortEventsByDate(result);
+        setEvents(sortedEvents);
+        setTotalPages(Math.ceil(result.length / pagination));
+      } else {
+        toast.error("No events available!")
+        setEvents([]);
+      }
+    }
+    fetchEventsByCity();
+    console.log(events)
+  }, [selectedCity])
 
   return (
     <>
-      <SeoMeta
+
+      {/*<SeoMeta
         title={title}
         meta_title={meta_title}
         description={description}
         image={image}
-      />
-      <PageHeader title={postIndex.frontmatter.title} />
-      <section className="section">
-        <div className="container">
-          <div className="row gx-5">
-            <div className="lg:col-8">
-              <div className="row">
-                {currentPosts.map((post: any, index: number) => (
-                  <div key={index} className="mb-14 lg:col-4 md:col-6">
-                    <EventCard data={post} />
-                  </div>
-                ))}
+      />*/}
+      <PageHeader title={"Events"} />
+      {events.length == 0 ?
+        <NotConnected /> :
+        <section className="section">
+          <div className="container">
+            <div className="row gx-5">
+              <div className="lg:col-8">
+                <div className="row">
+                  {events.slice(0, pagination).map((event: any, index: number) => (
+                    <div key={index} className="mb-14 lg:col-4 md:col-6">
+                      <EventCard data={event} />
+                    </div>
+                  ))}
+                </div>
+                {totalPages > 1 &&
+                  <Pagination
+                    section={'event'}
+                    currentPage={1}
+                    totalPages={totalPages}
+                  />
+                }
               </div>
-              <Pagination
-                section={blog_folder}
-                currentPage={1}
-                totalPages={totalPages}
-              />
-            </div>
 
-            <PostSidebar
-              categories={categories}
-              tags={tags}
-              allCategories={allCategories}
-            />
+              <PostSidebar />
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      }
     </>
   );
 };

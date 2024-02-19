@@ -57,6 +57,7 @@ export const ConnectWallet = () => {
       console.log(result)
       if (response.status == 404) {
         toast.dismiss();
+        setUserData(null);
         registerModal!.classList.add("show");
       } else {
         setUserData(result);
