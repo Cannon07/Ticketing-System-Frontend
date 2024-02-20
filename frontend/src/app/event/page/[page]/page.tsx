@@ -79,7 +79,7 @@ const Events = () => {
     })
   }
 
-  const getEventsByDateFilter = (events: event_data[]) => {
+  const getEventsByFilter = (events: event_data[]) => {
     let today = new Date();
 
     let events_today: event_data[] = [];
@@ -113,7 +113,35 @@ const Events = () => {
       })
     }
 
-    return [...new Set([...events_today, ...events_tomorrow, ...events_weekend])];
+    let events_free: event_data[] = [];
+    if (price.Free) {
+      events_free = events.filter((event) => {
+        return event.tiers.some((tier) => tier.price == 0)
+      });
+    }
+
+    let events_under_500: event_data[] = [];
+    if (price.below_500) {
+      events_under_500 = events.filter((event) => {
+        return event.tiers.some((tier) => tier.price < 501)
+      });
+    }
+
+    let events_between_500_1000: event_data[] = [];
+    if (price.between_500_1000) {
+      events_between_500_1000 = events.filter((event) => {
+        return event.tiers.some((tier) => tier.price > 500 && tier.price < 1001)
+      });
+    }
+
+    let events_above_2000: event_data[] = [];
+    if (price.Above_2000) {
+      events_above_2000 = events.filter((event) => {
+        return event.tiers.some((tier) => tier.price > 2000)
+      });
+    }
+
+    return [...new Set([...events_today, ...events_tomorrow, ...events_weekend, ...events_free, ...events_under_500, ...events_between_500_1000, ...events_above_2000])];
   }
 
   useEffect(() => {
@@ -135,8 +163,8 @@ const Events = () => {
           toast.success("Events fetched successufully!", {
             id: 'eventsFetched'
           })
-          if (date.today || date.tomorrow || date.weekend) {
-            let filtered_events = getEventsByDateFilter(result);
+          if (date.today || date.tomorrow || date.weekend || price.Free || price.below_500 || price.between_500_1000 || price.Above_2000) {
+            let filtered_events = getEventsByFilter(result);
             if (filtered_events.length > pagination * (Number(params.page)-1)) {
               setEvents(filtered_events);
               setTotalPages(Math.ceil(filtered_events.length / pagination));
@@ -158,7 +186,7 @@ const Events = () => {
     }
 
     fetchEventsByCity();
-  }, [selectedCity, date])
+  }, [selectedCity, date, price])
 
   return (
     <>
