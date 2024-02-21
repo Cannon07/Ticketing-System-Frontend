@@ -16,6 +16,7 @@ import { useGlobalContext } from "@/app/context/globalContext";
 import { GetEventsByCity } from "@/constants/endpoint_constants/EventEndpoints";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import MobilePostSidebar from "@/partials/MobilePostSidebar";
 
 const { blog_folder, pagination } = config.event_settings_2;
 
@@ -269,7 +270,10 @@ const Events = () => {
       <PageHeader title={"Events"} />
       <section className="section">
         <div className="container">
-          <div className="row gx-5">
+          <div className="row">
+            <div className="lg:hidden">
+              <MobilePostSidebar />
+            </div>
             <div className="lg:col-8">
               <div className="row">
                 {events.slice((Number(params.page)-1)*pagination, Number(params.page)*pagination).map((event: any, index: number) => (
@@ -284,8 +288,9 @@ const Events = () => {
                 totalPages={totalPages}
               />
             </div>
-
-            <PostSidebar />
+            <div className="lg:col-4 lg:block hidden">
+              <PostSidebar />
+            </div>
           </div>
         </div>
       </section>

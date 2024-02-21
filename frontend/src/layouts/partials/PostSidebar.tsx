@@ -1,15 +1,92 @@
 'use client'
 
 import Accordion from "@/shortcodes/Accordion";
+import { useEffect, useState } from "react";
 import { useGlobalContext } from "@/app/context/globalContext";
+import { IoClose } from "react-icons/io5";
 
 const PostSidebar = () => {
   const {date, setDate, price, setPrice, categories, setCategories} = useGlobalContext();
+  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
+
+  const filter_names: { [key: string]: string } = {
+    'today': 'Today',
+    'tomorrow': 'Tomorrow',
+    'weekend': 'Weekend',
+    'Free': 'Free',
+    'below_500': '1-500',
+    'between_500_1000': '501-1000',
+    'Above_2000': 'Above 2000',
+    'Rock': 'Rock',
+    'Pop': 'Pop',
+    'Jazz': 'Jazz',
+    'Classical': 'Classical',
+    'Hip_hop': 'Hip-Hop',
+    'Electronic_Dance': 'Electronic/Dance',
+    'Country': 'Country',
+    'R_B_Soul': 'R&B/Soul',
+    'Folk': 'Folk',
+    'Alternative': 'Alternative',
+  }
+
+  const getAppliedFilters = (appliedFilters: any) => {
+    return Object.keys(appliedFilters).filter(key => appliedFilters[key] === true);
+  }
+
+  useEffect(() => {
+    const appliedDateFilters = getAppliedFilters(date);
+    const appliedPriceFilters = getAppliedFilters(price);
+    const appliedCategoryFilters = getAppliedFilters(categories);
+
+    setSelectedFilters([...appliedDateFilters, ...appliedPriceFilters, ...appliedCategoryFilters]);
+  }, [date, price, categories])
 
   return (
-    <div className="lg:col-4">
+    <div>
 
       <h5 className="mb-6">Filters</h5>
+
+      <div className={`flex gap-2 flex-wrap dark:border-gray-600 border-gray-300 border-2 rounded border-dashed min-h-[57px] p-1 mb-6`}>
+        {selectedFilters.length > 0 ?
+          selectedFilters?.map((filter: string, index) => (
+            <div
+              key={index}
+              className="btn btn-outline-primary px-4 py-2 flex gap-4 items-center justify-center"
+              onClick={() => {
+                if (date.hasOwnProperty(filter)){
+                  setDate({
+                    ...date,
+                    [filter]: false,
+                  })
+                }
+
+                if (price.hasOwnProperty(filter)){
+                  setPrice({
+                    ...price,
+                    [filter]: false,
+                  })
+                }
+
+                if (categories.hasOwnProperty(filter)){
+                  setCategories({
+                    ...categories,
+                    [filter]: false,
+                  })
+                }
+
+                const newFilters = selectedFilters?.filter((filterDelete) => (filterDelete !== filter))
+                setSelectedFilters(newFilters)
+              }}
+            >
+              {filter_names[filter]}
+              <IoClose size={20}/>
+            </div>
+          ))
+          :
+          <p className='w-full flex justify-center items-center'>No Filters Selected</p>
+        }
+      </div>
+
       <Accordion
         title={"Date"}
       >

@@ -12,6 +12,7 @@ import { GetEventsByCity } from "@/constants/endpoint_constants/EventEndpoints";
 import toast from "react-hot-toast";
 import { useGlobalContext } from "../context/globalContext";
 import NotConnected from "../not-connected";
+import MobilePostSidebar from "@/partials/MobilePostSidebar";
 
 const { pagination } = config.event_settings_2;
 
@@ -238,33 +239,40 @@ const Events = () => {
         image={image}
       />*/}
       <PageHeader title={"Events"} />
-      {events.length == 0 ?
-        <NotConnected /> :
         <section className="section">
           <div className="container">
-            <div className="row gx-5">
-              <div className="lg:col-8">
-                <div className="row">
-                  {events.slice(0, pagination).map((event: any, index: number) => (
-                    <div key={index} className="mb-14 lg:col-4 md:col-6">
-                      <EventCard data={event} />
-                    </div>
-                  ))}
-                </div>
-                {totalPages > 1 &&
-                  <Pagination
-                    section={'event'}
-                    currentPage={1}
-                    totalPages={totalPages}
-                  />
-                }
+            <div className="row">
+              <div className="lg:hidden">
+                <MobilePostSidebar />
               </div>
-
-              <PostSidebar />
+              {events.length != 0 ?
+                <div className="lg:col-8">
+                  <div className="row">
+                    {events.slice(0, pagination).map((event: any, index: number) => (
+                      <div key={index} className="mb-14 lg:col-4 md:col-6">
+                        <EventCard data={event} />
+                      </div>
+                    ))}
+                  </div>
+                  {totalPages > 1 &&
+                    <Pagination
+                      section={'event'}
+                      currentPage={1}
+                      totalPages={totalPages}
+                    />
+                  }
+                </div>
+                :
+                <div className="lg:col-8 flex items-center">
+                  <NotConnected />
+                </div>
+              }
+              <div className="lg:col-4 lg:block hidden">
+                <PostSidebar />
+              </div>
             </div>
           </div>
         </section>
-      }
     </>
   );
 };
