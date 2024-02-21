@@ -141,7 +141,77 @@ const Events = () => {
       });
     }
 
-    return [...new Set([...events_today, ...events_tomorrow, ...events_weekend, ...events_free, ...events_under_500, ...events_between_500_1000, ...events_above_2000])];
+    let events_rock: event_data[] = [];
+    if (categories.Rock) {
+      events_rock = events.filter((event) => {
+        return event.categoryList.some((category) => category == "Rock")
+      });
+    }
+
+    let events_pop: event_data[] = [];
+    if (categories.Pop) {
+      events_pop = events.filter((event) => {
+        return event.categoryList.some((category) => category == "Pop")
+      });
+    }
+
+    let events_jazz: event_data[] = [];
+    if (categories.Jazz) {
+      events_jazz = events.filter((event) => {
+        return event.categoryList.some((category) => category == "Jazz")
+      });
+    }
+
+    let events_classical: event_data[] = [];
+    if (categories.Classical) {
+      events_classical = events.filter((event) => {
+        return event.categoryList.some((category) => category == "Classical")
+      });
+    }
+
+    let events_hip_hop: event_data[] = [];
+    if (categories.Hip_hop) {
+      events_hip_hop = events.filter((event) => {
+        return event.categoryList.some((category) => category == "Hip-hop")
+      });
+    }
+
+    let events_electronic_dance: event_data[] = [];
+    if (categories.Electronic_Dance) {
+      events_electronic_dance = events.filter((event) => {
+        return event.categoryList.some((category) => category == "Electronic/Dance")
+      });
+    }
+
+    let events_country: event_data[] = [];
+    if (categories.Country) {
+      events_country = events.filter((event) => {
+        return event.categoryList.some((category) => category == "Country")
+      });
+    }
+
+    let events_r_b_soul: event_data[] = [];
+    if (categories.R_B_Soul) {
+      events_r_b_soul = events.filter((event) => {
+        return event.categoryList.some((category) => category == "R&B/Soul")
+      });
+    }
+
+    let events_folk: event_data[] = [];
+    if (categories.Folk) {
+      events_folk = events.filter((event) => {
+        return event.categoryList.some((category) => category == "Folk")
+      });
+    }
+
+    let events_alternative: event_data[] = [];
+    if (categories.Alternative) {
+      events_alternative = events.filter((event) => {
+        return event.categoryList.some((category) => category == "Alternative")
+      });
+    }
+
+    return [...new Set([...events_today, ...events_tomorrow, ...events_weekend, ...events_free, ...events_under_500, ...events_between_500_1000, ...events_above_2000, ...events_rock, ...events_pop, ...events_jazz, ...events_classical, ...events_hip_hop, ...events_electronic_dance, ...events_country, ...events_r_b_soul, ...events_folk, ...events_alternative])];
   }
 
   useEffect(() => {
@@ -163,7 +233,7 @@ const Events = () => {
           toast.success("Events fetched successufully!", {
             id: 'eventsFetched'
           })
-          if (date.today || date.tomorrow || date.weekend || price.Free || price.below_500 || price.between_500_1000 || price.Above_2000) {
+          if (date.today || date.tomorrow || date.weekend || price.Free || price.below_500 || price.between_500_1000 || price.Above_2000 || categories.Rock || categories.Pop || categories.Jazz || categories.Classical|| categories.Hip_hop || categories.Electronic_Dance || categories.Country || categories.R_B_Soul || categories.Folk || categories.Alternative) {
             let filtered_events = getEventsByFilter(result);
             if (filtered_events.length > pagination * (Number(params.page)-1)) {
               setEvents(filtered_events);
@@ -186,7 +256,7 @@ const Events = () => {
     }
 
     fetchEventsByCity();
-  }, [selectedCity, date, price])
+  }, [selectedCity, date, price, categories])
 
   return (
     <>
