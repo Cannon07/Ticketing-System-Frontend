@@ -1,3 +1,6 @@
+'use client'
+
+import { useState, useEffect } from "react";
 import BlogCard from "@/components/BlogCard";
 import Disqus from "@/components/Disqus";
 import Share from "@/components/Share";
@@ -18,53 +21,100 @@ import {
 } from "react-icons/fa/index.js"
 import Image from "next/image";
 import EventPostPage from "@/components/EventPostPage";
+import { useParams } from "next/navigation";
+import { GetEventsById } from "@/constants/endpoint_constants/EventEndpoints";
 
-const { blog_folder } = config.event_settings;
+const { blog_folder } = config.event_settings_2;
 
 // remove dynamicParams
-export const dynamicParams = false;
+//export const dynamicParams = false;
 
-// generate static params
-export const generateStaticParams: () => { single: string }[] = () => {
-  const posts: EventPost[] = getSinglePage(blog_folder);
+interface artist_data {
+  id: string,
+  name: string,
+  profileImg: string,
+  userName: string,
+  govId: string,
+  email: string,
+}
 
-  const paths = posts.map((post) => ({
-    single: post.slug!,
-  }));
+interface tier_data {
+  id: string,
+  name: string,
+  capacity: number,
+  price: number,
+}
 
-  return paths;
-};
+interface venue_data {
+  id: string,
+  name: string,
+  address: string,
+  capacity: number,
+  placeId: string,
+}
 
-const EventSingle = ({ params }: { params: { single: string } }) => {
-  const posts: EventPost[] = getSinglePage(blog_folder);
-  const post = posts.filter((page) => page.slug === params.single)[0];
+interface event_data {
+  id: string,
+  name: string,
+  description: string,
+  dateAndTime: string,
+  eventDuration: string,
+  venueId: venue_data,
+  transactionId: string,
+  categoryList: string[],
+  imageUrls: string[],
+  artists: artist_data[],
+  tiers: tier_data[],
+}
 
-  const { frontmatter, content } = post;
-  const {
-    title,
-    about,
-    cast,
-    artists,
-    meta_title,
-    description,
-    image,
-    image2,
-    star_icon,
-    author,
-    categories,
-    date,
-    tags,
-  } = frontmatter;
-  const similarPosts = similerItems(post, posts, post.slug!);
+const EventSingle = () => {
+  //const posts: EventPost[] = getSinglePage(blog_folder);
+
+  //const { frontmatter, content } = post;
+  //const {
+  //  title,
+  //  about,
+  //  cast,
+  //  artists,
+  //  meta_title,
+  //  description,
+  //  image,
+  //  image2,
+  //  star_icon,
+  //  author,
+  //  categories,
+  //  date,
+  //  tags,
+  //} = frontmatter;
+  //const similarPosts = similerItems(post, posts, post.slug!);
+  const [eventData, setEventData] = useState<event_data | null>(null);
+  const params = useParams<{ single: string }>();
+
+  useEffect(() => {
+    const fetchEventByEventId = async () => {
+      var requestOptions = {
+        method: 'GET',
+      };
+      let response = await fetch(`${GetEventsById}id=${params.single}`, requestOptions)
+      if (response.status != 404) {
+        let result = await response.json();
+        setEventData(result);
+        console.log(result);
+      }
+    }
+
+    fetchEventByEventId();
+
+  }, [])
 
   return (
     <>
-      <SeoMeta
+      {/*<SeoMeta
         title={title}
         meta_title={meta_title}
         description={description}
         image={image}
-      />
+      />*/}
 
 
       {/* , backgroundColor:"rgb(26, 26, 26)" */}
@@ -73,8 +123,10 @@ const EventSingle = ({ params }: { params: { single: string } }) => {
         <div className="container">
         <div className="row justify-center">
 
-            <EventPostPage similarPosts={similarPosts}/>
-   
+            <EventPostPage
+              event_data={eventData}
+            />
+
         </div>
         </div>
       </section >

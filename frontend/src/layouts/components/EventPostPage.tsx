@@ -8,9 +8,6 @@ import { useState, useRef, useEffect } from "react";
 import TicketModal from "./TicketModal";
 import { GoHourglass } from "react-icons/go";
 
-
-
-
 const artists = [
     { id: 1, name: 'Shreya Ghoshal' },
     { id: 2, name: 'Arijit Singh' },
@@ -26,24 +23,59 @@ const artists = [
 
 const content = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rerum saepe fuga voluptates laudantium odit delectus commodi eius quis harum quo amet odio, nisi explicabo exercitationem iusto quidem est iure minus non sed doloremque ut dignissimos? Facere eos explicabo natus est culpa fugit impedit quos praesentium Lorem,\nIpsum dolor sit amet consectetur adipisicing elit. Blanditiis corrupti temporibus architecto similique cumque eius vitae saepe ipsum possimus, in odit hic numquam, facilis voluptatum, repellendus asperiores laudantium quod voluptate. Fugit, accusantium? Voluptas maxime, aperiam earum porro nisi eveniet enim."
 
+interface artist_data {
+  id: string,
+  name: string,
+  profileImg: string,
+  userName: string,
+  govId: string,
+  email: string,
+}
 
+interface tier_data {
+  id: string,
+  name: string,
+  capacity: number,
+  price: number,
+}
 
+interface venue_data {
+  id: string,
+  name: string,
+  address: string,
+  capacity: number,
+  placeId: string,
+}
 
+interface event_data {
+  id: string,
+  name: string,
+  description: string,
+  dateAndTime: string,
+  eventDuration: string,
+  venueId: venue_data,
+  transactionId: string,
+  categoryList: string[],
+  imageUrls: string[],
+  artists: artist_data[],
+  tiers: tier_data[],
+}
 
+interface event_data_props {
+  event_data: event_data | null
+}
 
-const EventPostPage = ({ similarPosts }: any) => {
+const EventPostPage: React.FC<event_data_props> = ({ event_data }) => {
 
     const [toggle, setToggle] = useState(false);
 
     const containerRef = useRef<HTMLDivElement>(null);
     const [showLeftArrow, setShowLeftArrow] = useState(false);
-    const [showRightArrow, setShowRightArrow] = useState(true); 
+    const [showRightArrow, setShowRightArrow] = useState(true);
 
     const iconStyle = {
-        strokeWidth: '4', 
+        strokeWidth: '4',
     };
-
-
 
     const handleScroll = () => {
         // console.log("scroll"+containerRef?.current?.scrollWidth)
@@ -94,26 +126,36 @@ const EventPostPage = ({ similarPosts }: any) => {
     return (
         <article className="">
             <TicketModal />
-            <div className="hidden lg:contents md:contents" style={{ color: "rgb(255, 255, 255)" }}>
-                <div className="flex items-center justify-center m-0 w-full">
-                    <div className="h-[490px] overflow-hidden w-full bg-[url('/images/image-placeholder.png')]
-                  bg-no-repeat bg-cover flex items-center p-6 rounded">
+            <div className="hidden lg:contents md:contents" style={{ color: "rgb(255, 255, 255) relative" }}>
+                <div className="h-[490px] overflow-hidden absolute left-0 right-0 bg-gradient-to-r from-[#1c1c1c] z-10"></div>
+                <div className="h-[490px] overflow-hidden absolute left-0 right-0 opacity-75">
+                    <ImageFallback
+                        height={490}
+                        width={300}
+                        src={event_data?.imageUrls[1]}
+                        alt="event-image-2"
+                        className="object-cover w-full h-full z-0"
+                    />
+                </div>
+                <div className="flex items-center justify-center m-0 w-full relative z-20">
+
+                    <div className="h-[490px] overflow-hidden w-full flex items-center p-6 rounded">
                         <div className="flex items-start justify-between w-full">
                             <div className="flex gap-8">
                                 <div className="w-[261px] h-[416px] rounded overflow-hidden object-cover">
                                     <ImageFallback
                                         height={200}
                                         width={300}
-                                        src={'/images/event-image.png'}
+                                        src={event_data?.imageUrls[0]}
                                         alt="event-image"
                                         className="object-cover w-full h-full"
                                     />
                                 </div>
                                 <div className="flex flex-col gap-6 justify-center">
-                                  
+
                                     {/* <p>Music Event</p> */}
-                                    <p className="text-3xl font-bold">Lorem ipsum dolor sit amet consectetur.</p>
-                                   
+                                    <p className="text-3xl font-bold text-white">{event_data?.name}</p>
+
                                     <button className="rounded">
                                         <div className="flex items-center gap-2">
                                             <Image
@@ -122,8 +164,8 @@ const EventPostPage = ({ similarPosts }: any) => {
                                                 src={'/images/star_icon.png'}
                                                 alt="star_icon"
                                             />
-                                            <p className="text-xl font-bold">7.8/10</p>
-                                            <span >12.8K Votes</span>
+                                            <p className="text-xl font-bold text-white ">7.8/10</p>
+                                            <span className="text-white">12.8K Votes</span>
                                             <svg className="h-4 w-4 fill-current rotate-[270deg]" viewBox="0 0 20 20">
                                                 <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
                                             </svg>
@@ -144,31 +186,35 @@ const EventPostPage = ({ similarPosts }: any) => {
 
                                     <ul className="flex items-center gap-4 flex-wrap">
                                         <li className='flex gap-1'>
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6 text-white">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
                                             </svg>
-                                            <span>19/01/2024</span>
+                                            <span className="text-white">{event_data?.dateAndTime.split(" ")[0]}</span>
                                         </li>
 
                                         <li className='flex gap-1'>
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6 text-white">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                             </svg>
-                                            <span>
-                                                1:32 pm</span></li>
+                                            <span className={"text-white"}>
+                                              {event_data?.dateAndTime.split(" ")[1]}
+                                            </span>
+                                        </li>
 
                                         <li className='flex gap-1'>
-                                             <GoHourglass size={24}/>
-                                            <span>
-                                                2 hrs</span></li>
+                                             <GoHourglass className={"text-white"} size={24}/>
+                                            <span className="text-white">
+                                               {event_data?.eventDuration}
+                                            </span>
+                                        </li>
                                         <li className='flex gap-1'>
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6 text-white">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
                                             </svg>
 
-                                            <span>
-                                                Gaothan,Shivajinagar,pune
+                                            <span className={"text-white"}>
+                                                {event_data?.venueId.address}
                                             </span>
 
                                         </li>
@@ -193,8 +239,7 @@ const EventPostPage = ({ similarPosts }: any) => {
                                 </div>
                             </div>
                         </div>
-                    </div>
-
+                  </div>
                 </div>
             </div>
 
@@ -205,7 +250,7 @@ const EventPostPage = ({ similarPosts }: any) => {
                     <ImageFallback
                         height={500}
                         width={1200}
-                        src={'/images/event-image.png'}
+                        src={event_data?.imageUrls[0]}
                         alt="event-image"
                         className="object-cover rounded"
                     />
@@ -214,7 +259,7 @@ const EventPostPage = ({ similarPosts }: any) => {
 
                     <div className="flex flex-col gap-4 mt-[16px]">
                         {/* <p>Music Event</p> */}
-                        <p className="text-3xl font-bold">Event Name Lorem ipsum</p>
+                        <p className="text-3xl font-bold">{event_data?.name}</p>
 
                         <button className="rounded">
                             <div className="flex items-center gap-2">
@@ -251,7 +296,7 @@ const EventPostPage = ({ similarPosts }: any) => {
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
                                 </svg>
-                                <span>19/01/2024</span>
+                                <span>{event_data?.dateAndTime.split(" ")[0]}</span>
                             </li>
 
                             <li className='flex gap-1'>
@@ -259,11 +304,13 @@ const EventPostPage = ({ similarPosts }: any) => {
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                 </svg>
                                 <span>
-                                    1:32 pm</span></li>
+                                  {event_data?.dateAndTime.split(" ")[1]}</span></li>
                             <li className='flex gap-1'>
                                  <GoHourglass size={24}/>
                                 <span>
-                                    2 hrs</span></li>
+                                   {event_data?.eventDuration}
+                                </span>
+                            </li>
                             <li className='flex gap-1'>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
@@ -271,18 +318,18 @@ const EventPostPage = ({ similarPosts }: any) => {
                                 </svg>
 
                                 <span>
-                                    Gaothan,Shivajinagar,pune
+                                    {event_data?.venueId.address}
                                 </span>
 
                             </li>
                         </ul>
 
 
-                        <div>
+                        {/*<div>
                             <button data-ticket-trigger className="btn btn-primary w-full text-center">
                                 Book Tickets
                             </button>
-                        </div>
+                        </div>*/}
                     </div>
                 </div>
 
@@ -316,7 +363,7 @@ const EventPostPage = ({ similarPosts }: any) => {
                 </ul> */}
                     <div className="content">
                         <p>
-                            {toggle ? content : content.slice(0, 300)}
+                            {toggle ? event_data?.description : event_data?.description.slice(0, 300)}
                             <button className="pl-2 font-semibold" onClick={(e) => setToggle(!toggle)}>{toggle ? 'Read less' : 'Read more'}</button>
                         </p>
 
@@ -353,14 +400,13 @@ const EventPostPage = ({ similarPosts }: any) => {
                         <h2 className="h3">Artists</h2>
                         <div className="relative">
                             <div className="flex items-center gap-6 overflow-scroll no-scrollbar" ref={containerRef}>
-                                {artists.map((artist) => (
+                                {event_data?.artists.map((artist) => (
                                     <div key={artist.id} className="flex flex-col items-center my-3">
                                         <div className="w-32 h-32 overflow-hidden rounded-full">
-                                            {/* Assuming ImageFallback is properly typed */}
                                             <ImageFallback
                                                 height={100}
                                                 width={100}
-                                                src={'/images/event-image.png'}
+                                                src={artist.profileImg}
                                                 alt="event image"
                                                 className="object-cover w-full h-full"
                                             />
@@ -383,8 +429,7 @@ const EventPostPage = ({ similarPosts }: any) => {
                             </button>
                         </div>
 
-                        <hr className="h-px my-8 dark:bg-gray-600 border-0 bg-gray-200" />
-
+                        {/*<hr className="h-px my-8 dark:bg-gray-600 border-0 bg-gray-200" />*/}
 
                     </div>
                     {/* <Disqus className="mt-20" /> */}
@@ -392,7 +437,7 @@ const EventPostPage = ({ similarPosts }: any) => {
                 </div>
 
                 {/* <!-- Related posts --> */}
-                <div className="pb-0">
+                {/*<div className="pb-0">
                     <h2 className="h3 mb-10 text-center">Related Posts</h2>
                     <div className="row justify-center">
                         {similarPosts.map((post: any) => (
@@ -401,7 +446,7 @@ const EventPostPage = ({ similarPosts }: any) => {
                             </div>
                         ))}
                     </div>
-                </div>
+                </div>*/}
 
 
             </div>

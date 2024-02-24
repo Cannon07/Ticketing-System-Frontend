@@ -36,13 +36,21 @@ interface tier_data {
   price: number,
 }
 
+interface venue_data {
+  id: String,
+  name: String,
+  address: String,
+  capacity: number,
+  placeId: String,
+}
+
 interface event_data {
   id: String,
   name: String,
   description: String,
   dateAndTime: String,
   eventDuration: String,
-  venueId: String,
+  venueId: venue_data,
   transactionId: String,
   categoryList: String[],
   imageUrls: String[],

@@ -311,8 +311,9 @@ const UserProfileSettings: React.FC<UserData> = ({id, name, userName, userEmail,
                             <button
                                 onClick={handleEditClick}
                                 className="btn-sm btn-primary"
+                                disabled={loading}
                             >
-                                Edit
+                                {loading ? "Updating..." : "Edit"}
                             </button>
                         )}
                     </div>
