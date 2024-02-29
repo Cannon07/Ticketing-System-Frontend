@@ -4,7 +4,7 @@ import config from "@/config/config.json";
 import { ThemeProvider } from "next-themes";
 import { ReactNode } from "react";
 import { InkConfig } from 'useink';
-import { RococoContractsTestnet, RococoTestnet } from 'useink/chains';
+import { AlephTestnet } from 'useink/chains';
 import { NotificationsProvider } from 'useink/notifications';
 import dynamic from 'next/dynamic';
 import { GlobalContextProvider } from "../../app/context/globalContext";
@@ -21,7 +21,7 @@ const Providers = ({ children }: { children: ReactNode }) => {
     <UseInkProvider
       config={{
         dappName: "NextGen Ticketing System",
-        chains: [RococoContractsTestnet],
+        chains: [AlephTestnet],
       }}
     >
       <NotificationsProvider>

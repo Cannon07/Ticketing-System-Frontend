@@ -3,11 +3,53 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 
+interface artist_data {
+  id: string,
+  name: string,
+  profileImg: string,
+  userName: string,
+  govId: string,
+  email: string,
+}
+
+interface tier_data {
+  id: string,
+  name: string,
+  capacity: number,
+  price: number,
+}
+
+interface venue_data {
+  id: string,
+  name: string,
+  address: string,
+  capacity: number,
+  placeId: string,
+}
+
+interface event_data {
+  id: string,
+  name: string,
+  description: string,
+  dateAndTime: string,
+  eventDuration: string,
+  venueId: venue_data,
+  transactionId: string,
+  categoryList: string[],
+  imageUrls: string[],
+  artists: artist_data[],
+  tiers: tier_data[],
+}
+
+interface event_data_props {
+  event_data: event_data | null,
+}
+
 interface TicketObject {
   [key: number]: boolean
 }
 
-const TicketModal = () => {
+const TicketModal: React.FC<event_data_props> = ({ event_data }) => {
   let ticketList: TicketObject[] = [];
   for (let i=1; i<=10; i++) {
     ticketList.push({[i]: false})
@@ -89,7 +131,7 @@ const TicketModal = () => {
             </div>
             <hr className="h-px my-4 w-full dark:bg-gray-600 border-0 bg-gray-200" />
             <div className={"flex justify-center gap-12 flex-wrap"}>
-              {tierList.map((tier, index) => {
+              {event_data?.tiers.map((tier, index) => {
                 return (
                   <div
                     className={"flex flex-col items-center"}
@@ -97,12 +139,12 @@ const TicketModal = () => {
                   >
                     <p>{tier.name}</p>
                     <p className={"font-semibold"}>{tier.price}</p>
-                    <p>{tier.status}</p>
+                    <p>Available</p>
                   </div>
                 )
               })}
             </div>
-            <Link href={"/book"} className={"btn btn-primary w-full md:w-9/12"}>
+            <Link href={`/book?eventId=${event_data?.id}&totalTickets=${ticket}`} className={"btn btn-primary w-full md:w-9/12"}>
               <h5 className={"text-white dark:text-dark flex justify-center"}>Book {ticket} Tickets</h5>
             </Link>
           </div>

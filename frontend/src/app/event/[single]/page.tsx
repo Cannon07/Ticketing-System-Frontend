@@ -23,6 +23,9 @@ import Image from "next/image";
 import EventPostPage from "@/components/EventPostPage";
 import { useParams } from "next/navigation";
 import { GetEventsById } from "@/constants/endpoint_constants/EventEndpoints";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import NotConnected from "@/app/not-connected";
 
 const { blog_folder } = config.event_settings_2;
 
@@ -87,7 +90,10 @@ const EventSingle = () => {
   //  tags,
   //} = frontmatter;
   //const similarPosts = similerItems(post, posts, post.slug!);
+  const router = useRouter();
+
   const [eventData, setEventData] = useState<event_data | null>(null);
+  const [loading, setLoading] = useState(false);
   const params = useParams<{ single: string }>();
 
   useEffect(() => {
@@ -95,11 +101,32 @@ const EventSingle = () => {
       var requestOptions = {
         method: 'GET',
       };
-      let response = await fetch(`${GetEventsById}id=${params.single}`, requestOptions)
-      if (response.status != 404) {
-        let result = await response.json();
-        setEventData(result);
-        console.log(result);
+      setLoading(true);
+      toast.loading("Fetching Event Details..", {
+        id: "eventDetails"
+      });
+      try {
+        let response = await fetch(`${GetEventsById}id=${params.single}`, requestOptions)
+        if (response.status != 404) {
+          toast.dismiss();
+          let result = await response.json();
+          setEventData(result);
+          setLoading(false);
+          console.log(result);
+          toast.success("Event Details Fetched Successfully!", {
+            id: "eventDeatilsSuccess"
+          })
+        } else {
+          setLoading(false);
+          toast.dismiss()
+          toast.error("Something went wrong!");
+          router.push('/event');
+        }
+      } catch (e) {
+        setLoading(false);
+        toast.dismiss()
+        toast.error("Something went wrong!");
+        router.push('/event');
       }
     }
 
@@ -122,10 +149,13 @@ const EventSingle = () => {
       <section>
         <div className="container">
         <div className="row justify-center">
+            {loading ?
+              <NotConnected /> :
+              <EventPostPage
+                event_data={eventData}
+              />
+            }
 
-            <EventPostPage
-              event_data={eventData}
-            />
 
         </div>
         </div>
