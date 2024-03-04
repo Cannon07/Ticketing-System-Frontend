@@ -322,7 +322,7 @@ const UserProfile = () => {
                                               <h1 className="h2 text-center">No Tickets Found</h1>
                                               <div className="content flex flex-col items-center">
                                                 <p className="mb-0 text-center">
-                                                  Oops! It seems you haven't booked any tickets yet.
+                                Oops! It seems you haven&apos;t booked any tickets yet.
                                                 </p>
                                                 <p className="mt-0 text-center">
                                                   Browse our upcoming events and book your tickets now.
@@ -357,7 +357,7 @@ const UserProfile = () => {
                                                   <h1 className="h2 text-center">No Past Tickets Found</h1>
                                                   <div className="content flex flex-col items-center">
                                                     <p className="mb-0 text-center">
-                                                      It looks like you haven't attended any events in the past.
+                                                      It looks like you haven&apos;t attended any events in the past.
                                                     </p>
                                                     <p className="mt-0 text-center">
                                                       Explore upcoming events to secure your tickets.
