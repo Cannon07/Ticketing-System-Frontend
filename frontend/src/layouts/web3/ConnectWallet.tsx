@@ -55,7 +55,7 @@ export const ConnectWallet = () => {
       let response = await fetch(`${GetUserByWalletId}${account?.address}`, requestOptions)
       let result = await response.json()
       console.log(result)
-      if (response.status == 400) {
+      if (response.status == 404) {
         toast.dismiss();
         setUserData(null);
         registerModal!.classList.add("show");

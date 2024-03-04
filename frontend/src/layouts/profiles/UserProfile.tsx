@@ -110,6 +110,8 @@ const UserProfile = () => {
         let result = await response.json()
         console.log(result)
         if (result.length == 0) {
+          setUpcomingUserTickets([]);
+          setPreviousUserTickets([]);
           toast.dismiss();
           toast.error("No Tickets Found!", {id:"TicketsFetchingFailure"})
         } else {
