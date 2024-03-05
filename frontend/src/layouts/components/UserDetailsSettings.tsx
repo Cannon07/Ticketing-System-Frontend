@@ -210,7 +210,7 @@ const UserDetailsSettings: React.FC<UserData> = ({id, name, userName, userEmail,
 
                         {isEditing ?
                           <>
-                            <div className={"flex w-full gap-4"}>
+                            <div className={"flex flex-col lg:flex-row lg:gap-4 md:flex-row md:gap-4 w-full"}>
                               <div className={`mb-4 flex flex-col justify-between w-full`}>
                                 <label htmlFor="firstname" className="form-label-profile">
                                     First Name
@@ -254,7 +254,7 @@ const UserDetailsSettings: React.FC<UserData> = ({id, name, userName, userEmail,
                               />
                             </div>
 
-                            <div className={"flex gap-4"}>
+                            <div className={"flex flex-col lg:flex-row lg:gap-4 md:flex-row md:gap-4 w-full"}>
                               <div className={`mb-4 flex flex-col justify-between w-full`}>
                                 <label htmlFor="dateOfBirth" className="form-label-profile">
                                     Date Of Birth
@@ -265,7 +265,7 @@ const UserDetailsSettings: React.FC<UserData> = ({id, name, userName, userEmail,
                                   name="dateOfBirth"
                                   value={email}
                                   onChange={(e) => setEmail(e.target.value)}
-                                  className="form-input-profile"
+                                  className="form-input-profile dark:dark-date"
                                 />
                               </div>
 
