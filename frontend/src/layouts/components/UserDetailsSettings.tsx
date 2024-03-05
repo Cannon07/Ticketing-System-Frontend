@@ -9,6 +9,8 @@ import { useTxNotifications } from 'useink/notifications';
 import { generateHash } from '@/lib/utils/hashGenerator';
 import { PostImage } from '@/constants/endpoint_constants/ImageEndpoints';
 import { UpdateUserById } from '@/constants/endpoint_constants/UserEndpoints';
+import { SelectDocTypeDropdown } from './DocTypeDropdown';
+import { ImageSelectorDoc } from './ImageSelectorDoc';
 
 interface UserData {
   id: string,
@@ -26,6 +28,13 @@ const UserDetailsSettings: React.FC<UserData> = ({id, name, userName, userEmail,
     const contract = useContract(CONTRACT_ADDRESS,metadata);
     const updateUser = useTx(contract,'updateUser');
     useTxNotifications(updateUser);
+
+    const docTypeList: string[] = [
+      'Student ID',
+      'Aadhar Card',
+    ]
+    const [selectedDocType, setSelectedDocType] = useState<string>('');
+    const [docFile, setDocFile] = useState<File | undefined>();
 
     const [isRegistered, setIsRegistered] = useState<boolean>(false);
     const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -192,129 +201,129 @@ const UserDetailsSettings: React.FC<UserData> = ({id, name, userName, userEmail,
                     <h1 className="text-2xl font-semibold mb-4 text-center">User Details Settings</h1>
                     <div>
 
+
                         {!isEditing &&
 
                             <div className="py-4">
                                 <hr className="h-px w-full dark:bg-gray-600 border-0 bg-gray-200" />
                             </div>}
 
-
-
-                        <div className={`mb-4 ${isEditing ? '' : 'flex justify-between'}`}>
-                            <label htmlFor="name" className="form-label-profile">
-                                Name
-                            </label>
-                            {isEditing ? (
+                        {isEditing ?
+                          <>
+                            <div className={"flex w-full gap-4"}>
+                              <div className={`mb-4 flex flex-col justify-between w-full`}>
+                                <label htmlFor="firstname" className="form-label-profile">
+                                    First Name
+                                </label>
                                 <input
-                                    type="text"
-                                    id="name"
-                                    name="name"
-                                    value={uname}
-                                    onChange={(e) => setUname(e.target.value)}
-                                    className="form-input-profile"
+                                  type="text"
+                                  id="firstname"
+                                  name="firstname"
+                                  value={uname}
+                                  onChange={(e) => setUname(e.target.value)}
+                                  className="form-input-profile"
                                 />
-                            ) : (
-                                <div>{uname}</div>
-                            )}
-                        </div>
+                              </div>
 
-
-                        <div className={`mb-4 ${isEditing ? '' : 'flex justify-between'}`}>
-                            <label htmlFor="username" className="form-label-profile">
-                                Username
-                            </label>
-                            {isEditing ? (
+                              <div className={`mb-4 flex flex-col justify-between w-full`}>
+                                <label htmlFor="lastname" className="form-label-profile">
+                                    Last Name
+                                </label>
                                 <input
-                                    type="text"
-                                    id="username"
-                                    name="username"
-                                    value={username}
-                                    onChange={(e) => setUsername(e.target.value)}
-                                    className="form-input-profile"
+                                  type="text"
+                                  id="lastname"
+                                  name="lastname"
+                                  value={username}
+                                  onChange={(e) => setUsername(e.target.value)}
+                                  className="form-input-profile"
                                 />
-                            ) : (
-                                <div>{username}</div>
-                            )}
-                        </div>
+                              </div>
+                            </div>
 
-                        <div className={`mb-4 ${isEditing ? '' : 'flex justify-between'}`}>
-                            <label htmlFor="email" className="form-label-profile">
-                                Email
-                            </label>
-                            {isEditing ? (
-                                <input
-                                    type="email"
-                                    id="email"
-                                    name="email"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    className="form-input-profile"
-                                />
-                            ) : (
-                                <div>{email}</div>
-                            )}
-                        </div>
-
-                        {!isEditing &&
-                        <>
-                        <div className={`mb-4 flex justify-between`}>
-                            <label htmlFor="email" className="form-label-profile">
-                                Wallet Id
-                            </label>
-                            <div>{walletId}</div>
-                        </div>
-
-                        <div className={`mb-4 flex justify-between`}>
-                            <label htmlFor="email" className="form-label-profile">
-                                Transaction Id
-                            </label>
-                            <div>{loading ? 'Loading...' : transId}</div>
-                        </div>
-                        </>
-                        }
-
-                        {isEditing && <div className={"flex gap-6 flex-col md:flex-row w-full"}>
-                          <div className="w-full">
-                            <label
-                              className="form-label-profile block"
-                              htmlFor="file_input"
-                            >
-                              Profile Image
-                            </label>
-                            <div className="flex gap-2 items-center">
-                              <button
-                                onClick={() => {
-                                  document.getElementById("image-input-profile")?.click()
-                                }}
-                                className="btn btn-sm btn-outline-primary h-fit mt-1">
-                                Upload
-                              </button>
+                            <div className={`mb-4 flex flex-col justify-between`}>
+                              <label htmlFor="address" className="form-label-profile">
+                                  Address
+                              </label>
                               <input
-                                  id="uplaoded-file"
-                                  name="uploaded-file"
-                                  className="form-input-disable form-input-profile w-full"
-                                  value={`${file ? file.name : "No file chosen"}`}
-                                  disabled
+                                type="text"
+                                id="address"
+                                name="address"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="form-input-profile"
                               />
                             </div>
-                            <input
-                              id="image-input-profile"
-                              ref={imageRef}
-                              type="file"
-                              className="hidden"
-                              onChange={({ target: {files} }) => {
-                                if (files && files.length > 0) {
-                                  setImage(URL.createObjectURL(files[0]));
-                                  setFile(files[0]);
-                                }
-                              }}
-                            />
+
+                            <div className={"flex gap-4"}>
+                              <div className={`mb-4 flex flex-col justify-between w-full`}>
+                                <label htmlFor="dateOfBirth" className="form-label-profile">
+                                    Date Of Birth
+                                </label>
+                                <input
+                                  type="date"
+                                  id="dateOfBirth"
+                                  name="dateOfBirth"
+                                  value={email}
+                                  onChange={(e) => setEmail(e.target.value)}
+                                  className="form-input-profile"
+                                />
+                              </div>
+
+                              <SelectDocTypeDropdown
+                                docTypeList={docTypeList}
+                                selectedDocType={selectedDocType}
+                                setselectedDocType={setSelectedDocType}
+                              />
+                            </div>
+
+                            <div>
+                              <ImageSelectorDoc
+                                title={"Document"}
+                                file={docFile}
+                                setFile={setDocFile}
+                              />
+                            </div>
+                          </>
+                        :
+                        <>
+                          <div className={`mb-4 flex justify-between`}>
+                            <label htmlFor="firstname" className="form-label-profile">
+                                First Name
+                            </label>
+                            <div>{uname}</div>
                           </div>
-                      </div>}
-                    </div>
-                    <div className="flex justify-start mt-6">
 
+                          <div className={`mb-4 flex justify-between`}>
+                            <label htmlFor="lastname" className="form-label-profile">
+                                Last Name
+                            </label>
+                            <div>{username}</div>
+                          </div>
 
+                          <div className={`mb-4 flex justify-between`}>
+                            <label htmlFor="address" className="form-label-profile">
+                                Address
+                            </label>
+                            <div>{email}</div>
+                          </div>
+
+                          <div className={`mb-4 flex justify-between`}>
+                            <label htmlFor="dateOfBirth" className="form-label-profile">
+                                Date Of Birth
+                            </label>
+                            <div>{email}</div>
+                          </div>
+
+                          <div className={`mb-4 flex justify-between`}>
+                            <label htmlFor="doctype" className="form-label-profile">
+                                Document Type
+                            </label>
+                            <div>{selectedDocType}</div>
+                          </div>
+                        </>
+                        }
+                      </div>
+                      <div className="flex justify-start mt-6">
                         {isEditing ? (
                             <>
                                 <button
