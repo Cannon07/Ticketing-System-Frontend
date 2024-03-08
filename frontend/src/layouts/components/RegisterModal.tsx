@@ -11,9 +11,18 @@ import toast from "react-hot-toast";
 import { PostUser } from "@/constants/endpoint_constants/UserEndpoints";
 import { PostImage } from "@/constants/endpoint_constants/ImageEndpoints";
 
+interface UserData {
+  id: string,
+  profileImg: string,
+  transactionId: string,
+  userDetailsId: string,
+  userEmail: string,
+  walletId: string,
+}
+
 const RegisterModal = () => {
 
-  const { walletAddress, setConnectLoading } = useGlobalContext();
+  const { walletAddress, setConnectLoading, setUserData } = useGlobalContext();
   const { disconnect } = useWallet();
 
   const contract = useContract(CONTRACT_ADDRESS,metadata);
@@ -22,8 +31,8 @@ const RegisterModal = () => {
   useTxNotifications(registerUser);
 
   const [email,setEmail] = useState('');
-  const [fullname,setFullname] = useState('');
-  const [username,setUsername] = useState('');
+  //const [fullname,setFullname] = useState('');
+  //const [username,setUsername] = useState('');
   const [file, setFile] = useState<File | undefined>();
   const imageRef = useRef<HTMLInputElement>(null);
 
@@ -36,8 +45,8 @@ const RegisterModal = () => {
       toast.dismiss()
       if (txId === "") {
         toast.error("Something went wrong!")
-        setFullname("");
-        setUsername("");
+        //setFullname("");
+        //setUsername("");
         setEmail("");
         setFile(undefined);
         disconnect();
@@ -90,15 +99,14 @@ const RegisterModal = () => {
     registerStatus()
   }, [registerUser.status]);
 
-  const saveUser = async (txId: String, imageUrl: String) => {
+  const saveUser = async (txId: string, imageUrl: string) => {
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
 
       var raw = JSON.stringify({
-        "name": fullname,
-        "userName": username,
         "userEmail": email,
         "walletId": walletAddress,
+        "userDetailsId": "",
         "transactionId": txId,
         "profileImg": imageUrl,
       });
@@ -115,15 +123,24 @@ const RegisterModal = () => {
       if (response.ok) {
         let result = await response.json();
         console.log(result)
+        let newUserData: UserData = {
+          "id": "",
+          "userEmail": email,
+          "walletId": walletAddress,
+          "userDetailsId": "",
+          "transactionId": txId,
+          "profileImg": imageUrl,
+        }
+        setUserData(newUserData);
         toast.success("User Registered!")
-        setFullname("");
-        setUsername("");
+        //setFullname("");
+        //setUsername("");
         setEmail("");
         setFile(undefined);
       }
   }
 
-  const uploadImage = async (txId: String) => {
+  const uploadImage = async (txId: string) => {
     if (typeof(file) === 'undefined') return;
 
     var formdata = new FormData();
@@ -141,11 +158,11 @@ const RegisterModal = () => {
 
   const handleRegisterClick= async () => {
     if (email === "") toast.error("Please enter Email");
-    else if (fullname === "") toast.error("Please enter Full Name");
-    else if (username === "") toast.error("Please enter Username");
+    //else if (fullname === "") toast.error("Please enter Full Name");
+    //else if (username === "") toast.error("Please enter Username");
     else if (typeof(file) === 'undefined') toast.error("Please upload Profile Image");
     else {
-      const hashData = generateHash([walletAddress,email,fullname,username])
+      const hashData = generateHash([email])
       const registerModal = document.getElementById("registerModal");
       registerUser.signAndSend([hashData]);
 
@@ -193,7 +210,7 @@ const RegisterModal = () => {
                       />
                   </div>
                 </div>
-                <div className={"flex gap-6 flex-col md:flex-row w-full"}>
+                {/*<div className={"flex gap-6 flex-col md:flex-row w-full"}>
                   <div className="w-full">
                       <label htmlFor="title" className="form-label block">
                         Full Name
@@ -225,7 +242,7 @@ const RegisterModal = () => {
                           required
                       />
                   </div>
-                </div>
+                </div>*/}
                 <div className={"flex gap-6 flex-col md:flex-row w-full"}>
                   <div className="w-full">
                     <label

@@ -1,33 +1,51 @@
 "use client"
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useContract, useTx } from 'useink';
-import { CONTRACT_ADDRESS } from '@/constants/contract_constants/ContractAddress';
-import metadata from '@/constants/contract_constants/assets/TicketingSystem.json';
-import { useTxNotifications } from 'useink/notifications';
-import { generateHash } from '@/lib/utils/hashGenerator';
 import { PostImage } from '@/constants/endpoint_constants/ImageEndpoints';
 import { UpdateUserById } from '@/constants/endpoint_constants/UserEndpoints';
+import { PostUserDetails } from '@/constants/ssi_endpoint_constants/UserDetailsEndpoint';
+import { GetUserDetailsById } from '@/constants/ssi_endpoint_constants/UserDetailsEndpoint';
 import { SelectDocTypeDropdown } from './DocTypeDropdown';
+import { SelectGenderDropdown } from './GenderDropdown';
 import { ImageSelectorDoc } from './ImageSelectorDoc';
+import { useGlobalContext } from '@/app/context/globalContext';
 
 interface UserData {
   id: string,
-  name: string,
   profileImg: string,
-  transactionId: String,
+  transactionId: string,
+  userDetailsId: string,
   userEmail: string,
-  userName: string,
   walletId: string,
-  originalImage: string | undefined,
-  setImage: React.Dispatch<React.SetStateAction<string | undefined>>,
 }
 
-const UserDetailsSettings: React.FC<UserData> = ({id, name, userName, userEmail, profileImg, transactionId, walletId, originalImage, setImage}) => {
-    const contract = useContract(CONTRACT_ADDRESS,metadata);
-    const updateUser = useTx(contract,'updateUser');
-    useTxNotifications(updateUser);
+interface UserDetails {
+  userDid: string,
+  firstName: string,
+  lastName: string,
+  address: string,
+  dateOfBirth: string,
+  gender: string,
+  placeOfBirth: string,
+  proofId: string,
+  docType: string,
+}
+
+interface UserDataProps {
+  userData: UserData,
+}
+
+const UserDetailsSettings: React.FC<UserDataProps> = ({ userData }) => {
+    const { setUserData} = useGlobalContext();
+
+    const [did, setDid] = useState<string>('');
+
+    const [firstName, setFirstName] = useState<string>('');
+    const [lastName, setLastName] = useState<string>('');
+    const [address, setAddress] = useState<string>('');
+    const [dateOfBirth, setDateOfBirth] = useState<string>('');
+    const [placeOfBirth, setPlaceOfBirth] = useState<string>('');
 
     const docTypeList: string[] = [
       'Student ID',
@@ -36,69 +54,86 @@ const UserDetailsSettings: React.FC<UserData> = ({id, name, userName, userEmail,
     const [selectedDocType, setSelectedDocType] = useState<string>('');
     const [docFile, setDocFile] = useState<File | undefined>();
 
+    const genderList: string[] = [
+      'Male',
+      'Female',
+      'Other',
+    ];
+    const [selectedGender, setSelectedGender] = useState<string>('');
+
+    const [originalFirstName, setOriginalFirstName] = useState<string>('');
+    const [originalLastName, setOriginalLastName] = useState<string>('');
+    const [originalAddress, setOriginalAddress] = useState<string>('');
+    const [originalDateOfBirth, setOriginalDateOfBirth] = useState<string>('');
+    const [originalPlaceOfBirth, setOriginalPlaceOfBirth] = useState<string>('');
+    const [originalSelectedDocType, setOriginalSelectedDocType] = useState<string>('');
+    const [originalSelectedGender, setOriginalSelectedGender] = useState<string>('');
+
     const [isRegistered, setIsRegistered] = useState<boolean>(false);
     const [isEditing, setIsEditing] = useState<boolean>(false);
-    const [uname, setUname] = useState(name);
-    const [username, setUsername] = useState(userName);
-    const [email, setEmail] = useState(userEmail);
-    const [profilePic, setProfilePic] = useState(null);
-    const [fileName, setFileName] = useState('');
-    const [transId, setTransId] = useState(transactionId);
     const [loading, setLoading] = useState(false);
 
-    const [file, setFile] = useState<File | undefined>();
-    const imageRef = useRef<HTMLInputElement>(null);
+    useEffect(() => {
+      const fetchUserDetails = async () => {
+        setLoading(true);
+        toast.loading("Fetching User Details..")
+        var requestOptions = {
+          method: 'GET',
+        };
+        let response = await fetch(`${GetUserDetailsById}${userData.userDetailsId}`, requestOptions)
+        console.log(response)
 
-    const [originalName, setOriginalName] = useState(uname);
-    const [originalUsername, setOriginalUsername] = useState(username);
-    const [originalEmail, setOriginalEmail] = useState(email);
-    const [originalProfilePic, setOriginalProfilePic] = useState(null);
+        if (response.ok) {
+          let result = await response.json();
+          console.log(result);
+          toast.dismiss();
+          toast.success("User Details Fetched Successfully!");
+          setLoading(false);
 
-    const updateStatus = () => {
-      if(updateUser.status === 'Finalized'){
-        let txId = "";
-        updateUser.result?.contractEvents?.map((value) => {
-          txId = Object.values(value.args[1]).slice(0, 64).join("")
-        });
-        toast.dismiss()
-        if (txId === "") {
-          toast.error("Something went wrong!")
+          let fetchedUserDetails: UserDetails = result;
+
+          setDid(fetchedUserDetails.userDid);
+
+          setFirstName(fetchedUserDetails.firstName);
+          setLastName(fetchedUserDetails.lastName);
+          setAddress(fetchedUserDetails.address);
+          setDateOfBirth(fetchedUserDetails.dateOfBirth);
+          setPlaceOfBirth(fetchedUserDetails.placeOfBirth);
+          setSelectedGender(fetchedUserDetails.gender);
+          setSelectedDocType(fetchedUserDetails.docType);
+
+          setOriginalFirstName(fetchedUserDetails.firstName);
+          setOriginalLastName(fetchedUserDetails.lastName);
+          setOriginalAddress(fetchedUserDetails.address);
+          setOriginalDateOfBirth(fetchedUserDetails.dateOfBirth);
+          setOriginalPlaceOfBirth(fetchedUserDetails.placeOfBirth);
+          setOriginalSelectedGender(fetchedUserDetails.gender);
+          setOriginalSelectedDocType(fetchedUserDetails.docType);
+
         } else {
-          toast.success('Transaction finalized!')
-          let register_toast = toast.loading('Updating User..')
-          uploadImage(txId);
-          toast.dismiss(register_toast);
+          setLoading(false);
+          toast.dismiss();
+          toast.error("User Details not found!");
         }
       }
-      else if(updateUser.status === 'PendingSignature'){
-        toast.dismiss()
-        toast.loading('Pending signature..')
-      }
-      else if(updateUser.status === 'Broadcast'){
-        toast.dismiss()
-        toast.loading('Broadcasting transaction..')
-      }
-      else if(updateUser.status === 'InBlock'){
-        toast.dismiss()
-        toast.loading('Transaction In Block..')
-      }
-      else{
-        toast.dismiss()
-      }
-    }
 
-    useEffect(() => {
-      updateStatus();
-    }, [updateUser.status])
+      if (userData.userDetailsId === "") {
+        setIsRegistered(false);
+      } else {
+        setIsRegistered(true);
+        fetchUserDetails();
+      }
+    }, [])
 
-    const uploadImage = async (txId: string) => {
-        if (typeof(file) === 'undefined') {
-          putUser(txId, originalImage)
+    const uploadImage = async () => {
+        if (typeof(docFile) === 'undefined') {
+          //putUser(txId, originalImage)
           return;
         }
 
+        toast.loading("Uploading Document..", {id: "DocUploadLoading"});
         var formdata = new FormData();
-        formdata.append("file", file);
+        formdata.append("file", docFile);
 
         var requestOptions = {
           method: 'POST',
@@ -107,22 +142,76 @@ const UserDetailsSettings: React.FC<UserData> = ({id, name, userName, userEmail,
 
         let response = await fetch(`${PostImage}`, requestOptions);
         let result = await response.text();
+        toast.dismiss();
+        toast.success("Document Uploaded Successfully!", {id: "DocUploadSuccess"});
         console.log(result);
-        putUser(txId, result);
+        saveUserDetails(result);
     }
 
-    const putUser = async (txId: String, imageUrl: String | undefined) => {
+    const formatDate = (unformattedDate: string) => {
+      const date = new Date(unformattedDate);
+      const year = date.getFullYear();
+      let month: any = date.getMonth() + 1;
+      let day: any = date.getDate();
+
+      month = month < 10 ? '0' + month : month;
+      day = day < 10 ? '0' + day : day;
+
+      return year + '-' + month + '-' + day;
+    };
+
+    const saveUserDetails = async (imageUrl: string | undefined) => {
+      toast.loading("Saving User Details..", {id: "SaveUserLoading"})
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
 
       var raw = JSON.stringify({
-        "id": id,
-        "name": uname,
-        "userName": username,
-        "userEmail": email,
-        "walletId": walletId,
-        "transactionId": txId,
-        "profileImg": imageUrl,
+        "firstName": firstName,
+        "lastName": lastName,
+        "address": address,
+        "dateOfBirth": formatDate(dateOfBirth),
+        "gender": selectedGender,
+        "placeOfBirth": placeOfBirth,
+        "proofId": imageUrl,
+        "docType": selectedDocType,
+      });
+
+      console.log(raw);
+
+      var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+      };
+
+      let response = await fetch(`${PostUserDetails}`, requestOptions)
+
+      console.log(response);
+
+      if (response.ok) {
+        toast.dismiss();
+        let result = await response.text();
+        console.log(result);
+        toast.success("User Details saved Successfully!", {id: "SaveUserSuccess"});
+        updateUserDetailsId(result);
+      } else {
+        toast.error("Something went wrong!", {id: "SaveUserFailure"});
+        setLoading(false);
+      }
+    }
+
+    const updateUserDetailsId = async (userDetailsId: string) => {
+      toast.loading("Updating User..", {id: "UpdateUserLoading"})
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      var raw = JSON.stringify({
+        "id": userData.id,
+        "profileImg": userData.profileImg,
+        "transactionId": userData.transactionId,
+        "userDetailsId": userDetailsId,
+        "userEmail": userData.userEmail,
+        "walletId": userData.walletId,
       });
 
       console.log(raw);
@@ -133,46 +222,73 @@ const UserDetailsSettings: React.FC<UserData> = ({id, name, userName, userEmail,
         body: raw,
       };
 
-      let response = await fetch(`${UpdateUserById}${id}`, requestOptions)
+      let response = await fetch(`${UpdateUserById}${userData.id}`, requestOptions)
+
+      console.log(response);
+
       if (response.ok) {
+        toast.dismiss();
         let result = await response.json();
-        setTransId(txId);
-        console.log(result)
-        toast.success("User Updated!")
-        setLoading(false)
+        console.log(result);
+
+        let newUserData: UserData = {
+          "id": userData.id,
+          "userEmail": userData.userEmail,
+          "walletId": userData.walletId,
+          "userDetailsId": userDetailsId,
+          "transactionId": userData.transactionId,
+          "profileImg": userData.profileImg,
+        }
+
+        setUserData(newUserData);
+
+        setOriginalFirstName(firstName);
+        setOriginalLastName(lastName);
+        setOriginalAddress(address);
+        setOriginalDateOfBirth(dateOfBirth);
+        setOriginalPlaceOfBirth(placeOfBirth);
+        setOriginalSelectedGender(selectedGender);
+        setOriginalSelectedDocType(selectedDocType);
+
+        toast.success("User updated Successfully!", {id: "UserUpdateSuccess"});
+        setLoading(false);
+      } else {
+        toast.error("Something went wrong!", {id: "UserUpdateFailure"});
+        setLoading(false);
       }
-  }
+    }
+
 
     const handleEditClick = () => {
         setIsEditing(true);
-        setOriginalName(uname);
-        setOriginalUsername(username);
-        setOriginalEmail(email);
-        setOriginalProfilePic(profilePic);
     };
 
     const handleSaveChanges = () => {
-        if (uname === "") toast.error("Name cannot be empty!");
-        else if (username === "") toast.error("Username cannot be empty!");
-        else if (email === "") toast.error("Email cannot be empty!");
+        if (firstName === "") toast.error("First Name cannot be empty!");
+        else if (lastName === "") toast.error("Last Name cannot be empty!");
+        else if (address === "") toast.error("Address cannot be empty!");
+        else if (dateOfBirth === "") toast.error("Date Of Birth cannot be empty!");
+        else if (placeOfBirth === "") toast.error("Place Of Birth cannot be empty!");
+        else if (selectedGender === "") toast.error("Gender cannot be empty!");
+        else if (selectedDocType === "") toast.error("Document Type cannot be empty!");
+        else if (docFile == undefined) toast.error("Please upload the required Document!");
         else {
             setLoading(true);
-            const hashData = generateHash([uname,username,email,profilePic]);
-            setFileName('');
             setIsEditing(false);
-            updateUser.signAndSend([hashData]);
+            uploadImage();
         }
     };
 
     const handleCancelEdit = () => {
-        setUname(originalName);
-        setUsername(originalUsername);
-        setEmail(originalEmail);
-        setProfilePic(originalProfilePic);
+        setFirstName(originalFirstName);
+        setLastName(originalLastName);
+        setAddress(originalAddress);
+        setDateOfBirth(originalDateOfBirth);
+        setPlaceOfBirth(originalPlaceOfBirth);
+        setSelectedGender(originalSelectedGender);
+        setSelectedDocType(originalSelectedDocType);
+        setDocFile(undefined);
         setIsEditing(false);
-        setFileName('');
-        setImage(profileImg);
-        setFile(undefined);
     };
 
     return (
@@ -219,8 +335,9 @@ const UserDetailsSettings: React.FC<UserData> = ({id, name, userName, userEmail,
                                   type="text"
                                   id="firstname"
                                   name="firstname"
-                                  value={uname}
-                                  onChange={(e) => setUname(e.target.value)}
+                                  placeholder='Enter First Name'
+                                  value={firstName}
+                                  onChange={(e) => setFirstName(e.target.value)}
                                   className="form-input-profile"
                                 />
                               </div>
@@ -233,8 +350,9 @@ const UserDetailsSettings: React.FC<UserData> = ({id, name, userName, userEmail,
                                   type="text"
                                   id="lastname"
                                   name="lastname"
-                                  value={username}
-                                  onChange={(e) => setUsername(e.target.value)}
+                                  placeholder='Enter Last Name'
+                                  value={lastName}
+                                  onChange={(e) => setLastName(e.target.value)}
                                   className="form-input-profile"
                                 />
                               </div>
@@ -248,8 +366,9 @@ const UserDetailsSettings: React.FC<UserData> = ({id, name, userName, userEmail,
                                 type="text"
                                 id="address"
                                 name="address"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
+                                placeholder='Enter Address'
+                                value={address}
+                                onChange={(e) => setAddress(e.target.value)}
                                 className="form-input-profile"
                               />
                             </div>
@@ -263,11 +382,34 @@ const UserDetailsSettings: React.FC<UserData> = ({id, name, userName, userEmail,
                                   type="date"
                                   id="dateOfBirth"
                                   name="dateOfBirth"
-                                  value={email}
-                                  onChange={(e) => setEmail(e.target.value)}
+                                  value={dateOfBirth}
+                                  onChange={(e) => setDateOfBirth(e.target.value)}
                                   className="form-input-profile dark:dark-date"
                                 />
                               </div>
+
+                              <div className={`mb-4 flex flex-col justify-between w-full`}>
+                                <label htmlFor="placeOfBirth" className="form-label-profile">
+                                    Place Of Birth
+                                </label>
+                                <input
+                                  type="text"
+                                  id="placeOfBirth"
+                                  name="placeOfBirth"
+                                  placeholder='Enter Place Of Birth'
+                                  value={placeOfBirth}
+                                  onChange={(e) => setPlaceOfBirth(e.target.value)}
+                                  className="form-input-profile"
+                                />
+                              </div>
+                            </div>
+
+                            <div className={"flex flex-col lg:flex-row lg:gap-4 md:flex-row md:gap-4 w-full"}>
+                              <SelectGenderDropdown
+                                genderList={genderList}
+                                selectedGender={selectedGender}
+                                setSelectedGender={setSelectedGender}
+                              />
 
                               <SelectDocTypeDropdown
                                 docTypeList={docTypeList}
@@ -288,37 +430,58 @@ const UserDetailsSettings: React.FC<UserData> = ({id, name, userName, userEmail,
                         <>
                           <div className={`mb-4 flex justify-between`}>
                             <label htmlFor="firstname" className="form-label-profile">
+                                Decentralized Identity (DID)
+                            </label>
+                            <div>{loading ? 'Loading...': did}</div>
+                          </div>
+
+                          <div className={`mb-4 flex justify-between`}>
+                            <label htmlFor="firstname" className="form-label-profile">
                                 First Name
                             </label>
-                            <div>{uname}</div>
+                            <div>{loading ? 'Loading...': originalFirstName}</div>
                           </div>
 
                           <div className={`mb-4 flex justify-between`}>
                             <label htmlFor="lastname" className="form-label-profile">
                                 Last Name
                             </label>
-                            <div>{username}</div>
+                            <div>{loading ? 'Loading...': originalLastName}</div>
                           </div>
 
                           <div className={`mb-4 flex justify-between`}>
                             <label htmlFor="address" className="form-label-profile">
                                 Address
                             </label>
-                            <div>{email}</div>
+                            <div>{loading ? 'Loading...': originalAddress}</div>
                           </div>
 
                           <div className={`mb-4 flex justify-between`}>
                             <label htmlFor="dateOfBirth" className="form-label-profile">
                                 Date Of Birth
                             </label>
-                            <div>{email}</div>
+                            <div>{loading ? 'Loading...': originalDateOfBirth}</div>
+                          </div>
+
+                          <div className={`mb-4 flex justify-between`}>
+                            <label htmlFor="dateOfBirth" className="form-label-profile">
+                                Place Of Birth
+                            </label>
+                            <div>{loading ? 'Loading...': originalPlaceOfBirth}</div>
+                          </div>
+
+                          <div className={`mb-4 flex justify-between`}>
+                            <label htmlFor="dateOfBirth" className="form-label-profile">
+                                Gender
+                            </label>
+                            <div>{loading ? 'Loading...': originalSelectedGender}</div>
                           </div>
 
                           <div className={`mb-4 flex justify-between`}>
                             <label htmlFor="doctype" className="form-label-profile">
                                 Document Type
                             </label>
-                            <div>{selectedDocType}</div>
+                            <div>{loading ? 'Loading...': originalSelectedDocType}</div>
                           </div>
                         </>
                         }
@@ -330,7 +493,7 @@ const UserDetailsSettings: React.FC<UserData> = ({id, name, userName, userEmail,
                                     onClick={handleSaveChanges}
                                     className="mr-2 btn-sm btn-primary"
                                 >
-                                    Save Changes
+                                    Save
                                 </button>
                                 <button
                                     onClick={handleCancelEdit}

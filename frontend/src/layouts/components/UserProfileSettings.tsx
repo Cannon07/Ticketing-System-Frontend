@@ -12,24 +12,23 @@ import { UpdateUserById } from '@/constants/endpoint_constants/UserEndpoints';
 
 interface UserData {
   id: string,
-  name: string,
   profileImg: string,
   transactionId: String,
   userEmail: string,
-  userName: string,
+  userDetailsId: string,
   walletId: string,
   originalImage: string | undefined,
   setImage: React.Dispatch<React.SetStateAction<string | undefined>>,
 }
 
-const UserProfileSettings: React.FC<UserData> = ({id, name, userName, userEmail, profileImg, transactionId, walletId, originalImage, setImage}) => {
+const UserProfileSettings: React.FC<UserData> = ({id, userEmail, profileImg, userDetailsId, transactionId, walletId, originalImage, setImage}) => {
     const contract = useContract(CONTRACT_ADDRESS,metadata);
     const updateUser = useTx(contract,'updateUser');
     useTxNotifications(updateUser);
 
     const [isEditing, setIsEditing] = useState<boolean>(false);
-    const [uname, setUname] = useState(name);
-    const [username, setUsername] = useState(userName);
+    //const [uname, setUname] = useState(name);
+    //const [username, setUsername] = useState(userName);
     const [email, setEmail] = useState(userEmail);
     const [profilePic, setProfilePic] = useState(null);
     const [fileName, setFileName] = useState('');
@@ -39,8 +38,8 @@ const UserProfileSettings: React.FC<UserData> = ({id, name, userName, userEmail,
     const [file, setFile] = useState<File | undefined>();
     const imageRef = useRef<HTMLInputElement>(null);
 
-    const [originalName, setOriginalName] = useState(uname);
-    const [originalUsername, setOriginalUsername] = useState(username);
+    //const [originalName, setOriginalName] = useState(uname);
+    //const [originalUsername, setOriginalUsername] = useState(username);
     const [originalEmail, setOriginalEmail] = useState(email);
     const [originalProfilePic, setOriginalProfilePic] = useState(null);
 
@@ -107,9 +106,8 @@ const UserProfileSettings: React.FC<UserData> = ({id, name, userName, userEmail,
 
       var raw = JSON.stringify({
         "id": id,
-        "name": uname,
-        "userName": username,
         "userEmail": email,
+        "userDetailsId": userDetailsId,
         "walletId": walletId,
         "transactionId": txId,
         "profileImg": imageUrl,
@@ -135,19 +133,19 @@ const UserProfileSettings: React.FC<UserData> = ({id, name, userName, userEmail,
 
     const handleEditClick = () => {
         setIsEditing(true);
-        setOriginalName(uname);
-        setOriginalUsername(username);
+        //setOriginalName(uname);
+        //setOriginalUsername(username);
         setOriginalEmail(email);
         setOriginalProfilePic(profilePic);
     };
 
     const handleSaveChanges = () => {
-        if (uname === "") toast.error("Name cannot be empty!");
-        else if (username === "") toast.error("Username cannot be empty!");
-        else if (email === "") toast.error("Email cannot be empty!");
+        //if (uname === "") toast.error("Name cannot be empty!");
+        //else if (username === "") toast.error("Username cannot be empty!");
+        if (email === "") toast.error("Email cannot be empty!");
         else {
             setLoading(true);
-            const hashData = generateHash([uname,username,email,profilePic]);
+            const hashData = generateHash([email]);
             setFileName('');
             setIsEditing(false);
             updateUser.signAndSend([hashData]);
@@ -155,8 +153,8 @@ const UserProfileSettings: React.FC<UserData> = ({id, name, userName, userEmail,
     };
 
     const handleCancelEdit = () => {
-        setUname(originalName);
-        setUsername(originalUsername);
+        //setUname(originalName);
+        //setUsername(originalUsername);
         setEmail(originalEmail);
         setProfilePic(originalProfilePic);
         setIsEditing(false);
@@ -177,7 +175,7 @@ const UserProfileSettings: React.FC<UserData> = ({id, name, userName, userEmail,
                                 <hr className="h-px w-full dark:bg-gray-600 border-0 bg-gray-200" />
                             </div>}
 
-                        <div className={`mb-4 ${isEditing ? '' : 'flex justify-between'}`}>
+                        {/*<div className={`mb-4 ${isEditing ? '' : 'flex justify-between'}`}>
                             <label htmlFor="name" className="form-label-profile">
                                 Name
                             </label>
@@ -193,10 +191,10 @@ const UserProfileSettings: React.FC<UserData> = ({id, name, userName, userEmail,
                             ) : (
                                 <div>{uname}</div>
                             )}
-                        </div>
+                        </div>*/}
 
 
-                        <div className={`mb-4 ${isEditing ? '' : 'flex justify-between'}`}>
+                        {/*<div className={`mb-4 ${isEditing ? '' : 'flex justify-between'}`}>
                             <label htmlFor="username" className="form-label-profile">
                                 Username
                             </label>
@@ -212,7 +210,7 @@ const UserProfileSettings: React.FC<UserData> = ({id, name, userName, userEmail,
                             ) : (
                                 <div>{username}</div>
                             )}
-                        </div>
+                        </div>*/}
 
                         <div className={`mb-4 ${isEditing ? '' : 'flex justify-between'}`}>
                             <label htmlFor="email" className="form-label-profile">

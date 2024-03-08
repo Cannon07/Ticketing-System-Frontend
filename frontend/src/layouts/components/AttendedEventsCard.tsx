@@ -43,11 +43,10 @@ interface event_data {
 
 interface UserData {
   id: string,
-  name: string,
   profileImg: string,
   transactionId: string,
+  userDetailsId: string,
   userEmail: string,
-  userName: string,
   walletId: string,
 }
 

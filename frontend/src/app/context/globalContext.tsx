@@ -5,11 +5,10 @@ import { createContext, useContext, Dispatch, SetStateAction,useState, ReactNode
 
 interface UserData {
   id: string,
-  name: string,
   profileImg: string,
   transactionId: string,
+  userDetailsId: string,
   userEmail: string,
-  userName: string,
   walletId: string,
 }
 

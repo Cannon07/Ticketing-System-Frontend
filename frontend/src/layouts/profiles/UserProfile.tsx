@@ -54,11 +54,10 @@ interface event_data {
 
 interface UserData {
   id: string,
-  name: string,
   profileImg: string,
   transactionId: string,
+  userDetailsId: string,
   userEmail: string,
-  userName: string,
   walletId: string,
 }
 
@@ -109,7 +108,7 @@ const UserProfile = () => {
         let response = await fetch(`${GetTicketsByUserId}user=${userData?.id}`, requestOptions)
         let result = await response.json()
         console.log(result)
-        if (result.length == 0) {
+        if (response.status == 400) {
           setUpcomingUserTickets([]);
           setPreviousUserTickets([]);
           toast.dismiss();
@@ -125,7 +124,7 @@ const UserProfile = () => {
       fetchUserTickets();
       setTab('Booked Events');
       setImage(userData?.profileImg)
-    }, [userData])
+    }, [userData?.walletId])
 
     return (
         <>
@@ -157,7 +156,7 @@ const UserProfile = () => {
                                                         />
                                                     </div>
 
-                                                    <span>{userData.name}</span>
+                                                    <span>{userData.userEmail}</span>
 
                                                 </div>
                                             </li>
@@ -240,7 +239,7 @@ const UserProfile = () => {
                                                         />
                                                     </div>
 
-                                                    <span>{userData.name}</span>
+                                                    <span>{userData.userEmail}</span>
 
                                                 </div>
                                             </li>
@@ -381,10 +380,9 @@ const UserProfile = () => {
                                                   <div className="flex justify-center items-center flex-wrap">
                                                     <UserProfileSettings
                                                       id={userData.id}
-                                                      name={userData.name}
-                                                      userName={userData.userName}
                                                       userEmail={userData.userEmail}
                                                       profileImg={userData.profileImg}
+                                                      userDetailsId={userData.userDetailsId}
                                                       transactionId={userData.transactionId}
                                                       walletId={userData.walletId}
                                                       originalImage={image}
@@ -394,15 +392,7 @@ const UserProfile = () => {
 
                                                   <div className="flex justify-center items-center flex-wrap">
                                                     <UserDetailsSettings
-                                                      id={userData.id}
-                                                      name={userData.name}
-                                                      userName={userData.userName}
-                                                      userEmail={userData.userEmail}
-                                                      profileImg={userData.profileImg}
-                                                      transactionId={userData.transactionId}
-                                                      walletId={userData.walletId}
-                                                      originalImage={image}
-                                                      setImage={setImage}
+                                                      userData={userData}
                                                     />
                                                   </div>
                                                 </div>
