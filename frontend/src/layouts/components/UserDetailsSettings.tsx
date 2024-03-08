@@ -6,6 +6,7 @@ import { PostImage } from '@/constants/endpoint_constants/ImageEndpoints';
 import { UpdateUserById } from '@/constants/endpoint_constants/UserEndpoints';
 import { PostUserDetails } from '@/constants/ssi_endpoint_constants/UserDetailsEndpoint';
 import { GetUserDetailsById } from '@/constants/ssi_endpoint_constants/UserDetailsEndpoint';
+import { UpdateUserDetails } from '@/constants/ssi_endpoint_constants/UserDetailsEndpoint';
 import { SelectDocTypeDropdown } from './DocTypeDropdown';
 import { SelectGenderDropdown } from './GenderDropdown';
 import { ImageSelectorDoc } from './ImageSelectorDoc';
@@ -20,6 +21,19 @@ interface UserData {
   walletId: string,
 }
 
+interface policy {
+  SignaturePolicy: string,
+  ScanResult: string,
+  JsonSchemaPolicy: string,
+  AgeVerification: string,
+}
+
+interface verificationResult {
+  result: string,
+  issuerDid: string,
+  policy: policy,
+}
+
 interface UserDetails {
   userDid: string,
   firstName: string,
@@ -30,6 +44,8 @@ interface UserDetails {
   placeOfBirth: string,
   proofId: string,
   docType: string,
+  verificationResult: verificationResult[],
+  issuedVCs: string[],
 }
 
 interface UserDataProps {
@@ -40,6 +56,8 @@ const UserDetailsSettings: React.FC<UserDataProps> = ({ userData }) => {
     const { setUserData} = useGlobalContext();
 
     const [did, setDid] = useState<string>('');
+    const [verificationResultList, setVerificationResultList] = useState<verificationResult[]>([]);
+    const [issuedVCsList, setIssuedVCsList] = useState<string[]>([]);
 
     const [firstName, setFirstName] = useState<string>('');
     const [lastName, setLastName] = useState<string>('');
@@ -93,6 +111,8 @@ const UserDetailsSettings: React.FC<UserDataProps> = ({ userData }) => {
           let fetchedUserDetails: UserDetails = result;
 
           setDid(fetchedUserDetails.userDid);
+          setVerificationResultList(fetchedUserDetails.verificationResult);
+          setIssuedVCsList(fetchedUserDetails.issuedVCs);
 
           setFirstName(fetchedUserDetails.firstName);
           setLastName(fetchedUserDetails.lastName);
@@ -145,7 +165,11 @@ const UserDetailsSettings: React.FC<UserDataProps> = ({ userData }) => {
         toast.dismiss();
         toast.success("Document Uploaded Successfully!", {id: "DocUploadSuccess"});
         console.log(result);
-        saveUserDetails(result);
+        if (userData.userDetailsId === "") {
+          saveUserDetails(result);
+        } else {
+          updateUserDetailsContents(result);
+        }
     }
 
     const formatDate = (unformattedDate: string) => {
@@ -258,6 +282,57 @@ const UserDetailsSettings: React.FC<UserDataProps> = ({ userData }) => {
       }
     }
 
+    const updateUserDetailsContents = async (imageUrl: string) => {
+      toast.loading("Updating User Details..", {id: "UpdateUserDetailsLoading"})
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      var raw = JSON.stringify({
+        "userDid": did,
+        "firstName": firstName,
+        "lastName": lastName,
+        "address": address,
+        "dateOfBirth": formatDate(dateOfBirth),
+        "gender": selectedGender,
+        "placeOfBirth": placeOfBirth,
+        "proofId": imageUrl,
+        "docType": selectedDocType,
+        "verificationResult": verificationResultList,
+        "issuedVCs": issuedVCsList,
+      });
+
+      console.log(raw);
+
+      var requestOptions = {
+        method: 'PUT',
+        headers: myHeaders,
+        body: raw,
+      };
+
+      let response = await fetch(`${UpdateUserDetails}${userData.userDetailsId}`, requestOptions)
+
+      console.log(response);
+
+      if (response.ok) {
+        toast.dismiss();
+        //let result = await response.json();
+        //console.log(result);
+
+        setOriginalFirstName(firstName);
+        setOriginalLastName(lastName);
+        setOriginalAddress(address);
+        setOriginalDateOfBirth(dateOfBirth);
+        setOriginalPlaceOfBirth(placeOfBirth);
+        setOriginalSelectedGender(selectedGender);
+        setOriginalSelectedDocType(selectedDocType);
+
+        toast.success("User Details updated Successfully!", {id: "UserDetailsUpdateSuccess"});
+        setLoading(false);
+      } else {
+        toast.error("Something went wrong!", {id: "UserDetailsUpdateFailure"});
+        setLoading(false);
+      }
+    }
 
     const handleEditClick = () => {
         setIsEditing(true);
