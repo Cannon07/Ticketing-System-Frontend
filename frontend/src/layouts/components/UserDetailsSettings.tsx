@@ -218,10 +218,11 @@ const UserDetailsSettings: React.FC<UserDataProps> = ({ userData }) => {
 
       if (response.ok) {
         toast.dismiss();
-        let result = await response.text();
+        let result = await response.json();
         console.log(result);
         toast.success("User Details saved Successfully!", {id: "SaveUserSuccess"});
-        updateUserDetailsId(result, imageUrl);
+        setDid(result?.userDid);
+        updateUserDetailsId(result?.id, imageUrl);
       } else {
         toast.error("Something went wrong!", {id: "SaveUserFailure"});
         setLoading(false);

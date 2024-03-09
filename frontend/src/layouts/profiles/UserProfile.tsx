@@ -108,7 +108,7 @@ const UserProfile = () => {
         let response = await fetch(`${GetTicketsByUserId}user=${userData?.id}`, requestOptions)
         let result = await response.json()
         console.log(result)
-        if (response.status == 400) {
+        if (result.length == 0) {
           setUpcomingUserTickets([]);
           setPreviousUserTickets([]);
           toast.dismiss();
@@ -309,6 +309,8 @@ const UserProfile = () => {
                                     tab === 'Booked Events' ? (
 
                                         <div className="flex justify-center items-center h-full flex-wrap">
+                                          {/*<UserTicket />
+                                          <UserTicket />*/}
                                           {upcomingUserTickets.length != 0 ?
                                             upcomingUserTickets.map((ticket, index) => {
                                               return(
@@ -323,7 +325,7 @@ const UserProfile = () => {
                                               <h1 className="h2 text-center">No Tickets Found</h1>
                                               <div className="content flex flex-col items-center">
                                                 <p className="mb-0 text-center">
-                                Oops! It seems you haven&apos;t booked any tickets yet.
+                                                  Oops! It seems you haven&apos;t booked any tickets yet.
                                                 </p>
                                                 <p className="mt-0 text-center">
                                                   Browse our upcoming events and book your tickets now.

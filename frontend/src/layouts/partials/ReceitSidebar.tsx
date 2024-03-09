@@ -16,6 +16,7 @@ import { generateHash } from "@/lib/utils/hashGenerator";
 import toast from "react-hot-toast";
 import { PostTickets } from "@/constants/endpoint_constants/TicketEndpoints";
 import { useGlobalContext } from "@/app/context/globalContext";
+import { useRouter } from "next/navigation";
 
 interface artist_data {
   id: String,
@@ -61,6 +62,7 @@ interface event_props {
 }
 
 const ReceitSidebar: React.FC<event_props> = ({ eventData, totalTickets }) => {
+  const router = useRouter();
 
   const {userData} = useGlobalContext()
 
@@ -96,7 +98,9 @@ const ReceitSidebar: React.FC<event_props> = ({ eventData, totalTickets }) => {
     selectedArtist.push(data);
   })
 
-  const eventHashCurrent = generateHash([eventTitle, eventDate, eventTime, eventDuration, aboutEvent, [...selectedArtist], selectedVenueData, selectedCategory]);
+  const eventHashCurrent = generateHash([eventTitle, eventDate, eventTime, eventDuration, aboutEvent, [...selectedArtist], selectedCategory]);
+
+  //console.log(eventHashCurrent);
 
   const mint = useTx(TicketsNft,'mint');
   useTxNotifications(mint);
@@ -202,6 +206,7 @@ const ReceitSidebar: React.FC<event_props> = ({ eventData, totalTickets }) => {
       let result = await response.json();
       console.log(result)
       toast.success("Tickets Booked Successfully!")
+      router.push('/user-profile');
     }
   }
 
