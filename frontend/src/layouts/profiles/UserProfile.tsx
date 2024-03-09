@@ -381,12 +381,7 @@ const UserProfile = () => {
                                                 <div className={"flex flex-col gap-4"}>
                                                   <div className="flex justify-center items-center flex-wrap">
                                                     <UserProfileSettings
-                                                      id={userData.id}
-                                                      userEmail={userData.userEmail}
-                                                      profileImg={userData.profileImg}
-                                                      userDetailsId={userData.userDetailsId}
-                                                      transactionId={userData.transactionId}
-                                                      walletId={userData.walletId}
+                                                      userData={userData}
                                                       originalImage={image}
                                                       setImage={setImage}
                                                     />

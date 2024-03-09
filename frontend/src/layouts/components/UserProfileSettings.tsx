@@ -9,30 +9,37 @@ import { useTxNotifications } from 'useink/notifications';
 import { generateHash } from '@/lib/utils/hashGenerator';
 import { PostImage } from '@/constants/endpoint_constants/ImageEndpoints';
 import { UpdateUserById } from '@/constants/endpoint_constants/UserEndpoints';
+import { useGlobalContext } from '@/app/context/globalContext';
 
 interface UserData {
   id: string,
   profileImg: string,
-  transactionId: String,
-  userEmail: string,
+  transactionId: string,
   userDetailsId: string,
+  userEmail: string,
   walletId: string,
+}
+
+interface UserDataProps {
+  userData: UserData,
   originalImage: string | undefined,
   setImage: React.Dispatch<React.SetStateAction<string | undefined>>,
 }
 
-const UserProfileSettings: React.FC<UserData> = ({id, userEmail, profileImg, userDetailsId, transactionId, walletId, originalImage, setImage}) => {
+const UserProfileSettings: React.FC<UserDataProps> = ({userData, originalImage, setImage}) => {
     const contract = useContract(CONTRACT_ADDRESS,metadata);
     const updateUser = useTx(contract,'updateUser');
     useTxNotifications(updateUser);
 
+    const { setUserData } = useGlobalContext();
+
     const [isEditing, setIsEditing] = useState<boolean>(false);
     //const [uname, setUname] = useState(name);
     //const [username, setUsername] = useState(userName);
-    const [email, setEmail] = useState(userEmail);
+    const [email, setEmail] = useState(userData.userEmail);
     const [profilePic, setProfilePic] = useState(null);
     const [fileName, setFileName] = useState('');
-    const [transId, setTransId] = useState(transactionId);
+    const [transId, setTransId] = useState(userData.transactionId);
     const [loading, setLoading] = useState(false);
 
     const [file, setFile] = useState<File | undefined>();
@@ -100,15 +107,15 @@ const UserProfileSettings: React.FC<UserData> = ({id, userEmail, profileImg, use
         putUser(txId, result);
     }
 
-    const putUser = async (txId: String, imageUrl: String | undefined) => {
+    const putUser = async (txId: string, imageUrl: string | undefined) => {
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
 
       var raw = JSON.stringify({
-        "id": id,
+        "id": userData.id,
         "userEmail": email,
-        "userDetailsId": userDetailsId,
-        "walletId": walletId,
+        "userDetailsId": userData.userDetailsId,
+        "walletId": userData.walletId,
         "transactionId": txId,
         "profileImg": imageUrl,
       });
@@ -121,13 +128,24 @@ const UserProfileSettings: React.FC<UserData> = ({id, userEmail, profileImg, use
         body: raw,
       };
 
-      let response = await fetch(`${UpdateUserById}${id}`, requestOptions)
+      let response = await fetch(`${UpdateUserById}${userData.id}`, requestOptions)
       if (response.ok) {
         let result = await response.json();
         setTransId(txId);
         console.log(result)
         toast.success("User Updated!")
         setLoading(false)
+
+        let updatedUserData: UserData = {
+          "id": userData.id,
+          "userEmail": email,
+          "userDetailsId": userData.userDetailsId,
+          "walletId": userData.walletId,
+          "transactionId": txId,
+          "profileImg": String(imageUrl),
+        }
+
+        setUserData(updatedUserData);
       }
   }
 
@@ -159,7 +177,7 @@ const UserProfileSettings: React.FC<UserData> = ({id, userEmail, profileImg, use
         setProfilePic(originalProfilePic);
         setIsEditing(false);
         setFileName('');
-        setImage(profileImg);
+        setImage(userData.profileImg);
         setFile(undefined);
     };
 
@@ -236,7 +254,7 @@ const UserProfileSettings: React.FC<UserData> = ({id, userEmail, profileImg, use
                             <label htmlFor="email" className="form-label-profile">
                                 Wallet Id
                             </label>
-                            <div>{walletId}</div>
+                            <div>{userData.walletId}</div>
                         </div>
 
                         <div className={`mb-4 flex justify-between`}>
