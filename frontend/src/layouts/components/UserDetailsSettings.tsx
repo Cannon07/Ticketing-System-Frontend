@@ -71,6 +71,7 @@ const UserDetailsSettings: React.FC<UserDataProps> = ({ userData }) => {
     ]
     const [selectedDocType, setSelectedDocType] = useState<string>('');
     const [docFile, setDocFile] = useState<File | undefined>();
+    const [docImage, setDocImage] = useState<string | undefined>('');
 
     const genderList: string[] = [
       'Male',
@@ -86,6 +87,7 @@ const UserDetailsSettings: React.FC<UserDataProps> = ({ userData }) => {
     const [originalPlaceOfBirth, setOriginalPlaceOfBirth] = useState<string>('');
     const [originalSelectedDocType, setOriginalSelectedDocType] = useState<string>('');
     const [originalSelectedGender, setOriginalSelectedGender] = useState<string>('');
+    const [originalDocImage, setOriginalDocImage] = useState<string | undefined>('');
 
     const [isRegistered, setIsRegistered] = useState<boolean>(false);
     const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -94,7 +96,7 @@ const UserDetailsSettings: React.FC<UserDataProps> = ({ userData }) => {
     useEffect(() => {
       const fetchUserDetails = async () => {
         setLoading(true);
-        toast.loading("Fetching User Details..")
+        toast.loading("Fetching User Details..", {id: "FetchUserDetails"})
         var requestOptions = {
           method: 'GET',
         };
@@ -105,7 +107,7 @@ const UserDetailsSettings: React.FC<UserDataProps> = ({ userData }) => {
           let result = await response.json();
           console.log(result);
           toast.dismiss();
-          toast.success("User Details Fetched Successfully!");
+          toast.success("User Details Fetched Successfully!", {id: "SuccessUserDetails"});
           setLoading(false);
 
           let fetchedUserDetails: UserDetails = result;
@@ -121,6 +123,7 @@ const UserDetailsSettings: React.FC<UserDataProps> = ({ userData }) => {
           setPlaceOfBirth(fetchedUserDetails.placeOfBirth);
           setSelectedGender(fetchedUserDetails.gender);
           setSelectedDocType(fetchedUserDetails.docType);
+          setDocImage(fetchedUserDetails.proofId);
 
           setOriginalFirstName(fetchedUserDetails.firstName);
           setOriginalLastName(fetchedUserDetails.lastName);
@@ -129,11 +132,12 @@ const UserDetailsSettings: React.FC<UserDataProps> = ({ userData }) => {
           setOriginalPlaceOfBirth(fetchedUserDetails.placeOfBirth);
           setOriginalSelectedGender(fetchedUserDetails.gender);
           setOriginalSelectedDocType(fetchedUserDetails.docType);
+          setOriginalDocImage(fetchedUserDetails.proofId);
 
         } else {
           setLoading(false);
           toast.dismiss();
-          toast.error("User Details not found!");
+          toast.error("User Details not found!", {id: "FailUserDetails"});
         }
       }
 
@@ -217,14 +221,14 @@ const UserDetailsSettings: React.FC<UserDataProps> = ({ userData }) => {
         let result = await response.text();
         console.log(result);
         toast.success("User Details saved Successfully!", {id: "SaveUserSuccess"});
-        updateUserDetailsId(result);
+        updateUserDetailsId(result, imageUrl);
       } else {
         toast.error("Something went wrong!", {id: "SaveUserFailure"});
         setLoading(false);
       }
     }
 
-    const updateUserDetailsId = async (userDetailsId: string) => {
+    const updateUserDetailsId = async (userDetailsId: string, imageUrl: string | undefined) => {
       toast.loading("Updating User..", {id: "UpdateUserLoading"})
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
@@ -273,6 +277,7 @@ const UserDetailsSettings: React.FC<UserDataProps> = ({ userData }) => {
         setOriginalPlaceOfBirth(placeOfBirth);
         setOriginalSelectedGender(selectedGender);
         setOriginalSelectedDocType(selectedDocType);
+        setOriginalDocImage(imageUrl);
 
         toast.success("User updated Successfully!", {id: "UserUpdateSuccess"});
         setLoading(false);
@@ -282,7 +287,7 @@ const UserDetailsSettings: React.FC<UserDataProps> = ({ userData }) => {
       }
     }
 
-    const updateUserDetailsContents = async (imageUrl: string) => {
+    const updateUserDetailsContents = async (imageUrl: string | undefined) => {
       toast.loading("Updating User Details..", {id: "UpdateUserDetailsLoading"})
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
@@ -325,6 +330,7 @@ const UserDetailsSettings: React.FC<UserDataProps> = ({ userData }) => {
         setOriginalPlaceOfBirth(placeOfBirth);
         setOriginalSelectedGender(selectedGender);
         setOriginalSelectedDocType(selectedDocType);
+        setOriginalDocImage(docImage);
 
         toast.success("User Details updated Successfully!", {id: "UserDetailsUpdateSuccess"});
         setLoading(false);
@@ -346,11 +352,16 @@ const UserDetailsSettings: React.FC<UserDataProps> = ({ userData }) => {
         else if (placeOfBirth === "") toast.error("Place Of Birth cannot be empty!");
         else if (selectedGender === "") toast.error("Gender cannot be empty!");
         else if (selectedDocType === "") toast.error("Document Type cannot be empty!");
-        else if (docFile == undefined) toast.error("Please upload the required Document!");
+        else if (docImage === "") toast.error("Please upload the required Document!");
         else {
             setLoading(true);
             setIsEditing(false);
-            uploadImage();
+            if (docImage == originalDocImage) {
+              updateUserDetailsContents(originalDocImage);
+            } else {
+              uploadImage();
+            }
+
         }
     };
 
@@ -362,6 +373,7 @@ const UserDetailsSettings: React.FC<UserDataProps> = ({ userData }) => {
         setPlaceOfBirth(originalPlaceOfBirth);
         setSelectedGender(originalSelectedGender);
         setSelectedDocType(originalSelectedDocType);
+        setDocImage(originalDocImage);
         setDocFile(undefined);
         setIsEditing(false);
     };
@@ -498,6 +510,8 @@ const UserDetailsSettings: React.FC<UserDataProps> = ({ userData }) => {
                                 title={"Document"}
                                 file={docFile}
                                 setFile={setDocFile}
+                                docImg={docImage}
+                                setDocImg={setDocImage}
                               />
                             </div>
                           </>

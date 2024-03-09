@@ -124,7 +124,7 @@ const RegisterModal = () => {
         let result = await response.json();
         console.log(result)
         let newUserData: UserData = {
-          "id": "",
+          "id": result.statusMsg,
           "userEmail": email,
           "walletId": walletAddress,
           "userDetailsId": "",

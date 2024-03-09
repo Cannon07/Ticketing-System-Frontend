@@ -7,10 +7,12 @@ interface ImageProps {
   title: string,
   file: File | undefined,
   setFile: React.Dispatch<React.SetStateAction<File | undefined>>,
+  docImg: string | undefined,
+  setDocImg: React.Dispatch<React.SetStateAction<string | undefined>>,
 }
 
-export const ImageSelectorDoc: React.FC<ImageProps> = ({ title, file, setFile }) => {
-  const [image, setImage] = useState("");
+export const ImageSelectorDoc: React.FC<ImageProps> = ({ title, file, setFile, docImg, setDocImg }) => {
+  const [image, setImage] = useState<string | undefined>("");
   const [fileName, setFileName] = useState("Upload Image");
 
 
@@ -21,6 +23,7 @@ export const ImageSelectorDoc: React.FC<ImageProps> = ({ title, file, setFile })
       let upload_input = document.getElementById(title) as any;
       upload_input.value = "";
       setImage("");
+      setDocImg("");
       setFileName("Upload Image")
     }
   }
@@ -29,10 +32,14 @@ export const ImageSelectorDoc: React.FC<ImageProps> = ({ title, file, setFile })
     if(file===undefined){
       let upload_input = document.getElementById(title) as any;
       upload_input.value = "";
-      setImage("");
-      setFileName("Upload Image")
+      setImage(docImg);
+      if (docImg === "") {
+        setFileName("Upload Image")
+      } else {
+        setFileName("Delete Image")
+      }
     }
-  },[file])
+  },[file, docImg])
 
 
   return (
@@ -67,6 +74,7 @@ export const ImageSelectorDoc: React.FC<ImageProps> = ({ title, file, setFile })
         onChange={({ target: {files} }) => {
           if (files && files.length > 0) {
             setImage(URL.createObjectURL(files[0]))
+            setDocImg(URL.createObjectURL(files[0]))
             setFileName(files[0].name)
             setFile(files[0])
           }
