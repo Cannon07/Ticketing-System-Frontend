@@ -98,7 +98,8 @@ export const QrCarousel: React.FC<TicketDetailsProps> = ({ ticket_data }) => {
               {Object.keys(ticket_data?.nfts ?? {}).map((s, i) => {
                 return (
                   <Image
-                    text={'https://github.com/bunlong/next-qrcode'}
+                    key={i}
+                    text={'https://github.com/Cannon07/Ticketing-System-Frontend'}
                     options={{
                       type: 'image/jpeg',
                       quality: 0.3,
