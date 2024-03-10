@@ -4,6 +4,7 @@ import { GoHourglass } from "react-icons/go";
 import { IoQrCode } from "react-icons/io5";
 import { FaIndianRupeeSign } from "react-icons/fa6";
 import { PiTicketLight } from "react-icons/pi";
+import QrModal from './QrModal';
 
 interface artist_data {
   id: String,
@@ -60,6 +61,7 @@ interface TicketDetails {
   id: string,
   tier: tier_data,
   user: UserData,
+  nfts: { [key: number]: boolean }
 }
 
 interface TicketDetailsProps {
@@ -97,23 +99,25 @@ const UserTicket: React.FC<TicketDetailsProps> = ({ ticket_data }) => {
     }
 
     return (
-        <div className="px-3 pb-3 flex items-center justify-center w-full">
-            <div className={"group cursor-pointer bg-dark transition-colors duration-300 ease-in-out dark:bg-white rounded-l-lg h-[227px] flex items-center px-4 hover:bg-theme-light dark:hover:bg-darkmode-theme-light"}>
+      <>
+        <QrModal ticket_data={ticket_data} />
+        <div id={`data-${ticket_data?.id}-trigger`} className="group px-3 pb-3 flex items-center justify-center w-full cursor-pointer">
+            <div className={"bg-dark transition-colors duration-300 ease-in-out dark:bg-white rounded-l-lg h-[227px] flex items-center px-4 group-hover:bg-theme-light dark:group-hover:bg-darkmode-theme-light"}>
               <IoQrCode className={"text-white transition-colors duration-300 ease-in-out dark:text-dark group-hover:text-dark dark:group-hover:text-white"} size={50} />
             </div>
             <div className="rounded-r-lg bg-theme-light p-4 dark:bg-darkmode-theme-light relative h-fit w-full lg:w-full lg:h-fit">
                 <div className={"flex h-full items-center gap-2"}>
 
-                  <div className={"flex flex-col lg:flex-row items-center gap-4 h-full"}>
+                  <div className={"flex flex-col lg:flex-row items-center gap-4 h-full w-full"}>
                       {/*<div className='hidden lg:contents'>
                           <div className={"h-[200px] w-px border-r border-dashed dark:border-gray-600 border-gray-200"} />
                       </div>
                       <div className={"lg:hidden h-px w-full border-t border-dashed dark:border-gray-600 border-gray-200"} />*/}
 
-                      <div className="lg:w-1/3 lg:h-[195px] rounded overflow-hidden object-cover">
+                      <div className="lg:w-[300px] lg:h-[195px] rounded overflow-hidden object-cover">
                           <ImageFallback
-                              height={200}
-                              width={200}
+                              height={195}
+                              width={300}
                               src={ticket_data?.eventId.imageUrls[0]}
                               alt="event-image"
                               className="object-cover w-full h-full"
@@ -121,7 +125,7 @@ const UserTicket: React.FC<TicketDetailsProps> = ({ ticket_data }) => {
                       </div>
                       <div className='hidden lg:contents h-[200px] w-px border-r dark:border-gray-600 border-gray-200' />
 
-                      <div className='flex flex-col lg:flex-row items-center justify-center w-2/3'>
+                      <div className='flex flex-col lg:flex-row items-center justify-center w-full'>
 
                           <div className='flex flex-col gap-3 justify-center w-full'>
                               <div>
@@ -170,7 +174,7 @@ const UserTicket: React.FC<TicketDetailsProps> = ({ ticket_data }) => {
                                           <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                                           <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
                                       </svg>
-                                      <span>
+                                      <span className={"line-clamp-1"}>
                                           {ticket_data?.eventId.venueId.address}
                                       </span>
                                   </li>
@@ -188,9 +192,8 @@ const UserTicket: React.FC<TicketDetailsProps> = ({ ticket_data }) => {
                 </div>
             </div>
         </div>
+      </>
     )
-
-
 }
 
 export default UserTicket

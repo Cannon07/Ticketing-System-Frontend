@@ -68,6 +68,7 @@ interface TicketDetails {
   id: string,
   tier: tier_data,
   user: UserData,
+  nfts: { [key: number]: boolean }
 }
 
 const UserProfile = () => {
@@ -121,9 +122,11 @@ const UserProfile = () => {
       }
 
       //userTickets.map((ticket, index) => {console.log(`Ticket ${index}`, ticket)});
-      fetchUserTickets();
-      setTab('Booked Events');
-      setImage(userData?.profileImg)
+      if (userData?.walletId) {
+        fetchUserTickets();
+        setTab('Booked Events');
+        setImage(userData?.profileImg)
+      }
     }, [userData?.walletId])
 
     return (
