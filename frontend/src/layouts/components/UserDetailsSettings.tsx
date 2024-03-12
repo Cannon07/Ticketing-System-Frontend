@@ -367,6 +367,9 @@ const UserDetailsSettings: React.FC<UserDataProps> = ({ userData }) => {
     };
 
     const handleCancelEdit = () => {
+        if (userData.userDetailsId === "") {
+          setIsRegistered(false);
+        }
         setFirstName(originalFirstName);
         setLastName(originalLastName);
         setAddress(originalAddress);
