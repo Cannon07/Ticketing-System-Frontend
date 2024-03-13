@@ -14,6 +14,7 @@ mod concert_ticketing_system {
         users: Mapping<AccountId, String>, 
         organizers: Mapping<AccountId, String>,
         events: Mapping<AccountId, Vec<String>>, 
+        event_details: Mapping<String, String>,
         tickets: Mapping<String, TicketsNftRef>,
         version: u32,
         tickets_code_hash: Hash,
@@ -71,6 +72,7 @@ mod concert_ticketing_system {
                 users: Mapping::default(), 
                 organizers: Mapping::default(),
                 events: Mapping::default(),
+                event_details: Mapping::default(),
                 tickets: Mapping::default(),
                 version: 0,
                 tickets_code_hash,
@@ -183,13 +185,11 @@ mod concert_ticketing_system {
         #[ink(message)]
         pub fn register_event(
             &mut self, 
+            event_id: String,
             data_hash: String, 
             tier_list: Vec<String>, 
             seats_list: Vec<u32>
         ) -> Result<()> {
-             
-            
-
             let caller = self.env().caller();
             
             if !self.organizers.contains(caller) {
@@ -200,11 +200,13 @@ mod concert_ticketing_system {
 
             if self.events.contains(caller) {
                 event_vec = self.events.get(caller).unwrap();   
-                event_vec.push(data_hash.clone());
+                event_vec.push(event_id.clone());
+                self.event_details.insert(&event_id, &data_hash);
                 self.events.insert(caller, &event_vec);
             } else {
                 event_vec = Vec::new();
-                event_vec.push(data_hash.clone());
+                event_vec.push(event_id.clone());
+                self.event_details.insert(&event_id, &data_hash);
                 self.events.insert(caller, &event_vec);
             }
 
@@ -218,7 +220,7 @@ mod concert_ticketing_system {
 
             self.version += 1;
             
-            self.tickets.insert(data_hash.clone(), &tickets_contract);
+            self.tickets.insert(&event_id, &tickets_contract);
 
             Self::env().emit_event(EventModified {
                 account: Some(caller),
@@ -243,33 +245,38 @@ mod concert_ticketing_system {
         }
 
         #[ink(message)]
-        pub fn update_events(&mut self, old_event: String, new_event: String) -> Result<()> { 
+        pub fn update_events(&mut self, event_id: String, new_event_hash: String) -> Result<()> { 
             let caller = self.env().caller();
 
             if !self.organizers.contains(caller) {
                 return Err(Error::NotRegisteredAsOrganizer);
             }
-            
-            let mut event_vec = self.events.get(caller).unwrap();
-            match event_vec.binary_search(&old_event) {
-                Ok(e) => {
-                    event_vec.remove(e);
-                    event_vec.push(new_event.clone());
-                    self.events.insert(caller, &event_vec);
 
-                    let event_tickets = self.tickets.get(old_event.clone()).unwrap();
-                    self.tickets.insert(new_event, &event_tickets);
-                    self.tickets.remove(old_event);
-
-                    Self::env().emit_event(EventModified {
-                        account: Some(caller),
-                        data: event_vec,
-                    });
-
-                    return Ok(());
-                },
-                Err(_) => return Err(Error::NoSuchEventRegistered)
+            if !self.event_details.contains(&event_id) {
+                return Err(Error::NoSuchEventRegistered)
             }
+
+            self.event_details.insert(&event_id, &new_event_hash);
+
+            Ok(())
+        }
+
+        #[ink(message)]
+        pub fn get_event_hash(&self, event_id: String) -> Result<String> {
+            let caller = self.env().caller(); 
+            if !self.organizers.contains(caller) {
+                return Err(Error::NotRegisteredAsOrganizer);
+            }
+
+            if !self.events.contains(caller) {
+                return Err(Error::NoEventsRegistered);
+            }
+
+            if !self.event_details.contains(&event_id) {
+                return Err(Error::NoSuchEventRegistered);
+            }
+
+            Ok(self.event_details.get(event_id).unwrap())
         }
 
         #[ink(message)]
