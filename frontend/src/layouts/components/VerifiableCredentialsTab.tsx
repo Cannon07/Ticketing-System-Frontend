@@ -15,8 +15,21 @@ const VerifiableCredentialsTab = () => {
     <div className="flex justify-between w-full gap-4">
 
       <div className="flex flex-col gap-4 w-full justify-center items-center">
-        <VerifiableCredentialsCard />
-        <VerifiableCredentialsCard />
+        <VerifiableCredentialsCard
+          name={"Government Id"}
+          vc={"fb0ea18c-8499-4d5c-83c7-f715b82f969f"}
+          type={1}
+          issue_date={"February 10, 2024"}
+          expiry_date={"March 10, 2024"}
+        />
+
+        <VerifiableCredentialsCard
+          name={"Government Id"}
+          vc={"fb0ea18c-8499-4d5c-83c7-f715b82f969f"}
+          type={1}
+          issue_date={"March 10, 2024"}
+          expiry_date={"April 10, 2024"}
+        />
       </div>
 
       <div className="lg:sticky lg:top-28 w-80 h-fit bg-theme-light dark:bg-darkmode-theme-light rounded-lg lg:border lg:border-border lg:dark:border-darkmode-border p-8">

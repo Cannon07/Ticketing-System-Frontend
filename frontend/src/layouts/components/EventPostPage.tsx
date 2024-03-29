@@ -6,7 +6,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 import TicketModal from "./TicketModal";
+import IssuerModal from "./IssuerModal";
 import { GoHourglass } from "react-icons/go";
+import VCsModal from "./VCsModal";
 
 const artists = [
     { id: 1, name: 'Shreya Ghoshal' },
@@ -128,6 +130,12 @@ const EventPostPage: React.FC<event_data_props> = ({ event_data }) => {
             <TicketModal
               event_data={event_data}
             />
+            <IssuerModal
+              event_data={event_data}
+            />
+            <VCsModal
+              event_data={event_data}
+            />
             <div className="hidden lg:contents md:contents" style={{ color: "rgb(255, 255, 255) relative" }}>
                 <div className="h-[490px] overflow-hidden absolute left-0 right-0 bg-gradient-to-r from-[#1c1c1c] z-10"></div>
                 <div className="h-[490px] overflow-hidden absolute left-0 right-0 opacity-75">
@@ -224,7 +232,7 @@ const EventPostPage: React.FC<event_data_props> = ({ event_data }) => {
                                     </ul>
 
                                     <div>
-                                        <button data-ticket-trigger className="btn btn-primary">
+                                        <button data-issuer-trigger className="btn btn-primary">
                                             Book Tickets
                                         </button>
                                     </div>
