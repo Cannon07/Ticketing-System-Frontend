@@ -13,6 +13,7 @@ import PageHeader from "@/partials/PageHeader";
 import toast from "react-hot-toast";
 import { GetTicketsByUserId } from "@/constants/endpoint_constants/TicketEndpoints";
 import { useRouter } from "next/navigation";
+import VerifiableCredentialsTab from "@/components/VerifiableCredentialsTab";
 
 interface artist_data {
   id: String,
@@ -68,7 +69,10 @@ interface TicketDetails {
   id: string,
   tier: tier_data,
   user: UserData,
-  nfts: { [key: number]: boolean }
+  nfts: { [key: number]: {
+    scanned: string,
+    verifier: string,
+  } }
 }
 
 const UserProfile = () => {
@@ -90,7 +94,7 @@ const UserProfile = () => {
       userTickets.map((ticket) => {
         let ticket_timestamp = Date.parse(ticket.eventId.dateAndTime.split(" ")[0]);
         let ticket_date = new Date(ticket_timestamp);
-        if (ticket_date.getDate() >= today.getDate()) {
+        if (ticket_date.getTime() >= today.getTime()) {
           upcoming_tickets.push(ticket);
         } else {
           previous_tickets.push(ticket);
@@ -109,15 +113,22 @@ const UserProfile = () => {
         let response = await fetch(`${GetTicketsByUserId}user=${userData?.id}`, requestOptions)
         let result = await response.json()
         console.log(result)
-        if (result.length == 0) {
+        if (response.ok) {
+          if (result.length == 0) {
+            setUpcomingUserTickets([]);
+            setPreviousUserTickets([]);
+            toast.dismiss();
+            toast.error("No Tickets Found!", {id:"TicketsFetchingFailure"})
+          } else {
+            filterTickets(result);
+            toast.dismiss();
+            toast.success("Tickets Fetched Successfully!", {id:"TicketsFetchingSuccess"});
+          }
+        } else {
           setUpcomingUserTickets([]);
           setPreviousUserTickets([]);
           toast.dismiss();
-          toast.error("No Tickets Found!", {id:"TicketsFetchingFailure"})
-        } else {
-          filterTickets(result);
-          toast.dismiss();
-          toast.success("Tickets Fetched Successfully!", {id:"TicketsFetchingSuccess"});
+          toast.error("Something went wrong!", {id:"TicketsFetchingFailureError"})
         }
       }
 
@@ -396,9 +407,22 @@ const UserProfile = () => {
                                                     />
                                                   </div>
                                                 </div>
+                                            ) : (
+                                                tab === 'Verifiable Credentials' ? (
+                                                <div className={"flex flex-col gap-4"}>
+                                                  <div className="flex justify-center items-center flex-wrap">
+                                                    <VerifiableCredentialsTab />
+                                                  </div>
+
+                                                  {/*<div className="flex justify-center items-center flex-wrap">
+                                                    <UserDetailsSettings
+                                                      userData={userData}
+                                                    />
+                                                  </div>*/}
+                                                </div>
                                             ) : ''
                                         )
-
+                                      )
                                     )
                                 }
 

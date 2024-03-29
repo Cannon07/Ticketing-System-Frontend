@@ -61,7 +61,10 @@ interface TicketDetails {
   id: string,
   tier: tier_data,
   user: UserData,
-  nfts: { [key: number]: boolean }
+  nfts: { [key: number]: {
+    scanned: string,
+    verifier: string,
+  } }
 }
 
 interface TicketDetailsProps {

@@ -184,7 +184,6 @@ const ReceitSidebar: React.FC<event_props> = ({ eventData, totalTickets }) => {
 
     var raw = JSON.stringify({
       "count": Number(totalTickets),
-      "cost": totalPrice,
       "transactionId": eventHashCurrent,
       "userId": userData?.id,
       "tierId": selectedTier?.id,
