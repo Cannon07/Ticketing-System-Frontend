@@ -19,6 +19,7 @@ interface vc_data {
   issuance_date: string,
   expiration_date: string,
   vc_id: string,
+  vc_type: string,
 }
 
 interface event_data_props {
@@ -67,7 +68,7 @@ const VCsModal: React.FC<event_data_props> = ({ vc_data }) => {
                     <VerifiableCredentialsCard
                       name={vc.issuer_name}
                       vc={vc.vc_id}
-                      type={1}
+                      type={vc.vc_type}
                       issue_date={vc.issuance_date}
                       expiry_date={vc.expiration_date}
                     />

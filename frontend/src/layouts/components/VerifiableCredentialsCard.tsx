@@ -2,11 +2,12 @@ import { IoSchoolOutline } from "react-icons/io5";
 import { IoHomeOutline } from "react-icons/io5";
 import { RiGovernmentLine } from "react-icons/ri";
 import { TbShieldCheckFilled } from "react-icons/tb";
+import { BsBuilding } from "react-icons/bs";
 
 interface VCDetailsProps {
   name: string,
   vc: string,
-  type: number,
+  type: string,
   issue_date: string,
   expiry_date: string,
 }
@@ -18,29 +19,37 @@ const VerifiableCredentialsCard: React.FC<VCDetailsProps> = ({name, vc, type, is
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div>
-              {type === 1 &&
+              {type === 'AgeVerification' &&
                 <RiGovernmentLine className="text-black dark:text-white" size={45} />
               }
 
-              {type === 2 &&
+              {type === 'StudentVerification' &&
                 <IoSchoolOutline className="text-black dark:text-white" size={45} />
               }
 
-              {type === 3 &&
+              {type === 'Both' &&
+                <BsBuilding className="text-black dark:text-white" size={45} />
+              }
+
+              {type === 'General' &&
                 <IoHomeOutline className="text-black dark:text-white" size={45} />
               }
             </div>
 
             <div>
-              {type === 1 &&
+              {type === 'AgeVerification' &&
                 <h5>Government ID</h5>
               }
 
-              {type === 2 &&
+              {type === 'StudentVerification' &&
                 <h5>Student ID</h5>
               }
 
-              {type === 3 &&
+              {type === 'Both' &&
+                <h5>Common ID</h5>
+              }
+
+              {type === 'General' &&
                 <h5>General ID</h5>
               }
               <p>{name}</p>

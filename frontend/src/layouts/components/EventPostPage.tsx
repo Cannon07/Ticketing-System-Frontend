@@ -82,6 +82,7 @@ interface vc_data {
   issuance_date: string,
   expiration_date: string,
   vc_id: string,
+  vc_type: string,
 }
 
 interface event_data_props {
@@ -197,6 +198,7 @@ const EventPostPage: React.FC<event_data_props> = ({ event_data, issuer_data }) 
                 issuance_date: formatDate(vc.validFrom),
                 expiration_date: formatDate(vc.expirationDate),
                 vc_id: vc.id,
+                vc_type: vc.proof.proofPurpose,
               }
               vcList.push(temp_vc);
             })
