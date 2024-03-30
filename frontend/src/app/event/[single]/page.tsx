@@ -1,36 +1,13 @@
 'use client'
 
 import { useState, useEffect } from "react";
-import BlogCard from "@/components/BlogCard";
-import Disqus from "@/components/Disqus";
-import Share from "@/components/Share";
-import config from "@/config/config.json";
-import ImageFallback from "@/helpers/ImageFallback";
-import MDXContent from "@/helpers/MDXContent";
-import { getSinglePage } from "@/lib/contentParser";
-import dateFormat from "@/lib/utils/dateFormat";
-import similerItems from "@/lib/utils/similarItems";
-import { humanize, markdownify, slugify } from "@/lib/utils/textConverter";
-import SeoMeta from "@/partials/SeoMeta";
-import { EventPost } from "@/types";
-import Link from "next/link";
-import {
-  FaRegClock,
-  FaRegFolder,
-  FaRegUserCircle,
-} from "react-icons/fa/index.js"
-import Image from "next/image";
 import EventPostPage from "@/components/EventPostPage";
 import { useParams } from "next/navigation";
 import { GetEventsById } from "@/constants/endpoint_constants/EventEndpoints";
+import { PostIssuerDetailsFromDid } from "@/constants/ssi_endpoint_constants/IssuerEndpoints";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import NotConnected from "@/app/not-connected";
-
-const { blog_folder } = config.event_settings_2;
-
-// remove dynamicParams
-//export const dynamicParams = false;
 
 interface artist_data {
   id: string,
@@ -56,6 +33,12 @@ interface venue_data {
   placeId: string,
 }
 
+interface issuer_data {
+  name: string,
+  publicDid: string,
+  type: string,
+}
+
 interface event_data {
   id: string,
   name: string,
@@ -68,31 +51,15 @@ interface event_data {
   imageUrls: string[],
   artists: artist_data[],
   tiers: tier_data[],
+  verificationMode: string,
+  trustedIssuers: string[],
 }
 
 const EventSingle = () => {
-  //const posts: EventPost[] = getSinglePage(blog_folder);
-
-  //const { frontmatter, content } = post;
-  //const {
-  //  title,
-  //  about,
-  //  cast,
-  //  artists,
-  //  meta_title,
-  //  description,
-  //  image,
-  //  image2,
-  //  star_icon,
-  //  author,
-  //  categories,
-  //  date,
-  //  tags,
-  //} = frontmatter;
-  //const similarPosts = similerItems(post, posts, post.slug!);
   const router = useRouter();
 
   const [eventData, setEventData] = useState<event_data | null>(null);
+  const [issuerData, setIssuerData] = useState<issuer_data[]>([]);
   const [loading, setLoading] = useState(false);
   const params = useParams<{ single: string }>();
 
@@ -134,18 +101,46 @@ const EventSingle = () => {
 
   }, [])
 
+  useEffect(() => {
+    const fetchIssuerData = async () => {
+      toast.loading("Fetching Issuer Details..", {id: "FetchIssuerLoading"})
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      var raw = JSON.stringify({
+        "issuersDid": eventData?.trustedIssuers,
+      });
+
+      console.log(raw);
+
+      var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+      };
+
+      let response = await fetch(`${PostIssuerDetailsFromDid}`, requestOptions)
+
+      console.log(response);
+
+      if (response.ok) {
+        toast.dismiss();
+        let result = await response.json();
+        console.log(result);
+        toast.success("Issuer Details fetched Successfully!", {id: "FetchIssuerSuccess"});
+        setIssuerData(result);
+      } else {
+        toast.error("Something went wrong!", {id: "FetchIssuerFailure"});
+        setLoading(false);
+      }
+    }
+    if (eventData) {
+      fetchIssuerData()
+    }
+  }, [eventData])
+
   return (
     <>
-      {/*<SeoMeta
-        title={title}
-        meta_title={meta_title}
-        description={description}
-        image={image}
-      />*/}
-
-
-      {/* , backgroundColor:"rgb(26, 26, 26)" */}
-
       <section>
         <div className="container">
         <div className="row justify-center">
@@ -153,10 +148,9 @@ const EventSingle = () => {
               <NotConnected /> :
               <EventPostPage
                 event_data={eventData}
+                issuer_data={issuerData}
               />
             }
-
-
         </div>
         </div>
       </section >

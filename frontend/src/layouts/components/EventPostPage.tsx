@@ -9,6 +9,11 @@ import TicketModal from "./TicketModal";
 import IssuerModal from "./IssuerModal";
 import { GoHourglass } from "react-icons/go";
 import VCsModal from "./VCsModal";
+import toast from "react-hot-toast";
+import { useGlobalContext } from "@/app/context/globalContext";
+import { useRouter } from "next/navigation";
+import { GetUserDetailsById } from "@/constants/ssi_endpoint_constants/UserDetailsEndpoint";
+import { PostUserVCsFromUserDid } from "@/constants/ssi_endpoint_constants/UserDetailsEndpoint";
 
 const artists = [
     { id: 1, name: 'Shreya Ghoshal' },
@@ -49,6 +54,12 @@ interface venue_data {
   placeId: string,
 }
 
+interface issuer_data {
+  name: string,
+  publicDid: string,
+  type: string,
+}
+
 interface event_data {
   id: string,
   name: string,
@@ -61,13 +72,30 @@ interface event_data {
   imageUrls: string[],
   artists: artist_data[],
   tiers: tier_data[],
+  verificationMode: string,
+  trustedIssuers: string[],
+}
+
+interface vc_data {
+  issuer_name: string,
+  issuer_publicDid: string,
+  issuance_date: string,
+  expiration_date: string,
+  vc_id: string,
 }
 
 interface event_data_props {
-  event_data: event_data | null
+  event_data: event_data | null,
+  issuer_data: issuer_data[],
 }
 
-const EventPostPage: React.FC<event_data_props> = ({ event_data }) => {
+const EventPostPage: React.FC<event_data_props> = ({ event_data, issuer_data }) => {
+    const router = useRouter();
+
+    const { userData } = useGlobalContext();
+    const [userDid, setUserDid] = useState<string>('');
+
+    const [userVCs, setUserVCs] = useState<vc_data[]>([]);
 
     const [toggle, setToggle] = useState(false);
 
@@ -78,6 +106,118 @@ const EventPostPage: React.FC<event_data_props> = ({ event_data }) => {
     const iconStyle = {
         strokeWidth: '4',
     };
+
+    function formatDate(inputDate: any) {
+      const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+      const dateParts = inputDate.split(' ')[0].split('-');
+      const year = parseInt(dateParts[0]);
+      const monthIndex = parseInt(dateParts[1]) - 1;
+      const day = parseInt(dateParts[2]);
+
+      const monthName = months[monthIndex];
+
+      return `${monthName} ${day}, ${year}`;
+    }
+
+    const fetchUserDid = async () => {
+      setUserDid('');
+      toast.loading("Fetching User Details..", {id: "FetchUserDetails"})
+
+      var requestOptions = {
+        method: 'GET',
+      };
+      let response = await fetch(`${GetUserDetailsById}${userData?.userDetailsId}`, requestOptions)
+      console.log(response)
+
+      if (response.ok) {
+        let result = await response.json();
+        console.log(result);
+        toast.dismiss();
+        toast.success("User Details Fetched Successfully!", {id: "SuccessUserDetails"});
+        setUserDid(result.userDid);
+      } else {
+        toast.dismiss();
+        toast.error("User Details not found!", {id: "FailUserDetails"});
+      }
+    }
+
+    const handleBooking = () => {
+      if (!userData) {
+        toast.error("Wallet Not Connected!");
+        return;
+      }
+
+      if (!userData.userDetailsId) {
+        toast.error("User Registration Required!");
+        router.push('/user-profile');
+        return;
+      }
+
+      fetchUserDid();
+    }
+
+    useEffect(() => {
+      const fetchUserVCs = async () => {
+        toast.loading("Fetching User VCs..", {id: "LoadingUserVC"});
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+
+        var raw = JSON.stringify({
+          "userDid": userDid,
+          "issuers": event_data?.trustedIssuers
+        });
+
+        console.log(raw);
+
+        var requestOptions = {
+          method: 'POST',
+          headers: myHeaders,
+          body: raw,
+        };
+
+        let response = await fetch(`${PostUserVCsFromUserDid}`, requestOptions)
+
+        console.log(response);
+
+        if (response.ok) {
+          toast.dismiss();
+          let result = await response.json();
+          console.log(result);
+          if (result.length > 0) {
+
+            toast.success("User VCs Fetched Successfully!", {id: "SuccessUserVC"});
+            const vcModal = document.getElementById('vcModal');
+            vcModal!.classList.add("show");
+            let vcList: vc_data[] = [];
+            result.map((vc: any) => {
+              let temp_vc: vc_data = {
+                issuer_name: vc.issuer.name,
+                issuer_publicDid: vc.issuer.publicDid,
+                issuance_date: formatDate(vc.validFrom),
+                expiration_date: formatDate(vc.expirationDate),
+                vc_id: vc.id,
+              }
+              vcList.push(temp_vc);
+            })
+
+            setUserVCs(vcList);
+          } else {
+
+            toast.error("No VCs Available!", {id: "FailureUserVC"});
+            const issuerModal = document.getElementById("issuerModal");
+            issuerModal!.classList.add('show');
+
+          }
+        } else {
+          toast.error("Something went wrong!", {id: "UnknownFailureUserVC"});
+        }
+      }
+
+      if (userDid) {
+        fetchUserVCs();
+      }
+    }, [userDid])
 
     const handleScroll = () => {
         // console.log("scroll"+containerRef?.current?.scrollWidth)
@@ -130,11 +270,14 @@ const EventPostPage: React.FC<event_data_props> = ({ event_data }) => {
             <TicketModal
               event_data={event_data}
             />
+
             <IssuerModal
-              event_data={event_data}
+              issuer_data={issuer_data}
+              userDetailsId={String(userData?.userDetailsId)}
             />
+
             <VCsModal
-              event_data={event_data}
+              vc_data={userVCs}
             />
             <div className="hidden lg:contents md:contents" style={{ color: "rgb(255, 255, 255) relative" }}>
                 <div className="h-[490px] overflow-hidden absolute left-0 right-0 bg-gradient-to-r from-[#1c1c1c] z-10"></div>
@@ -232,7 +375,7 @@ const EventPostPage: React.FC<event_data_props> = ({ event_data }) => {
                                     </ul>
 
                                     <div>
-                                        <button data-issuer-trigger className="btn btn-primary">
+                                        <button onClick={() => handleBooking()} className="btn btn-primary">
                                             Book Tickets
                                         </button>
                                     </div>

@@ -13,53 +13,24 @@ import { FaRegAddressCard } from "react-icons/fa";
 import RequestIssuerCard from "./RequestIssuerCard";
 import VerifiableCredentialsCard from "./VerifiableCredentialsCard";
 
-interface artist_data {
-  id: string,
-  name: string,
-  profileImg: string,
-  userName: string,
-  govId: string,
-  email: string,
-}
-
-interface tier_data {
-  id: string,
-  name: string,
-  capacity: number,
-  price: number,
-}
-
-interface venue_data {
-  id: string,
-  name: string,
-  address: string,
-  capacity: number,
-  placeId: string,
-}
-
-interface event_data {
-  id: string,
-  name: string,
-  description: string,
-  dateAndTime: string,
-  eventDuration: string,
-  venueId: venue_data,
-  transactionId: string,
-  categoryList: string[],
-  imageUrls: string[],
-  artists: artist_data[],
-  tiers: tier_data[],
+interface vc_data {
+  issuer_name: string,
+  issuer_publicDid: string,
+  issuance_date: string,
+  expiration_date: string,
+  vc_id: string,
 }
 
 interface event_data_props {
-  event_data: event_data | null,
+  vc_data: vc_data[],
 }
 
 interface TicketObject {
   [key: number]: boolean
 }
 
-const VCsModal: React.FC<event_data_props> = ({ event_data }) => {
+const VCsModal: React.FC<event_data_props> = ({ vc_data }) => {
+  console.log(vc_data);
 
   useEffect(() => {
     const vcModal = document.getElementById("vcModal");
@@ -89,25 +60,21 @@ const VCsModal: React.FC<event_data_props> = ({ event_data }) => {
             <h3 className={""}>Verified Credentials</h3>
 
             <div className="w-full max-h-96 overflow-y-auto overflow-x-hidden no-scrollbar flex flex-col items-center gap-8 p-8 bg-theme-light dark:bg-darkmode-theme-light rounded-lg">
-              <div className="cursor-pointer transform transition duration-300 hover:scale-105">
-                <VerifiableCredentialsCard
-                  name={"Government Id"}
-                  vc={"fb0ea18c-8499-4d5c-83c7-f715b82f969f"}
-                  type={1}
-                  issue_date={"February 10, 2024"}
-                  expiry_date={"March 10, 2024"}
-                />
-              </div>
 
-              <div className="cursor-pointer transform transition duration-300 hover:scale-105">
-                <VerifiableCredentialsCard
-                  name={"Student Id"}
-                  vc={"fb0ea18c-8499-4d5c-83c7-f715b82f969f"}
-                  type={2}
-                  issue_date={"February 10, 2024"}
-                  expiry_date={"March 10, 2024"}
-                />
-              </div>
+              {vc_data.map((vc, index) => {
+                return (
+                  <div key={index} className="cursor-pointer transform transition duration-300 hover:scale-105">
+                    <VerifiableCredentialsCard
+                      name={vc.issuer_name}
+                      vc={vc.vc_id}
+                      type={1}
+                      issue_date={vc.issuance_date}
+                      expiry_date={vc.expiration_date}
+                    />
+                  </div>
+                )
+              })}
+
             </div>
 
           </div>
