@@ -409,16 +409,10 @@ const UserProfile = () => {
                                                 </div>
                                             ) : (
                                                 tab === 'Verifiable Credentials' ? (
-                                                <div className={"flex flex-col gap-4"}>
-                                                  <div className="flex justify-center items-center flex-wrap">
+                                                <div className={"flex h-full flex-col gap-4"}>
+                                                  <div className="flex h-full justify-center items-center flex-wrap">
                                                     <VerifiableCredentialsTab />
                                                   </div>
-
-                                                  {/*<div className="flex justify-center items-center flex-wrap">
-                                                    <UserDetailsSettings
-                                                      userData={userData}
-                                                    />
-                                                  </div>*/}
                                                 </div>
                                             ) : ''
                                         )
