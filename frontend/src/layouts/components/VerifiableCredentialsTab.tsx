@@ -18,7 +18,7 @@ const VerifiableCredentialsTab = () => {
         <VerifiableCredentialsCard
           name={"Government Id"}
           vc={"fb0ea18c-8499-4d5c-83c7-f715b82f969f"}
-          type={1}
+          type={'AgeVerification'}
           issue_date={"February 10, 2024"}
           expiry_date={"March 10, 2024"}
         />
@@ -26,7 +26,7 @@ const VerifiableCredentialsTab = () => {
         <VerifiableCredentialsCard
           name={"Government Id"}
           vc={"fb0ea18c-8499-4d5c-83c7-f715b82f969f"}
-          type={1}
+          type={'AgeVerification'}
           issue_date={"March 10, 2024"}
           expiry_date={"April 10, 2024"}
         />
