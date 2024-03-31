@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 interface artist_data {
   id: string,
@@ -43,13 +44,16 @@ interface event_data {
 
 interface event_data_props {
   event_data: event_data | null,
+  selectedVCId: string,
 }
 
 interface TicketObject {
   [key: number]: boolean
 }
 
-const TicketModal: React.FC<event_data_props> = ({ event_data }) => {
+const TicketModal: React.FC<event_data_props> = ({ event_data, selectedVCId }) => {
+  const router = useRouter();
+
   let ticketList: TicketObject[] = [];
   for (let i=1; i<=10; i++) {
     ticketList.push({[i]: false})
@@ -113,7 +117,10 @@ const TicketModal: React.FC<event_data_props> = ({ event_data }) => {
       <div className="search-wrapper">
         <div className="search-wrapper-header">
           <div className={"flex flex-col items-center gap-4"}>
-            <h3 className={"mb-4"}>How Many Tickets ?</h3>
+            <div className={"flex flex-col items-center mb-4"}>
+              <h3 >How Many Tickets ?</h3>
+              <p>VC Id: {selectedVCId}</p>
+            </div>
             <div className={"flex gap-2 justify-center w-full flex-wrap"}>
               {totalTickets.map((ticket, index) => {
                 const ticketKey = Object.keys(ticket)[0];
@@ -129,8 +136,8 @@ const TicketModal: React.FC<event_data_props> = ({ event_data }) => {
                 );
               })}
             </div>
-            <hr className="h-px my-4 w-full dark:bg-gray-600 border-0 bg-gray-200" />
-            <div className={"flex justify-center gap-12 flex-wrap"}>
+            <hr className="h-px my-2 w-full dark:bg-gray-600 border-0 bg-gray-200" />
+            <div className={"flex justify-center gap-8 flex-wrap"}>
               {event_data?.tiers.map((tier, index) => {
                 return (
                   <div
@@ -144,9 +151,18 @@ const TicketModal: React.FC<event_data_props> = ({ event_data }) => {
                 )
               })}
             </div>
-            <Link href={`/book?eventId=${event_data?.id}&totalTickets=${ticket}`} className={"btn btn-primary w-full md:w-9/12"}>
+            <div
+              onClick={() => {
+                if (ticket) {
+                  router.push(`/book?eventId=${event_data?.id}&totalTickets=${ticket}&vcId=${selectedVCId}`)
+                } else {
+                  toast.error("Select Tickets Count!")
+                }
+              }}
+              className={"btn btn-primary w-full md:w-9/12"}
+            >
               <h5 className={"text-white dark:text-dark flex justify-center"}>Book {ticket} Tickets</h5>
-            </Link>
+            </div>
           </div>
         </div>
       </div>

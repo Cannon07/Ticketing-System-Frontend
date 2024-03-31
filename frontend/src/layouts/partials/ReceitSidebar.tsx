@@ -59,9 +59,10 @@ interface event_data {
 interface event_props {
   eventData: event_data | null,
   totalTickets: string | null,
+  selectedVCId: string | null,
 }
 
-const ReceitSidebar: React.FC<event_props> = ({ eventData, totalTickets }) => {
+const ReceitSidebar: React.FC<event_props> = ({ eventData, totalTickets, selectedVCId }) => {
   const router = useRouter();
 
   const {userData} = useGlobalContext()
@@ -186,6 +187,7 @@ const ReceitSidebar: React.FC<event_props> = ({ eventData, totalTickets }) => {
       "count": Number(totalTickets),
       "transactionId": eventHashCurrent,
       "userId": userData?.id,
+      "vcId": selectedVCId,
       "tierId": selectedTier?.id,
       "eventId": eventData?.id,
       "nftToken": data.Ok,

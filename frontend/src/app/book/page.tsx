@@ -14,6 +14,7 @@ import { useSearchParams } from "next/navigation";
 import { GetEventsById } from "@/constants/endpoint_constants/EventEndpoints";
 import toast from "react-hot-toast";
 import NotConnected from "../not-connected";
+import { useRouter } from "next/navigation";
 
 const { blog_folder, pagination } = config.event_settings_2;
 
@@ -66,9 +67,12 @@ const Book = () => {
   //const totalPages = Math.ceil(posts.length / pagination);
   //const currentPosts = sortedPosts.slice(0, pagination);
 
+  const router = useRouter();
+
   const searchParams = useSearchParams();
   const eventId = searchParams.get('eventId');
   const totalTickets = searchParams.get('totalTickets');
+  const selectedVCId = searchParams.get('vcId');
   const [eventData, setEventData] = useState<event_data | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -80,7 +84,7 @@ const Book = () => {
       toast.loading("Fetching Tier Details..");
       setLoading(true)
       let response = await fetch(`${GetEventsById}id=${eventId}`,   requestOptions)
-      if (response.status != 404) {
+      if (response.ok) {
         let result = await response.json();
         setEventData(result);
         setLoading(false);
@@ -90,11 +94,16 @@ const Book = () => {
       } else {
         setLoading(false);
         toast.error("Something went Wrong!");
+        router.push('/event')
       }
     }
-
-    fetchEventByEventId();
-    console.log(eventData);
+    if (!eventId || !totalTickets || !selectedVCId) {
+      toast.error("Not Available!");
+      router.push('/event');
+    } else {
+      fetchEventByEventId();
+      console.log(eventData);
+    }
   }, [])
 
 
@@ -133,6 +142,7 @@ const Book = () => {
                 <ReceitSidebar
                   eventData={eventData}
                   totalTickets={totalTickets}
+                  selectedVCId={selectedVCId}
                 />
               </>
             }

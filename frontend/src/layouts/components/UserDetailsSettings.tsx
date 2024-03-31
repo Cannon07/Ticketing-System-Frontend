@@ -212,7 +212,7 @@ const UserDetailsSettings: React.FC<UserDataProps> = ({ userData }) => {
         body: raw,
       };
 
-      let response = await fetch(`${PostUserDetails}`, requestOptions)
+      let response = await fetch(`${PostUserDetails}${userData.id}`, requestOptions)
 
       console.log(response);
 
@@ -221,50 +221,13 @@ const UserDetailsSettings: React.FC<UserDataProps> = ({ userData }) => {
         let result = await response.json();
         console.log(result);
         toast.success("User Details saved Successfully!", {id: "SaveUserSuccess"});
-        setDid(result?.userDid);
-        updateUserDetailsId(result?.id, imageUrl);
-      } else {
-        toast.error("Something went wrong!", {id: "SaveUserFailure"});
-        setLoading(false);
-      }
-    }
-
-    const updateUserDetailsId = async (userDetailsId: string, imageUrl: string | undefined) => {
-      toast.loading("Updating User..", {id: "UpdateUserLoading"})
-      var myHeaders = new Headers();
-      myHeaders.append("Content-Type", "application/json");
-
-      var raw = JSON.stringify({
-        "id": userData.id,
-        "profileImg": userData.profileImg,
-        "transactionId": userData.transactionId,
-        "userDetailsId": userDetailsId,
-        "userEmail": userData.userEmail,
-        "walletId": userData.walletId,
-      });
-
-      console.log(raw);
-
-      var requestOptions = {
-        method: 'PUT',
-        headers: myHeaders,
-        body: raw,
-      };
-
-      let response = await fetch(`${UpdateUserById}${userData.id}`, requestOptions)
-
-      console.log(response);
-
-      if (response.ok) {
-        toast.dismiss();
-        let result = await response.json();
-        console.log(result);
+        setDid(result?.statusBody?.userDid);
 
         let newUserData: UserData = {
           "id": userData.id,
           "userEmail": userData.userEmail,
           "walletId": userData.walletId,
-          "userDetailsId": userDetailsId,
+          "userDetailsId": result?.statusBody?.id,
           "transactionId": userData.transactionId,
           "profileImg": userData.profileImg,
         }
@@ -280,10 +243,11 @@ const UserDetailsSettings: React.FC<UserDataProps> = ({ userData }) => {
         setOriginalSelectedDocType(selectedDocType);
         setOriginalDocImage(imageUrl);
 
-        toast.success("User updated Successfully!", {id: "UserUpdateSuccess"});
         setLoading(false);
+
+        //updateUserDetailsId(result?.id, imageUrl);
       } else {
-        toast.error("Something went wrong!", {id: "UserUpdateFailure"});
+        toast.error("Something went wrong!", {id: "SaveUserFailure"});
         setLoading(false);
       }
     }

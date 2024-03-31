@@ -97,6 +97,7 @@ const EventPostPage: React.FC<event_data_props> = ({ event_data, issuer_data }) 
     const [userDid, setUserDid] = useState<string>('');
 
     const [userVCs, setUserVCs] = useState<vc_data[]>([]);
+    const [selectedVCId, setSelectedVCId] = useState<string>('');
 
     const [toggle, setToggle] = useState(false);
 
@@ -204,6 +205,7 @@ const EventPostPage: React.FC<event_data_props> = ({ event_data, issuer_data }) 
             })
 
             setUserVCs(vcList);
+
           } else {
 
             toast.error("No VCs Available!", {id: "FailureUserVC"});
@@ -271,6 +273,7 @@ const EventPostPage: React.FC<event_data_props> = ({ event_data, issuer_data }) 
         <article className="">
             <TicketModal
               event_data={event_data}
+              selectedVCId={selectedVCId}
             />
 
             <IssuerModal
@@ -280,7 +283,9 @@ const EventPostPage: React.FC<event_data_props> = ({ event_data, issuer_data }) 
 
             <VCsModal
               vc_data={userVCs}
+              setSelectedVCId={setSelectedVCId}
             />
+
             <div className="hidden lg:contents md:contents" style={{ color: "rgb(255, 255, 255) relative" }}>
                 <div className="h-[490px] overflow-hidden absolute left-0 right-0 bg-gradient-to-r from-[#1c1c1c] z-10"></div>
                 <div className="h-[490px] overflow-hidden absolute left-0 right-0 opacity-75">

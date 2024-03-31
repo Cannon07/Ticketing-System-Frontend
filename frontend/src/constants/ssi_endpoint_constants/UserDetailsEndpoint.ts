@@ -4,7 +4,7 @@ import { SsiBaseURL } from "./SsiBaseURL";
 export const GetUserDetailsById = `${SsiBaseURL}/userDetails/id?id=`;
 
 // Post
-export const PostUserDetails = `${SsiBaseURL}/userDetails/`;
+export const PostUserDetails = `${SsiBaseURL}/userDetails/?userId=`;
 export const PostUserVCsFromUserDid = `${SsiBaseURL}/userDetails/availableVCs`;
 
 // Put

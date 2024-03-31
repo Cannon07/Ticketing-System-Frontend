@@ -24,13 +24,14 @@ interface vc_data {
 
 interface event_data_props {
   vc_data: vc_data[],
+  setSelectedVCId: React.Dispatch<React.SetStateAction<string>>;
 }
 
 interface TicketObject {
   [key: number]: boolean
 }
 
-const VCsModal: React.FC<event_data_props> = ({ vc_data }) => {
+const VCsModal: React.FC<event_data_props> = ({ vc_data, setSelectedVCId }) => {
   console.log(vc_data);
 
   useEffect(() => {
@@ -64,7 +65,17 @@ const VCsModal: React.FC<event_data_props> = ({ vc_data }) => {
 
               {vc_data.map((vc, index) => {
                 return (
-                  <div key={index} className="cursor-pointer transform transition duration-300 hover:scale-105">
+                  <div
+                    key={index}
+                    onClick={() => {
+                      setSelectedVCId(vc.vc_id)
+                      const vcModal = document.getElementById("vcModal");
+                      vcModal!.classList.remove("show");
+                      const ticketModal = document.getElementById("ticketModal");
+                      ticketModal!.classList.add("show");
+                    }}
+                    className="cursor-pointer transform transition duration-300 hover:scale-105"
+                  >
                     <VerifiableCredentialsCard
                       name={vc.issuer_name}
                       vc={vc.vc_id}
