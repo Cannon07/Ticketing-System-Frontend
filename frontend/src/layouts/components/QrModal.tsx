@@ -4,6 +4,7 @@ import { QrCarousel } from "@/partials/QrCarosuel";
 import React, { useEffect, useState } from "react";
 import { FaIndianRupeeSign } from "react-icons/fa6";
 import { PiTicketLight } from "react-icons/pi";
+import { CiCreditCard1 } from "react-icons/ci";
 
 interface artist_data {
   id: String,
@@ -119,6 +120,15 @@ const QrModal: React.FC<TicketDetailsProps> = ({ ticket_data }) => {
             </div>
           </div>
 
+        </div>
+
+        <div className={"flex flex-col items-center justify-center"}>
+          <div className={"flex gap-2 items-center"}>
+            <CiCreditCard1 className={"text-black dark:text-white"} size={30} />
+            <h5>VC Id:</h5>
+          </div>
+
+          <p className={'text-center'}>{ticket_data?.vcId}</p>
         </div>
 
         <div className={"w-full flex items-center justify-center mt-4"}>
