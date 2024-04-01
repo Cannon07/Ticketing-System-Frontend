@@ -159,7 +159,7 @@ const TicketModal: React.FC<event_data_props> = ({ event_data, selectedVCId }) =
                   toast.error("Select Tickets Count!")
                 }
               }}
-              className={"btn btn-primary w-full md:w-9/12"}
+              className={"btn btn-primary w-full md:w-9/12 cursor-pointer"}
             >
               <h5 className={"text-white dark:text-dark flex justify-center"}>Book {ticket} Tickets</h5>
             </div>

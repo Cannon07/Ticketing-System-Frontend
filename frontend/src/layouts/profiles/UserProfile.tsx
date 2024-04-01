@@ -67,6 +67,7 @@ interface TicketDetails {
   count: number,
   eventId: event_data,
   id: string,
+  vcId: string,
   tier: tier_data,
   user: UserData,
   nfts: { [key: number]: {

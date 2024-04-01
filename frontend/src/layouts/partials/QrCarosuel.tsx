@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { SlArrowLeft } from "react-icons/sl";
 import { SlArrowRight } from "react-icons/sl";
+import { CiCreditCard1 } from "react-icons/ci";
 import { useQRCode } from "next-qrcode";
 
 interface artist_data {
@@ -56,6 +57,7 @@ interface TicketDetails {
   count: number,
   eventId: event_data,
   id: string,
+  vcId: string,
   tier: tier_data,
   user: UserData,
   nfts: { [key: number]: {
@@ -86,6 +88,15 @@ export const QrCarousel: React.FC<TicketDetailsProps> = ({ ticket_data }) => {
   return (
     <>
       <div className={"flex flex-col gap-2"}>
+        <div className={"flex flex-col items-center justify-center"}>
+          <div className={"flex gap-2 items-center"}>
+            <CiCreditCard1 className={"text-black dark:text-white"} size={30} />
+            <h5>VC Id:</h5>
+          </div>
+
+          <p className={'text-center'}>{ticket_data?.vcId}</p>
+        </div>
+
         <div className={"flex items-center gap-4"}>
           <button onClick={previousSlide} className={"text-dark text-3xl dark:text-white"}>
             <SlArrowLeft />
@@ -102,7 +113,7 @@ export const QrCarousel: React.FC<TicketDetailsProps> = ({ ticket_data }) => {
                 return (
                   <Image
                     key={i}
-                    text={'https://github.com/Cannon07/Ticketing-System-Frontend'}
+                    text={`${ticket_data?.vcId}, ${ticket_data?.id}, ${Object.keys(ticket_data?.nfts ?? {})[current]}`}
                     options={{
                       type: 'image/jpeg',
                       quality: 0.3,
