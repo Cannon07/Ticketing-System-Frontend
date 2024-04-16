@@ -10,6 +10,7 @@ import { generateHash } from "@/lib/utils/hashGenerator";
 import toast from "react-hot-toast";
 import { PostUser } from "@/constants/endpoint_constants/UserEndpoints";
 import { PostImage } from "@/constants/endpoint_constants/ImageEndpoints";
+import { PostUserOtp } from "@/constants/endpoint_constants/UserEndpoints";
 
 interface UserData {
   id: string,
@@ -31,6 +32,8 @@ const RegisterModal = () => {
   useTxNotifications(registerUser);
 
   const [email,setEmail] = useState('');
+  const [otp, setOtp] = useState('');
+  const [userOtp, setUserOtp] = useState('');
   //const [fullname,setFullname] = useState('');
   //const [username,setUsername] = useState('');
   const [file, setFile] = useState<File | undefined>();
@@ -100,6 +103,7 @@ const RegisterModal = () => {
   }, [registerUser.status]);
 
   const saveUser = async (txId: string, imageUrl: string) => {
+      toast.loading("Registering User..")
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
 
@@ -119,7 +123,9 @@ const RegisterModal = () => {
         body: raw,
       };
 
-      let response = await fetch(`${PostUser}`, requestOptions)
+      let response = await fetch(`${PostUser}?userCode=${userOtp}&orgCode=${otp}`, requestOptions)
+      console.log(response)
+
       if (response.ok) {
         let result = await response.json();
         console.log(result)
@@ -132,11 +138,18 @@ const RegisterModal = () => {
           "profileImg": imageUrl,
         }
         setUserData(newUserData);
+        toast.dismiss();
         toast.success("User Registered!")
         //setFullname("");
         //setUsername("");
+        setUserOtp("");
         setEmail("");
         setFile(undefined);
+      } else {
+        setUserOtp("");
+        setEmail("");
+        setFile(undefined);
+        toast.error("Something went wrong!")
       }
   }
 
@@ -158,8 +171,8 @@ const RegisterModal = () => {
 
   const handleRegisterClick= async () => {
     if (email === "") toast.error("Please enter Email");
-    //else if (fullname === "") toast.error("Please enter Full Name");
-    //else if (username === "") toast.error("Please enter Username");
+    else if (userOtp === "") toast.error("Please enter your OTP")
+    else if (otp !== userOtp) toast.error("Incorrect OTP");
     else if (typeof(file) === 'undefined') toast.error("Please upload Profile Image");
     else {
       const hashData = generateHash([email])
@@ -167,6 +180,32 @@ const RegisterModal = () => {
       registerUser.signAndSend([hashData]);
 
       registerModal!.classList.remove("show");
+    }
+  }
+
+  const handleGetOTP = async () => {
+    toast.loading("Sending OTP..");
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({});
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+    };
+
+    let response = await fetch(`${PostUserOtp}${email}`, requestOptions)
+    if (response.ok) {
+      let result = await response.text();
+      setOtp(result);
+      console.log(result)
+      toast.dismiss()
+      toast.success("OTP sent successfully!")
+    } else {
+      toast.dismiss()
+      toast.error("Failed to send OTP!")
     }
   }
 
@@ -179,7 +218,7 @@ const RegisterModal = () => {
             <h3 className={"mb-4"}>Register Now!</h3>
             <div className="mx-auto mb-4 w-full sm:px-4 md:px-8 lg:px-12">
             <div className="flex flex-col gap-6">
-                <div className={"flex gap-6 flex-col md:flex-row w-full"}>
+                <div className={"flex gap-6 flex-col w-full"}>
                   <div className="w-full">
                       <label htmlFor="title" className="form-label block">
                         Wallet Address
@@ -195,54 +234,49 @@ const RegisterModal = () => {
                       />
                   </div>
                   <div className="w-full">
+                    <div>
                       <label htmlFor="title" className="form-label block">
                         Email
                       </label>
+                      <div className={"flex gap-4"}>
+                        <input
+                            id="Email"
+                            name="Email"
+                            className="form-input w-full"
+                            placeholder="Enter your email"
+                            type="text"
+                            value={email}
+                            onChange={(e)=>setEmail(e.target.value)}
+                            required
+                        />
+                        <button onClick={handleGetOTP} className={"btn btn-primary w-full"}>
+                          <h5 className={"text-white dark:text-dark flex justify-center"}>Get OTP</h5>
+                        </button>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+                <div className="w-full">
+                  <div>
+                    <label htmlFor="title" className="form-label block">
+                      Enter OTP
+                    </label>
+                    <div className={"flex"}>
                       <input
                           id="Email"
                           name="Email"
                           className="form-input w-full"
-                          placeholder="Enter your email"
+                          placeholder="Enter OTP"
                           type="text"
-                          value={email}
-                          onChange={(e)=>setEmail(e.target.value)}
+                          value={userOtp}
+                          onChange={(e)=>setUserOtp(e.target.value)}
                           required
                       />
+                    </div>
                   </div>
                 </div>
-                {/*<div className={"flex gap-6 flex-col md:flex-row w-full"}>
-                  <div className="w-full">
-                      <label htmlFor="title" className="form-label block">
-                        Full Name
-                      </label>
-                      <input
-                          id="full-name"
-                          name="full-name"
-                          className="form-input w-full"
-                          placeholder="Enter your full name"
-                          type="text"
-                          value={fullname}
-                          onChange={(e)=>setFullname(e.target.value)}
-                          required
-                      />
-                  </div>
 
-                  <div className="w-full">
-                      <label htmlFor="date" className="form-label block">
-                        Username
-                      </label>
-                      <input
-                          id="date"
-                          name="date"
-                          className="form-input w-full"
-                          placeholder="Enter your username"
-                          type="text"
-                          value={username}
-                          onChange={(e)=>setUsername(e.target.value)}
-                          required
-                      />
-                  </div>
-                </div>*/}
                 <div className={"flex gap-6 flex-col md:flex-row w-full"}>
                   <div className="w-full">
                     <label
